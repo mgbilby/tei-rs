@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A made-up FreeDict-style dictionary whose anchored tagUsage values point
+     with @ana into ontology/pos.rdf, which FreeDict's schema reads with
+     document(@ana): some resolve to a labelled concept, some to an empty one
+     or to none, one through xml:base, so tests/schematron_agreement.rs
+     exercises document() relative to the document. Not meant to be valid
+     RELAX NG. -->
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>Made-up dictionary</title></titleStmt>
+      <publicationStmt><p/></publicationStmt>
+      <sourceDesc><p/></sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <tagsDecl rend="anchored">
+        <namespace name="http://www.tei-c.org/ns/1.0">
+          <tagUsage gi="pos">
+            <list>
+              <item ana="ontology/pos.rdf#noun">n</item>
+              <item ana="ontology/pos.rdf#verb">v</item>
+              <item ana="ontology/pos.rdf#unlabelled">u</item>
+              <item ana="ontology/pos.rdf#adjective">adj</item>
+              <item ana="ontology/pos.rdf">all</item>
+              <item>none</item>
+            </list>
+            <list xml:base="ontology/">
+              <item ana="pos.rdf#noun">noun</item>
+              <item ana="pos.rdf#adverb">adv</item>
+            </list>
+          </tagUsage>
+        </namespace>
+      </tagsDecl>
+      <tagsDecl>
+        <namespace name="http://www.tei-c.org/ns/1.0">
+          <tagUsage gi="gen">
+            <list><item ana="ontology/pos.rdf#nothing">m</item></list>
+          </tagUsage>
+        </namespace>
+      </tagsDecl>
+    </encodingDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <entry>
+        <form><orth>word</orth></form>
+        <gramGrp><pos>n</pos><gen>m</gen></gramGrp>
+        <gramGrp><pos>x</pos></gramGrp>
+      </entry>
+    </body>
+  </text>
+</TEI>

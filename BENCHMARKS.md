@@ -105,9 +105,8 @@ the same rules compiled to XSLT by SchXslt 1.10.1 and run on Saxon-HE 12.5.
 The reference's rules are compiled once per schema before timing starts, so
 its timings leave that step out; tei-rs's include compiling them. Both
 report the same Schematron messages (`tests/schematron_agreement.rs`).
-`tei_all` embeds 47 Schematron tests, of which tei-rs evaluates 45 (the
-other 2 need `current-date()`; tei-rs lists them as unchecked), and the
-papyri.info schema 79, all evaluated.
+`tei_all` embeds 47 Schematron tests and the papyri.info schema 79, all
+evaluated by tei-rs.
 
 <!-- bench:schematron -->
 _Commit `1fd4075`, 2026-10-16: hyperfine 2.0.0, 5 runs after 1 warm-up run, on

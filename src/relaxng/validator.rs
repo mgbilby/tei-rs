@@ -55,6 +55,14 @@ use crate::relaxng::simplify::name_class_matches;
 /// namespace URI. `None` means "no namespace" — the caller's document
 /// implementation is responsible for resolving any prefixes itself (this
 /// crate has no XML/namespace parser of its own).
+///
+/// ```
+/// use teixml::relaxng::ExpandedName;
+///
+/// let name = ExpandedName::new(Some("http://www.tei-c.org/ns/1.0"), "p");
+/// assert_eq!(name.to_string(), "{http://www.tei-c.org/ns/1.0}p");
+/// assert_eq!(ExpandedName::new(None::<String>, "p").to_string(), "p");
+/// ```
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct ExpandedName {
     /// The namespace URI, or `None` for "no namespace".
@@ -213,6 +221,21 @@ pub struct ValidationError<L> {
 /// The names of the elements from the document root down to one element.
 /// Cheap to clone: errors on the same element, and on elements with the
 /// same ancestors, share the names.
+///
+/// ```
+/// use teixml::ElementPath;
+/// use teixml::relaxng::ExpandedName;
+///
+/// let tei = |local| ExpandedName::new(Some("http://www.tei-c.org/ns/1.0"), local);
+/// let text = ElementPath::from_names([tei("TEI"), tei("text")]);
+/// let body = text.child(tei("body"));
+///
+/// assert_eq!(body.to_string(), "/TEI/text/body");
+/// assert_eq!(body.names().len(), 3);
+/// assert_eq!(body.last().map(|name| name.local.as_str()), Some("body"));
+/// assert_eq!(text.to_string(), "/TEI/text"); // unchanged by `child`
+/// assert!(ElementPath::default().is_empty());
+/// ```
 #[derive(Clone, Default)]
 pub struct ElementPath(Option<std::sync::Arc<PathNode>>);
 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A made-up document for the Schematron rules that use dates, durations
+     and base URIs (it is not meant to be valid RELAX NG). Deprecation dates
+     are far in the past or future, so the messages don't change with the
+     current date; every date is a valid xs:date, as the rules cast them. -->
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en" xml:id="volume_1"
+     xml:base="https://example.org/genizah-mss/collections/">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>Dates</title></titleStmt>
+      <publicationStmt><p>Made up for testing.</p></publicationStmt>
+      <sourceDesc><p>None.</p></sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div validUntil="2001-01-01">
+        <p>Deprecated long ago.</p>
+      </div>
+      <div validUntil="2999-12-31">
+        <desc type="deprecationInfo">Still supported for centuries.</desc>
+        <p>Deprecated far in the future.</p>
+      </div>
+      <p>
+        <date notBefore="1850-05-01" notAfter="1850-01-01">reversed dates</date>
+        <date notBefore="1850-01-01" notAfter="1850-05-01">ordered dates</date>
+        <date notBefore="1850-01-01" notAfter="1850-01-01">one day</date>
+        <date notBefore="-0044-03-15" notAfter="-0044-03-14">reversed BCE dates</date>
+        <date from="1900" to="1850">reversed years</date>
+        <date from="1850" to="1900">ordered years</date>
+        <date notBefore="1850-01" notAfter="1849-12">months are neither</date>
+        <date from="2020-02-29" to="2020-03-01">leap day</date>
+        <date when="2020-02-29">a leap day</date>
+        <date when="1850">a year</date>
+      </p>
+    </body>
+  </text>
+</TEI>

@@ -6,7 +6,9 @@ use std::collections::HashMap;
 
 use super::XError;
 use super::ast::*;
+use super::datetime::{self, DateTime};
 use super::functions;
+use super::resources::Resources;
 use super::value::{Atomic, AtomicType, Item, Seq, XML_NS, XNode};
 
 type Result<T> = std::result::Result<T, XError>;
@@ -16,8 +18,15 @@ pub(crate) struct Document<'a> {
     pub(crate) doc: &'a roxmltree::Document<'a>,
     /// What `document-uri()` returns for the document node.
     pub(crate) uri: Option<String>,
+    /// Where the document comes in document order among the documents an
+    /// evaluation uses: 0 for the validated one, then in the order the
+    /// others were read.
+    pub(crate) rank: u32,
     ids: OnceCell<HashMap<&'a str, roxmltree::Node<'a, 'a>>>,
     node_count: OnceCell<u32>,
+    /// The current date and time, fixed when first asked for so that every
+    /// `current-dateTime()` while checking the document agrees.
+    pub(crate) now: OnceCell<DateTime>,
 }
 
 impl<'a> Document<'a> {
@@ -25,9 +34,15 @@ impl<'a> Document<'a> {
         Self {
             doc,
             uri,
+            rank: 0,
             ids: OnceCell::new(),
             node_count: OnceCell::new(),
+            now: OnceCell::new(),
         }
+    }
+
+    pub(crate) fn now(&self) -> DateTime {
+        *self.now.get_or_init(DateTime::now)
     }
 
     pub(crate) fn root(&self) -> XNode<'a> {
@@ -86,14 +101,17 @@ impl<'a> Focus<'a> {
 /// Evaluation state: the document, `current()`, and variable bindings.
 pub(crate) struct Evaluator<'d, 'a> {
     pub(crate) doc: &'d Document<'a>,
+    /// The other documents `doc()` and `document()` read, if they may.
+    pub(crate) resources: Option<&'a Resources<'a>>,
     pub(crate) current: Option<XNode<'a>>,
     variables: Vec<(String, Seq<'a>)>,
-    /// `for`/`some`/`every` iterations so far, against [`MAX_ITERATIONS`].
+    /// `for`/`some`/`every`/`!` iterations so far, against [`MAX_ITERATIONS`].
     iterations: u64,
 }
 
-/// How many `for`/`some`/`every` iterations all the tests on one document may
-/// run, and how long a sequence a `for` may build: enough for any real rule,
+/// How many `for`/`some`/`every`/`!` iterations all the tests on one document
+/// may run, and how long a sequence a `for` or `!` may build: enough for any
+/// real rule,
 /// while a hostile one fails with an error instead of running for hours or
 /// exhausting memory.
 const MAX_ITERATIONS: u64 = 100_000_000;
@@ -103,9 +121,18 @@ impl<'d, 'a> Evaluator<'d, 'a> {
     pub(crate) fn new(doc: &'d Document<'a>) -> Self {
         Self {
             doc,
+            resources: None,
             current: None,
             variables: Vec::new(),
             iterations: 0,
+        }
+    }
+
+    /// An evaluator whose `doc()` and `document()` read from `resources`.
+    pub(crate) fn with_resources(doc: &'d Document<'a>, resources: &'a Resources<'a>) -> Self {
+        Self {
+            resources: Some(resources),
+            ..Self::new(doc)
         }
     }
 
@@ -114,7 +141,7 @@ impl<'d, 'a> Evaluator<'d, 'a> {
         if self.iterations > MAX_ITERATIONS {
             return Err(XError::new(
                 "FOER0000",
-                format!("more than {MAX_ITERATIONS} iterations of for/some/every"),
+                format!("more than {MAX_ITERATIONS} iterations of for/some/every/!"),
             ));
         }
         Ok(())
@@ -251,8 +278,8 @@ impl<'d, 'a> Evaluator<'d, 'a> {
                 };
                 Ok(boolean(match op {
                     NodeOp::Is => a == b,
-                    NodeOp::Precedes => a.order() < b.order(),
-                    NodeOp::Follows => a.order() > b.order(),
+                    NodeOp::Precedes => self.order(a) < self.order(b),
+                    NodeOp::Follows => self.order(a) > self.order(b),
                 }))
             }
             Expr::Arithmetic(op, left, right) => {
@@ -294,13 +321,13 @@ impl<'d, 'a> Evaluator<'d, 'a> {
             Expr::Union(left, right) => {
                 let mut nodes = self.nodes(left, focus)?;
                 nodes.extend(self.nodes(right, focus)?);
-                Ok(sorted_nodes(nodes))
+                Ok(self.in_document_order(nodes))
             }
             Expr::Intersect(left, right) | Expr::Except(left, right) => {
                 let left = self.nodes(left, focus)?;
                 let right = self.nodes(right, focus)?;
                 let keep = matches!(expr, Expr::Intersect(..));
-                Ok(sorted_nodes(
+                Ok(self.in_document_order(
                     left.into_iter()
                         .filter(|node| right.contains(node) == keep)
                         .collect(),
@@ -330,6 +357,34 @@ impl<'d, 'a> Evaluator<'d, 'a> {
                     }
                 }
                 Ok(out)
+            }
+            Expr::Map(left, right) => {
+                let items = self.eval(left, focus)?;
+                let size = items.len();
+                let mut out = Vec::new();
+                for (index, item) in items.into_iter().enumerate() {
+                    self.count_iteration()?;
+                    let focus = Focus {
+                        item,
+                        position: index + 1,
+                        size,
+                    };
+                    out.extend(self.eval(right, Some(&focus))?);
+                    if out.len() > MAX_SEQUENCE {
+                        return Err(XError::new(
+                            "FOER0000",
+                            format!("sequence longer than {MAX_SEQUENCE} items"),
+                        ));
+                    }
+                }
+                Ok(out)
+            }
+            Expr::Let(name, value, body) => {
+                let value = self.eval(value, focus)?;
+                self.variables.push((name.clone(), value));
+                let result = self.eval(body, focus);
+                self.variables.pop();
+                result
             }
             Expr::Quantified(every, name, domain, body) => {
                 let domain = self.eval(domain, focus)?;
@@ -413,7 +468,7 @@ impl<'d, 'a> Evaluator<'d, 'a> {
                     Item::Atomic(_) => unreachable!("all nodes"),
                 })
                 .collect();
-            return Ok(sorted_nodes(nodes));
+            return Ok(self.in_document_order(nodes));
         }
         Ok(out)
     }
@@ -580,8 +635,9 @@ impl<'d, 'a> Evaluator<'d, 'a> {
                     XNode::Attr(owner, _) => owner.id().get() + 1,
                     XNode::Node(node) => last_descendant(node).id().get() + 1,
                 };
-                for id in start..self.doc.node_count() {
-                    if let Some(node) = self.doc.node(id) {
+                let doc = self.document_of(node);
+                for id in start..doc.node_count() {
+                    if let Some(node) = doc.node(id) {
                         push(XNode::Node(node));
                     }
                 }
@@ -594,12 +650,13 @@ impl<'d, 'a> Evaluator<'d, 'a> {
                 let ancestors: Vec<u32> =
                     element.ancestors().skip(1).map(|a| a.id().get()).collect();
                 let mut next_ancestor = 0;
+                let doc = self.document_of(node);
                 for id in (0..element.id().get()).rev() {
                     if ancestors.get(next_ancestor) == Some(&id) {
                         next_ancestor += 1;
                         continue;
                     }
-                    if let Some(node) = self.doc.node(id) {
+                    if let Some(node) = doc.node(id) {
                         push(XNode::Node(node));
                     }
                 }
@@ -771,7 +828,9 @@ fn uses_focus(expr: &Expr) -> bool {
         Expr::ContextItem | Expr::Root | Expr::Step(_) => true,
         Expr::Sequence(items) => items.iter().any(uses_focus),
         // The predicates and the right-hand side have their own focus.
-        Expr::Filter(primary, _) | Expr::Path(primary, _) => uses_focus(primary),
+        Expr::Filter(primary, _) | Expr::Path(primary, _) | Expr::Map(primary, _) => {
+            uses_focus(primary)
+        }
         Expr::Or(a, b)
         | Expr::And(a, b)
         | Expr::GeneralCompare(_, a, b)
@@ -783,6 +842,7 @@ fn uses_focus(expr: &Expr) -> bool {
         | Expr::Intersect(a, b)
         | Expr::Except(a, b)
         | Expr::For(_, a, b)
+        | Expr::Let(_, a, b)
         | Expr::Quantified(_, _, a, b) => uses_focus(a) || uses_focus(b),
         Expr::If(a, b, c) => uses_focus(a) || uses_focus(b) || uses_focus(c),
         Expr::Negate(a)
@@ -807,6 +867,9 @@ fn uses_focus(expr: &Expr) -> bool {
                     | F::Id
                     | F::GenerateId
                     | F::DocumentUri
+                    | F::BaseUri
+                    | F::HasChildren
+                    | F::Path
                     | F::Trace
             ) || args.iter().any(uses_focus)
         }
@@ -901,6 +964,10 @@ pub(crate) fn effective_boolean(value: &[Item<'_>]) -> Result<bool> {
             Atomic::Str(text) | Atomic::Untyped(text) => Ok(!text.is_empty()),
             Atomic::Int(value) => Ok(*value != 0),
             Atomic::Dec(value) | Atomic::Dbl(value) => Ok(*value != 0.0 && !value.is_nan()),
+            Atomic::DateTime(_) | Atomic::Duration(_) => Err(XError::new(
+                "FORG0006",
+                "no effective boolean value for a date, time or duration",
+            )),
         },
         _ => Err(XError::new(
             "FORG0006",
@@ -936,6 +1003,8 @@ fn general_compare(op: CompareOp, a: &Atomic, b: &Atomic) -> Result<bool> {
                 Atomic::Untyped(_) | Atomic::Str(_) => Ok(Atomic::Str(text.clone())),
                 other if other.is_numeric() => value.cast(AtomicType::Double),
                 Atomic::Bool(_) => value.cast(AtomicType::Boolean),
+                Atomic::DateTime(other) => value.cast(AtomicType::DateTime(other.kind)),
+                Atomic::Duration(other) => value.cast(AtomicType::Duration(other.kind)),
                 _ => Ok(Atomic::Str(text.clone())),
             },
             other => Ok(other.clone()),
@@ -952,6 +1021,16 @@ fn value_compare(op: CompareOp, a: &Atomic, b: &Atomic) -> Result<bool> {
             "XPTY0004",
             format!(
                 "cannot compare `{}` with `{}`",
+                a.to_string_value(),
+                b.to_string_value()
+            ),
+        ));
+    }
+    if !matches!(op, CompareOp::Eq | CompareOp::Ne) && !a.ordered_with(b) {
+        return Err(XError::new(
+            "XPTY0004",
+            format!(
+                "`{}` and `{}` can only be compared for equality",
                 a.to_string_value(),
                 b.to_string_value()
             ),
@@ -997,6 +1076,12 @@ fn integer_operand(value: Atomic) -> Result<i64> {
 }
 
 fn arithmetic(op: ArithmeticOp, a: Atomic, b: Atomic) -> Result<Atomic> {
+    let temporal = |value: &Atomic| matches!(value, Atomic::DateTime(_) | Atomic::Duration(_));
+    if temporal(&a) || temporal(&b) {
+        let a = if temporal(&a) { a } else { numeric_operand(a)? };
+        let b = if temporal(&b) { b } else { numeric_operand(b)? };
+        return datetime::arithmetic(op, &a, &b);
+    }
     let a = numeric_operand(a)?;
     let b = numeric_operand(b)?;
     if let (Atomic::Int(x), Atomic::Int(y)) = (&a, &b) {

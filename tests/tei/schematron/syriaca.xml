@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A made-up Syriaca.org-style record whose values are checked against
+     documents the Syriaca schemas read with doc() (the editors list, the
+     person and place indexes, the confessions list and the taxonomy), half
+     of them right and half wrong, so tests/schematron_agreement.rs exercises
+     doc() through the schema store. Not meant to be valid RELAX NG. -->
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Made-up record</title>
+        <editor role="general" ref="http://syriaca.org/documentation/editors.xml#rakhrass">An editor</editor>
+        <editor role="general" ref="http://syriaca.org/documentation/editors.xml#nobody">Unknown</editor>
+        <respStmt><name ref="http://syriaca.org/documentation/editors.xml#makyuz">Another</name></respStmt>
+        <respStmt><name ref="http://syriaca.org/documentation/editors.xml#none">Nobody</name></respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <idno type="URI">http://syriaca.org/place/162/tei</idno>
+      </publicationStmt>
+      <sourceDesc><p/></sourceDesc>
+    </fileDesc>
+    <revisionDesc>
+      <change who="http://syriaca.org/documentation/editors.xml#halthani" when="2026-01-01">Made up</change>
+      <change who="http://syriaca.org/documentation/editors.xml#ghost" when="2026-01-02">Made up</change>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <listPerson>
+        <person>
+          <persName>Someone</persName>
+          <gender ana="http://syriaca.org/taxonomy/women"/>
+          <gender ana="http://syriaca.org/taxonomy/women http://syriaca.org/taxonomy/giants"/>
+          <state type="occupation" ref="http://syriaca.org/taxonomy/architects"/>
+          <state type="occupation" ref="http://syriaca.org/taxonomy/actors http://syriaca.org/taxonomy/wizards"/>
+          <state type="socio-economic-status" ref="http://syriaca.org/taxonomy/slaves"/>
+          <state type="socio-economic-status" ref="http://syriaca.org/taxonomy/kings"/>
+          <state type="religious-affiliation" ref="http://syriaca.org/taxonomy/jews"/>
+          <state type="religious-affiliation" ref="http://syriaca.org/taxonomy/pirates"/>
+        </person>
+        <listRelation>
+          <relation type="personal" ref="http://syriaca.org/taxonomy/co-located" mutual="http://syriaca.org/person/162 http://syriaca.org/person/2699"/>
+          <relation type="personal" ref="http://syriaca.org/taxonomy/co-located" active="http://syriaca.org/person/162" passive="http://syriaca.org/person/0"/>
+          <relation type="personal" ref="http://syriaca.org/taxonomy/student-of" mutual="http://syriaca.org/person/3587" ana="http://syriaca.org/taxonomy/alleged-relationship http://syriaca.org/taxonomy/rumour"/>
+          <relation type="personal" ref="http://syriaca.org/taxonomy/made-up" active="http://syriaca.org/person/162" passive="http://syriaca.org/person/2699" ana="http://syriaca.org/taxonomy/adopted-family-relationship"/>
+        </listRelation>
+      </listPerson>
+      <listPlace>
+        <place type="building" ana="http://syriaca.org/taxonomy/buildings">
+          <placeName>A building</placeName>
+          <state type="confession" xml:id="confession162-1" ref="http://syriaca.org/taxonomy/jews"><desc>Jews</desc></state>
+          <state type="confession" xml:id="confession162-x" ref="http://syriaca.org/taxonomy/pirates"><desc>pirates of the sea</desc></state>
+        </place>
+        <place type="church" ana="http://syriaca.org/taxonomy/temples"><placeName>A church</placeName></place>
+        <place type="composite" ana="http://syriaca.org/taxonomy/composite"><placeName>A composite</placeName></place>
+        <listRelation>
+          <relation type="disambiguation" ref="http://syriaca.org/taxonomy/co-located" mutual="http://syriaca.org/place/162 http://syriaca.org/place/1390"/>
+          <relation type="place" ref="http://syriaca.org/taxonomy/has-relation-to-place" active="http://syriaca.org/place/162" passive="http://syriaca.org/place/0 http://syriaca.org/place/604"/>
+          <relation type="pseudonymity" ref="http://syriaca.org/taxonomy/broader" active="http://syriaca.org/person/162" passive="http://syriaca.org/person/0"/>
+        </listRelation>
+      </listPlace>
+    </body>
+  </text>
+</TEI>

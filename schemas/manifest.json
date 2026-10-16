@@ -277,6 +277,48 @@
       "sha256": "0da2ba078235049c28791d0156276af51cd6e1ee3b90e0701cc825c48515f1f0",
       "fetched_from": "https://raw.githubusercontent.com/HistoryAtState/frus/master/schema/frus.rnc",
       "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/srophe/gaddel/master/documentation/editors.xml",
+      "file": "raw.githubusercontent.com/srophe/gaddel/master/documentation/editors.xml",
+      "sha256": "8dd43b09f06c8f0b95cb385d8d7a4059b61f390b319fdbc6825285ad841f1c7d",
+      "fetched_from": "https://raw.githubusercontent.com/srophe/gaddel/master/documentation/editors.xml",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/srophe/srophe-eXist-app/master/documentation/confessions.xml",
+      "file": "raw.githubusercontent.com/srophe/srophe-eXist-app/master/documentation/confessions.xml",
+      "sha256": "dd70a7e41034947f79374978ba3e8cee4da48c82d4c5fefecc40163ec7e4e00f",
+      "fetched_from": "https://raw.githubusercontent.com/srophe/srophe-eXist-app/master/documentation/confessions.xml",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/srophe/syriaca-data/refs/heads/gaddel_development/data/taxonomy/taxonomy.rdf",
+      "file": "raw.githubusercontent.com/srophe/syriaca-data/refs/heads/gaddel_development/data/taxonomy/taxonomy.rdf",
+      "sha256": "53a9958686f3e34c0cf5bfe3fda12a6d8196ed4def98ad287a2f18db74db1eba",
+      "fetched_from": "https://raw.githubusercontent.com/srophe/syriaca-data/refs/heads/gaddel_development/data/taxonomy/taxonomy.rdf",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/srophe/syriaca/master/documentation/indexes/persons.xml",
+      "file": "raw.githubusercontent.com/srophe/syriaca/master/documentation/indexes/persons.xml",
+      "sha256": "3ad1ec0adfc6cdcbcd8d6f63c9624285dc0ebddad001ba68bfc8bd8c85febcee",
+      "fetched_from": "https://raw.githubusercontent.com/srophe/syriaca/master/documentation/indexes/persons.xml",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/srophe/syriaca/refs/heads/main/documentation/indexes/persons.xml",
+      "file": "raw.githubusercontent.com/srophe/syriaca/refs/heads/main/documentation/indexes/persons.xml",
+      "sha256": "3ad1ec0adfc6cdcbcd8d6f63c9624285dc0ebddad001ba68bfc8bd8c85febcee",
+      "fetched_from": "https://raw.githubusercontent.com/srophe/syriaca/refs/heads/main/documentation/indexes/persons.xml",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/srophe/syriaca/refs/heads/main/documentation/indexes/places.xml",
+      "file": "raw.githubusercontent.com/srophe/syriaca/refs/heads/main/documentation/indexes/places.xml",
+      "sha256": "dbcd7f051f644df98a2a4e52bbb6ecc3cc64729622d705b3c26ae00e07221add",
+      "fetched_from": "https://raw.githubusercontent.com/srophe/syriaca/refs/heads/main/documentation/indexes/places.xml",
+      "checked": "2026-10-16"
     }
   ]
 }

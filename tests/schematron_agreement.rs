@@ -1,6 +1,7 @@
 //! Checks that tei-rs's Schematron messages agree with the reference ISO
-//! Schematron pipeline (rules extracted from the .rng, compiled to XSLT 2.0
-//! with SchXslt and run with Saxon-HE), as recorded by
+//! Schematron pipeline (rules extracted from the .rng, or from the .rnc
+//! converted with Trang, compiled to XSLT 2.0 with SchXslt and run with
+//! Saxon-HE), as recorded by
 //! `scripts/record-schematron-expectations.sh` in
 //! `tests/tei/schematron-expected.tsv`.
 //!
@@ -10,7 +11,9 @@
 //! tests tei-rs reports as unsupported, which are counted and skipped. Pairs
 //! from `tests/tei/docs/` run with every `cargo test`; the large benchmark
 //! samples in `tests/tei/bench/` with `cargo test --release -- --ignored`.
-//! Pairs whose files are missing are skipped (and reported).
+//! Pairs whose files are missing are skipped (and reported), as are pairs
+//! whose schema reads a document by URL that the schema store in `schemas/`
+//! (which both pipelines read such documents from) lacks.
 
 #![cfg(feature = "schematron")]
 
@@ -18,7 +21,7 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 
 use teixml::schematron::{Outcome, TestKind};
-use teixml::{DiagnosticKind, Error};
+use teixml::{DiagnosticKind, Error, SchemaStore};
 
 fn repository() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -65,6 +68,7 @@ fn expectations() -> BTreeMap<(String, String), Pair> {
 
 fn check_agreement(bench: bool) {
     let pairs = expectations();
+    let store = SchemaStore::open(repository().join("schemas")).expect("the schema store opens");
     let mut schemas: BTreeMap<String, teixml::Schema> = BTreeMap::new();
     let mut disagreements = Vec::new();
     let (mut checked, mut skipped, mut messages, mut unsupported) = (0, 0, 0, 0);
@@ -77,12 +81,22 @@ fn check_agreement(bench: bool) {
             skipped += 1;
             continue;
         }
-        checked += 1;
         let schema = schemas.entry(schema_path.clone()).or_insert_with(|| {
-            teixml::Schema::from_file(repository().join(schema_path))
-                .unwrap_or_else(|error| panic!("{schema_path}: {error}"))
+            let mut schema = teixml::Schema::from_file(repository().join(schema_path))
+                .unwrap_or_else(|error| panic!("{schema_path}: {error}"));
+            schema.set_store(&store);
+            schema
         });
         let rules = schema.schematron().expect("Schematron rules compile");
+        if rules
+            .remote_documents()
+            .iter()
+            .any(|url| store.resolve(url).is_none())
+        {
+            skipped += 1;
+            continue;
+        }
+        checked += 1;
         let skips = |row: &Row| {
             rules.unsupported().iter().any(|entry| {
                 entry.context == row.3
@@ -178,7 +192,7 @@ fn agrees_with_reference_schematron_on_benchmark_samples() {
 fn supports_the_rules_of_the_bundled_schemas() {
     let expected = [
         // (schema, tests, unsupported tests)
-        ("tests/tei/schemas/tei_all-2.7.0.rng", 47, 2),
+        ("tests/tei/schemas/tei_all-2.7.0.rng", 47, 0),
         ("schemas/epidoc.stoa.org/schema/8.16/tei-epidoc.rng", 36, 0),
         ("schemas/epidoc.stoa.org/schema/8.13/tei-epidoc.rng", 25, 0),
         (
@@ -187,9 +201,40 @@ fn supports_the_rules_of_the_bundled_schemas() {
             0,
         ),
         ("schemas/papyri.info/schemas/papyri.info.rng", 79, 0),
+        // Their rules read documents with doc() and document().
+        (
+            "schemas/raw.githubusercontent.com/srophe/Gaddel/refs/heads/main/documentation/schemas/out/syriacaPersons.compiled.rng",
+            190,
+            0,
+        ),
+        (
+            "schemas/raw.githubusercontent.com/srophe/Gaddel/refs/heads/main/documentation/schemas/out/syriacaPlaces.compiled.rng",
+            164,
+            0,
+        ),
+        (
+            "schemas/raw.githubusercontent.com/freedict/fd-dictionaries/master/shared/freedict-P5.rng",
+            33,
+            0,
+        ),
         (
             "schemas/raw.githubusercontent.com/clarin-eric/ParlaMint/main/Schema/ParlaMint-TEI.ana.rng",
             0,
+            0,
+        ),
+        (
+            "schemas/raw.githubusercontent.com/HistoryAtState/frus/master/schema/frus.rnc",
+            23,
+            0,
+        ),
+        (
+            "schemas/raw.githubusercontent.com/pruizf/disco/master/schema/tei_all_DISCO.rnc",
+            57,
+            0,
+        ),
+        (
+            "schemas/raw.githubusercontent.com/cbeta-org/xml-p5/master/schema/cbeta-p5.rnc",
+            3,
             0,
         ),
     ];

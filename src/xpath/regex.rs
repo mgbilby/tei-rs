@@ -1,9 +1,33 @@
 //! XPath 2.0 regular expressions (XML Schema regex syntax plus `^`, `$`,
 //! non-greedy quantifiers and flags), translated to the `regex` crate's
 //! syntax. Back-references and Unicode block escapes (`\p{IsBasicLatin}`)
-//! have no equivalent there and are rejected.
+//! have no equivalent there and are rejected as unsupported; expressions
+//! that aren't valid XPath regular expressions at all are told apart, as
+//! XPath makes using them a dynamic error.
 
 use std::fmt;
+
+/// Why a regular expression can't be compiled.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub(crate) enum RegexError {
+    /// Not a valid XPath regular expression, with the error code using it
+    /// raises: `FORX0001` for bad flags, `FORX0002` for a bad expression.
+    Invalid(&'static str, String),
+    /// Valid, but beyond what can be translated for the `regex` crate.
+    Unsupported(String),
+}
+
+impl fmt::Display for RegexError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Invalid(_, message) | Self::Unsupported(message) => f.write_str(message),
+        }
+    }
+}
+
+fn invalid<T>(message: impl Into<String>) -> Result<T, RegexError> {
+    Err(RegexError::Invalid("FORX0002", message.into()))
+}
 
 pub(crate) struct CompiledRegex {
     pub regex: regex::Regex,
@@ -19,7 +43,7 @@ impl fmt::Debug for CompiledRegex {
 }
 
 impl CompiledRegex {
-    pub(crate) fn new(pattern: &str, flags: &str) -> Result<Self, String> {
+    pub(crate) fn new(pattern: &str, flags: &str) -> Result<Self, RegexError> {
         let mut dot_all = false;
         let mut prefix = String::new();
         let mut extended = false;
@@ -31,7 +55,12 @@ impl CompiledRegex {
                 'i' => prefix.push('i'),
                 'x' => extended = true,
                 'q' => literal = true,
-                other => return Err(format!("invalid flag `{other}`")),
+                other => {
+                    return Err(RegexError::Invalid(
+                        "FORX0001",
+                        format!("invalid flag `{other}`"),
+                    ));
+                }
             }
         }
         let translated = if literal {
@@ -44,7 +73,8 @@ impl CompiledRegex {
         } else {
             format!("(?{prefix}){translated}")
         };
-        let regex = regex::Regex::new(&source).map_err(|error| error.to_string())?;
+        let regex = regex::Regex::new(&source)
+            .map_err(|error| RegexError::Unsupported(error.to_string()))?;
         let matches_empty = regex.is_match("");
         Ok(Self {
             regex,
@@ -60,7 +90,7 @@ const NAME_START: &str = r"A-Z_a-z:\xC0-\xD6\xD8-\xF6\xF8-\x{2FF}\x{370}-\x{37D}
 /// XML Schema `\c` adds these to `\i`.
 const NAME_EXTRA: &str = r"\-.0-9\xB7\x{300}-\x{36F}\x{203F}-\x{2040}";
 
-fn translate(pattern: &str, dot_all: bool, extended: bool) -> Result<String, String> {
+fn translate(pattern: &str, dot_all: bool, extended: bool) -> Result<String, RegexError> {
     let chars: Vec<char> = pattern.chars().collect();
     let mut out = String::new();
     let mut i = 0;
@@ -74,7 +104,7 @@ fn translate(pattern: &str, dot_all: bool, extended: bool) -> Result<String, Str
         match c {
             '\\' => {
                 let Some(&escaped) = chars.get(i + 1) else {
-                    return Err("trailing backslash".into());
+                    return invalid("trailing backslash");
                 };
                 i += 2;
                 match escaped {
@@ -97,16 +127,17 @@ fn translate(pattern: &str, dot_all: bool, extended: bool) -> Result<String, Str
                     'W' => out.push_str(&class(r"\p{P}\p{Z}\p{C}", false)),
                     'p' | 'P' => {
                         if chars.get(i) != Some(&'{') {
-                            return Err(format!("`\\{escaped}` needs a `{{…}}` property"));
+                            return invalid(format!("`\\{escaped}` needs a `{{…}}` property"));
                         }
-                        let end = chars[i..]
-                            .iter()
-                            .position(|&c| c == '}')
-                            .ok_or("unterminated `\\p{`")?;
+                        let Some(end) = chars[i..].iter().position(|&c| c == '}') else {
+                            return invalid("unterminated `\\p{`");
+                        };
                         let name: String = chars[i + 1..i + end].iter().collect();
                         i += end + 1;
                         if name.starts_with("Is") {
-                            return Err(format!("Unicode block `{name}` is not supported"));
+                            return Err(RegexError::Unsupported(format!(
+                                "Unicode block `{name}` is not supported"
+                            )));
                         }
                         out.push('\\');
                         out.push(escaped);
@@ -114,8 +145,12 @@ fn translate(pattern: &str, dot_all: bool, extended: bool) -> Result<String, Str
                         out.push_str(&name);
                         out.push('}');
                     }
-                    '1'..='9' => return Err("back-references are not supported".into()),
-                    other => return Err(format!("invalid escape `\\{other}`")),
+                    '1'..='9' => {
+                        return Err(RegexError::Unsupported(
+                            "back-references are not supported".into(),
+                        ));
+                    }
+                    other => return invalid(format!("invalid escape `\\{other}`")),
                 }
                 continue;
             }
@@ -146,7 +181,7 @@ fn translate(pattern: &str, dot_all: bool, extended: bool) -> Result<String, Str
                     i += 3;
                     continue;
                 }
-                return Err("`(?` groups other than `(?:` are not allowed".into());
+                return invalid("`(?` groups other than `(?:` are not allowed");
             }
             // Characters the `regex` crate treats specially inside classes
             // (or always) but XML Schema doesn't.
@@ -159,7 +194,7 @@ fn translate(pattern: &str, dot_all: bool, extended: bool) -> Result<String, Str
         i += 1;
     }
     if class_depth > 0 {
-        return Err("unterminated character class".into());
+        return invalid("unterminated character class");
     }
     Ok(out)
 }
@@ -217,8 +252,26 @@ mod tests {
 
     #[test]
     fn rejects_what_it_cannot_translate() {
-        assert!(CompiledRegex::new(r"(a)\1", "").is_err());
-        assert!(CompiledRegex::new(r"\p{IsBasicLatin}", "").is_err());
-        assert!(CompiledRegex::new("a", "z").is_err());
+        let unsupported = |pattern| {
+            matches!(
+                CompiledRegex::new(pattern, ""),
+                Err(RegexError::Unsupported(_))
+            )
+        };
+        assert!(unsupported(r"(a)\1"));
+        assert!(unsupported(r"\p{IsBasicLatin}"));
+    }
+
+    #[test]
+    fn tells_invalid_expressions_apart() {
+        let code = |pattern, flags| match CompiledRegex::new(pattern, flags) {
+            Err(RegexError::Invalid(code, _)) => code,
+            _ => "",
+        };
+        assert_eq!(code(r"\,", ""), "FORX0002");
+        assert_eq!(code(r"a\", ""), "FORX0002");
+        assert_eq!(code("[a", ""), "FORX0002");
+        assert_eq!(code("(?i)a", ""), "FORX0002");
+        assert_eq!(code("a", "z"), "FORX0001");
     }
 }

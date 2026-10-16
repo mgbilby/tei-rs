@@ -33,3 +33,9 @@ raw.githubusercontent.com/freedict/fd-dictionaries/master/shared/freedict-P5.rng
 raw.githubusercontent.com/pruizf/disco/master/schema/tei_all_DISCO.rnc	BSD-2-Clause OR CC-BY-3.0	public	stated in the file (TEI's dual licence)
 raw.githubusercontent.com/srophe/Gaddel/refs/heads/main/documentation/schemas/out/syriacaPersons.compiled.rng	CC-BY-3.0	public	stated in the file
 raw.githubusercontent.com/srophe/Gaddel/refs/heads/main/documentation/schemas/out/syriacaPlaces.compiled.rng	CC-BY-3.0	public	stated in the file
+raw.githubusercontent.com/srophe/gaddel/master/documentation/editors.xml	CC-BY-3.0	public	stated in the file
+raw.githubusercontent.com/srophe/srophe-eXist-app/master/documentation/confessions.xml	CC-BY-3.0	public	stated in the file
+raw.githubusercontent.com/srophe/syriaca-data/refs/heads/gaddel_development/data/taxonomy/taxonomy.rdf	NONE	fetch-only	no licence stated
+raw.githubusercontent.com/srophe/syriaca/master/documentation/indexes/persons.xml	GPL-3.0-only	public	github.com/srophe/syriaca LICENSE (GPL v3); none in the file
+raw.githubusercontent.com/srophe/syriaca/refs/heads/main/documentation/indexes/persons.xml	GPL-3.0-only	public	github.com/srophe/syriaca LICENSE (GPL v3); none in the file
+raw.githubusercontent.com/srophe/syriaca/refs/heads/main/documentation/indexes/places.xml	GPL-3.0-only	public	github.com/srophe/syriaca LICENSE (GPL v3); none in the file

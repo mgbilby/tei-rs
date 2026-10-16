@@ -3,32 +3,47 @@
 //!
 //! The rules are extracted the way TEI's toolchain does (every `sch:ns`,
 //! schema-level `sch:let`, `sch:pattern` and `sch:diagnostics` in the
-//! schema and the files it includes), compiled once, and run over each
+//! schema and the files it includes), in either syntax: compact-syntax
+//! annotations are read as the XML elements they stand for, and Schematron
+//! 1.5 elements as ISO ones. They are compiled once, and run over each
 //! document with the XPath 2.0 evaluator in `crate::xpath`. As in ISO
 //! Schematron, each node is checked against every pattern, by the first
 //! rule of that pattern whose context matches it.
 //!
 //! Rules and tests that use XPath this crate doesn't implement are not
 //! guessed at: they are listed by [`Schematron::unsupported`] and skipped.
+//!
+//! Rules may read other XML documents with `doc()` and XSLT's `document()`:
+//! files under the schema's directory, the validated document's directory or
+//! the schema store set with [`Schema::set_store`](crate::Schema::set_store),
+//! which also holds the `http(s)` documents rules name: validation never
+//! touches the network. A document that can't be read is an evaluation error
+//! of the rule that reads it.
 
 use std::collections::HashMap;
 use std::fmt;
+use std::path::{Path, PathBuf};
 
 use crate::Severity;
+use crate::relaxng::{SchemaSource, SchemaSyntax};
 use crate::xpath::{
-    CompileError, Document, Evaluator, Expr, Focus, Item, NodeTest, Pattern, StaticContext, XNode,
-    parse_expr, parse_pattern,
+    Access, CompileError, Document, Evaluator, Expr, Focus, Item, NodeTest, Pattern, Resources,
+    StaticContext, XNode, file_uri, literal_documents, parse_expr, parse_pattern, static_base,
 };
 
+mod compact;
+
 /// Reads an included schema: given an `href` and the including schema's
-/// URI, returns the included schema's text and URI.
-type Resolve = dyn Fn(&str, &str) -> Result<(String, String), String>;
+/// URI, returns the included schema.
+type Resolve = dyn Fn(&str, &str) -> Result<SchemaSource, String>;
 
 /// Variable values, in binding order.
 type Bindings<'a> = Vec<(String, Vec<Item<'a>>)>;
 
 /// The ISO Schematron namespace.
 pub const SCHEMATRON_NS: &str = "http://purl.oclc.org/dsdl/schematron";
+/// The Schematron 1.5 namespace, whose elements are read as ISO ones.
+const SCHEMATRON_1_5_NS: &str = "http://www.ascc.net/xml/schematron";
 const RELAXNG_NS: &str = "http://relaxng.org/ns/structure/1.0";
 
 /// Whether a message comes from an `assert` or a `report`.
@@ -154,6 +169,9 @@ pub struct Schematron {
     dispatch: Dispatch,
     test_count: usize,
     unsupported: Vec<Unsupported>,
+    /// The schema's directory, whose files rules may read.
+    schema_dir: Option<PathBuf>,
+    remote_documents: Vec<String>,
 }
 
 impl fmt::Debug for Schematron {
@@ -216,56 +234,23 @@ struct Dispatch {
 
 impl Schematron {
     /// Extracts and compiles the Schematron rules embedded in a RELAX NG
-    /// schema in the XML syntax. `resolve` reads an included or externally
+    /// schema, in either syntax. `resolve` reads an included or externally
     /// referenced schema: given an `href` and the including schema's URI, it
-    /// returns that schema's text and URI.
-    pub(crate) fn from_relaxng(
-        text: &str,
-        base_uri: &str,
-        resolve: &Resolve,
-    ) -> Result<Self, String> {
+    /// returns that schema.
+    pub(crate) fn from_relaxng(source: &SchemaSource, resolve: &Resolve) -> Result<Self, String> {
         let mut collected = Collected::default();
-        collect(text, base_uri, resolve, &mut collected, 0)?;
-        Ok(compile(collected))
-    }
-
-    /// The rules of a schema in the compact syntax, whose annotations this
-    /// crate doesn't read: none are checked, and any `assert`/`report` the
-    /// annotations contain is listed as unsupported rather than ignored.
-    pub(crate) fn from_compact(text: &str) -> Self {
-        let mut schematron = compile(Collected::default());
-        let prefixes: Vec<&str> = regex::Regex::new(
-            r#"namespace\s+([\w.-]+)\s*=\s*"http://(?:purl\.oclc\.org/dsdl|www\.ascc\.net/xml)/schematron""#,
-        )
-        .expect("valid regex")
-        .captures_iter(text)
-        .filter_map(|captures| captures.get(1).map(|prefix| prefix.as_str()))
-        .collect();
-        let tests = prefixes
-            .iter()
-            .map(|prefix| {
-                regex::Regex::new(&format!(
-                    r"\b{}:(?:assert|report)\s*\[",
-                    regex::escape(prefix)
-                ))
-                .expect("valid regex")
-                .find_iter(text)
-                .count()
+        collect(source, resolve, &mut collected, 0)?;
+        let mut schematron = compile(collected);
+        let base_uri = source.base_uri();
+        schematron.schema_dir = (!base_uri.is_empty() && !base_uri.contains("://"))
+            .then(|| {
+                std::path::absolute(base_uri)
+                    .ok()?
+                    .parent()
+                    .map(Path::to_owned)
             })
-            .sum();
-        if tests > 0 {
-            schematron.test_count = tests;
-            schematron.unsupported.push(Unsupported {
-                context: "*".into(),
-                test: None,
-                tests,
-                reason:
-                    "Schematron in compact-syntax annotations isn't read; validate against the \
-                         schema's XML-syntax (.rng) version to check these rules"
-                        .into(),
-            });
-        }
-        schematron
+            .flatten();
+        Ok(schematron)
     }
 
     /// Whether the schema embeds no Schematron rules at all.
@@ -288,14 +273,52 @@ impl Schematron {
         &self.unsupported
     }
 
-    /// Checks a parsed document. `uri` is what `document-uri()` returns.
+    /// The `http(s)` URIs of the documents the rules read with `doc()`,
+    /// `document()` or `doc-available()` of a string literal, sorted.
+    /// Validation reads them from the schema store
+    /// ([`Schema::set_store`](crate::Schema::set_store)); rules that read
+    /// one the store lacks report an evaluation error instead (and
+    /// `doc-available()` is false).
+    pub fn remote_documents(&self) -> &[String] {
+        &self.remote_documents
+    }
+
+    /// Checks a parsed document, read from `path` if it was. `access` says
+    /// what else the rules may read.
     pub(crate) fn check<'a>(
         &self,
         doc: &'a roxmltree::Document<'a>,
+        path: Option<&Path>,
+        access: &Access,
+    ) -> Vec<(XNode<'a>, Message)> {
+        let resources = Resources::new(access, self.schema_dir.as_deref(), path);
+        let uri = path.map(file_uri);
+        // The messages are all about the validated document's nodes; they
+        // are looked up again so they outlive the other documents.
+        self.check_with(doc, uri, &resources)
+            .into_iter()
+            .map(|(node, message)| {
+                let (XNode::Node(found) | XNode::Attr(found, _)) = node;
+                let same = doc
+                    .get_node(found.id())
+                    .expect("a node of the validated document");
+                let node = match node {
+                    XNode::Node(_) => XNode::Node(same),
+                    XNode::Attr(_, index) => XNode::Attr(same, index),
+                };
+                (node, message)
+            })
+            .collect()
+    }
+
+    fn check_with<'a>(
+        &self,
+        doc: &'a roxmltree::Document<'a>,
         uri: Option<String>,
+        resources: &'a Resources<'a>,
     ) -> Vec<(XNode<'a>, Message)> {
         let document = Document::new(doc, uri);
-        let mut evaluator = Evaluator::new(&document);
+        let mut evaluator = Evaluator::with_resources(&document, resources);
         let mut messages = Vec::new();
         let root = document.root();
         let root_focus = Focus::node(root);
@@ -440,6 +463,7 @@ impl Schematron {
                 .as_ref()
                 .and_then(|subject| evaluator.nodes(subject, Some(&focus)).ok())
                 .and_then(|nodes| nodes.first().copied())
+                .filter(|subject| evaluator.in_main_document(*subject))
                 .unwrap_or(node);
             let (text, diagnostics) = if errored {
                 (String::new(), Vec::new())
@@ -624,6 +648,9 @@ struct SchElement {
     /// Namespace declarations in scope, as a fallback for prefixes no
     /// `sch:ns` declares.
     namespaces: Vec<(String, String)>,
+    /// For a pattern or schema-level variable: the static base URI of the
+    /// expressions in it (the URI of the schema file it is in).
+    base: Option<String>,
 }
 
 #[derive(Clone, Debug)]
@@ -634,7 +661,7 @@ enum SchContent {
 
 impl SchElement {
     fn from_node(node: roxmltree::Node<'_, '_>) -> Self {
-        let in_schematron = node.tag_name().namespace() == Some(SCHEMATRON_NS);
+        let in_schematron = is_schematron(node.tag_name().namespace());
         Self {
             name: in_schematron.then(|| node.tag_name().name().to_owned()),
             attributes: node
@@ -663,7 +690,14 @@ impl SchElement {
                         .map(|prefix| (prefix.to_owned(), ns.uri().to_owned()))
                 })
                 .collect(),
+            base: None,
         }
+    }
+
+    /// The element, with its expressions' static base URI.
+    fn with_base(mut self, uri: &str) -> Self {
+        self.base = static_base(uri);
+        self
     }
 
     fn attribute(&self, name: &str) -> Option<&str> {
@@ -687,15 +721,24 @@ struct Collected {
 }
 
 fn collect(
-    text: &str,
-    uri: &str,
+    source: &SchemaSource,
     resolve: &Resolve,
     collected: &mut Collected,
     depth: usize,
 ) -> Result<(), String> {
+    let uri = source.base_uri();
     if depth > 50 {
         return Err(format!("{uri}: includes nest too deeply"));
     }
+    let annotations;
+    let text = match source.syntax() {
+        SchemaSyntax::Xml => source.text(),
+        SchemaSyntax::Compact => {
+            annotations =
+                compact::annotations(source.text()).map_err(|error| format!("{uri}: {error}"))?;
+            &annotations
+        }
+    };
     let options = roxmltree::ParsingOptions {
         allow_dtd: true,
         ..Default::default()
@@ -708,6 +751,10 @@ fn collect(
     collect_node(doc.root(), uri, resolve, collected, depth)
 }
 
+fn is_schematron(namespace: Option<&str>) -> bool {
+    matches!(namespace, Some(SCHEMATRON_NS | SCHEMATRON_1_5_NS))
+}
+
 fn collect_node(
     node: roxmltree::Node<'_, '_>,
     uri: &str,
@@ -718,7 +765,7 @@ fn collect_node(
     for child in node.children().filter(|child| child.is_element()) {
         let name = child.tag_name();
         match (name.namespace(), name.name()) {
-            (Some(SCHEMATRON_NS), "ns") => {
+            (namespace, "ns") if is_schematron(namespace) => {
                 if let (Some(prefix), Some(namespace)) =
                     (child.attribute("prefix"), child.attribute("uri"))
                 {
@@ -727,17 +774,19 @@ fn collect_node(
                         .push((prefix.to_owned(), namespace.to_owned()));
                 }
             }
-            (Some(SCHEMATRON_NS), "pattern") => {
-                collected.patterns.push(SchElement::from_node(child))
-            }
-            (Some(SCHEMATRON_NS), "let") => collected.lets.push(SchElement::from_node(child)),
-            (Some(SCHEMATRON_NS), "diagnostics") => {
+            (namespace, "pattern") if is_schematron(namespace) => collected
+                .patterns
+                .push(SchElement::from_node(child).with_base(uri)),
+            (namespace, "let") if is_schematron(namespace) => collected
+                .lets
+                .push(SchElement::from_node(child).with_base(uri)),
+            (namespace, "diagnostics") if is_schematron(namespace) => {
                 collected.diagnostics.push(SchElement::from_node(child))
             }
             (Some(RELAXNG_NS), "include" | "externalRef") => {
                 if let Some(href) = child.attribute("href") {
-                    let (text, included_uri) = resolve(href, uri)?;
-                    collect(&text, &included_uri, resolve, collected, depth + 1)?;
+                    let included = resolve(href, uri)?;
+                    collect(&included, resolve, collected, depth + 1)?;
                 }
                 collect_node(child, uri, resolve, collected, depth)?;
             }
@@ -756,7 +805,7 @@ fn compile(collected: Collected) -> Schematron {
     }
     let mut context = StaticContext {
         namespaces,
-        variables: Vec::new(),
+        ..StaticContext::default()
     };
     let mut unsupported = Vec::new();
     let mut globals = Vec::new();
@@ -765,6 +814,7 @@ fn compile(collected: Collected) -> Schematron {
         else {
             continue;
         };
+        context.base_uri = element.base.clone();
         match parse_expr(value, &context) {
             Ok(expr) => {
                 globals.push((name.to_owned(), expr));
@@ -811,6 +861,7 @@ fn compile(collected: Collected) -> Schematron {
         ..
     } = compiler;
     let dispatch = dispatch(&rules);
+    let remote_documents = remote_documents(&globals, &patterns, &rules);
     Schematron {
         globals,
         patterns,
@@ -818,7 +869,41 @@ fn compile(collected: Collected) -> Schematron {
         dispatch,
         test_count,
         unsupported,
+        schema_dir: None,
+        remote_documents,
     }
+}
+
+/// The `http(s)` URIs the compiled expressions read with `doc()`,
+/// `document()` or `doc-available()` of a string literal.
+fn remote_documents(
+    globals: &[(String, Expr)],
+    patterns: &[CompiledPattern],
+    rules: &[Rule],
+) -> Vec<String> {
+    let mut found = Vec::new();
+    let lets = globals
+        .iter()
+        .chain(patterns.iter().flat_map(|pattern| &pattern.lets))
+        .chain(rules.iter().flat_map(|rule| &rule.lets));
+    for (_, expr) in lets {
+        literal_documents(expr, &mut found);
+    }
+    for test in rules.iter().flat_map(|rule| &rule.tests) {
+        literal_documents(&test.expr, &mut found);
+        if let Some(subject) = &test.subject {
+            literal_documents(subject, &mut found);
+        }
+        for part in test.message.iter().chain(test.diagnostics.iter().flatten()) {
+            if let Part::Name(Some(expr)) | Part::ValueOf(expr) = part {
+                literal_documents(expr, &mut found);
+            }
+        }
+    }
+    found.retain(|uri| uri.starts_with("http://") || uri.starts_with("https://"));
+    found.sort();
+    found.dedup();
+    found
 }
 
 struct Compiler<'s> {
@@ -858,6 +943,7 @@ impl<'s> Compiler<'s> {
         }
         let index = self.patterns.len();
         let mut context = schema_context.clone();
+        context.base_uri = pattern.base.clone();
         let mut lets = Vec::new();
         for element in pattern.elements("let") {
             let (Some(name), Some(value)) = (element.attribute("name"), element.attribute("value"))

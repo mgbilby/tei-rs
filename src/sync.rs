@@ -285,7 +285,8 @@ fn get(agent: &ureq::Agent, url: &str) -> Result<Vec<u8>, String> {
 
 /// Relative hrefs of `include`/`externalRef` in an XML-syntax schema, or of
 /// `include`/`external` in a compact-syntax one. Absolute URLs are left out:
-/// they are separate schemas.
+/// they are separate schemas. Other XML (such as a document Schematron rules
+/// read) has none, even if it doesn't parse.
 fn schema_references(bytes: &[u8]) -> Vec<String> {
     let Ok(text) = std::str::from_utf8(bytes) else {
         return Vec::new();
@@ -309,7 +310,11 @@ fn schema_references(bytes: &[u8]) -> Vec<String> {
                 hrefs.push(href.to_owned());
             }
         }
-    } else {
+    } else if !text
+        .trim_start_matches('\u{feff}')
+        .trim_start()
+        .starts_with('<')
+    {
         hrefs = compact_references(text);
     }
     hrefs.retain(|href| !href.contains("://"));
@@ -484,6 +489,11 @@ mod tests {
         assert_eq!(schema_references(rng), ["a.rng", "b.rng"]);
         let rnc = br#"include "common.rnc" start = external "part.rnc""#;
         assert_eq!(schema_references(rnc), ["common.rnc", "part.rnc"]);
+        // XML that isn't a schema, well-formed or not, includes nothing.
+        let rdf = br#"<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>"#;
+        assert!(schema_references(rdf).is_empty());
+        let broken = br#"<doc>see include "x.rnc" <unclosed></doc>"#;
+        assert!(schema_references(broken).is_empty());
     }
 
     #[test]

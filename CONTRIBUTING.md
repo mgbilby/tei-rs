@@ -69,7 +69,9 @@ The reference is TEI's own pipeline: the rules are extracted from the `.rng`
 (`scripts/schematron/extract.xsl`), compiled to XSLT 2.0 with
 [SchXslt](https://github.com/schxslt/schxslt) and run with Saxon-HE. Both
 come from Maven Central; re-record `tests/tei/schematron-expected.tsv` after
-adding samples or schemas:
+adding samples or schemas. Documents that rules read by URL come from the
+schema store in `schemas/` (through an XML catalog), never the network, so add
+them there first with `tei-rs schemas add --schemas schemas URL`:
 
 ```sh
 mvn dependency:get -Dartifact=net.sf.saxon:Saxon-HE:12.5

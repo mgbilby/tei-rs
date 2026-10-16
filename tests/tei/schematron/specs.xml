@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A made-up ODD fragment for the Schematron rules whose contexts are XSLT
+     3.0 patterns with parenthesised unions, such as
+     `( tei:classSpec | tei:elementSpec | … )/tei:listRef`, and with a base URI
+     that some rules look at (it is not meant to be valid RELAX NG). -->
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en"
+     xml:base="https://example.org/genizah-mss/">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>Specifications</title></titleStmt>
+      <publicationStmt><p>Made up for testing.</p></publicationStmt>
+      <sourceDesc><p>None.</p></sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <schemaSpec ident="test" start="TEI">
+        <elementSpec ident="one" mode="change">
+          <listRef>
+            <listRef><ptr target="#nested"/></listRef>
+            <ptr target="#a #b"/>
+            <ref>no target</ref>
+            <ptr target="#fine"/>
+          </listRef>
+        </elementSpec>
+        <classSpec ident="att.two" type="atts" mode="change">
+          <listRef><ref target="#fine">fine</ref></listRef>
+        </classSpec>
+        <dataSpec ident="three" mode="change">
+          <listRef><ptr/></listRef>
+        </dataSpec>
+        <specGrp xml:id="grp">
+          <listRef><ptr target="#x&#x9;#y"/></listRef>
+        </specGrp>
+        <macroSpec ident="four" mode="change">
+          <valList type="closed">
+            <valItem ident="old" validUntil="2001-01-01"/>
+          </valList>
+        </macroSpec>
+      </schemaSpec>
+      <div>
+        <listRef><ptr target="#not in a specification"/></listRef>
+      </div>
+    </body>
+  </text>
+</TEI>

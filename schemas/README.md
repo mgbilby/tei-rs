@@ -2,7 +2,9 @@
 
 A local copy of the RELAX NG schemas the bundled sample documents declare
 (`<?xml-model href="…"?>`), so `tei-rs validate` can use each document's own
-schema without network access. `manifest.json` lists every schema by its
+schema without network access, plus the XML documents some of those
+schemas' Schematron rules read by URL with `doc()`, which validation reads
+from here instead of the network. `manifest.json` lists every file by its
 canonical URL, with alias hrefs, fallback mirrors, the stored file, its
 SHA-256 and when it was last fetched or confirmed current. Files are stored
 under paths derived from their URLs, so relative `include`s resolve inside the
@@ -55,6 +57,10 @@ tried only when the canonical URL is unreachable.
 | `https://tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng` | **not downloaded yet** | BSD-2 or CC BY 3.0 (TEI) |
 | `https://epidoc.stoa.org/schema/latest/tei-epidoc.rng`, `…/9.7/tei-epidoc.rng` | **not downloaded yet** | |
 | `https://dracor.org/schema.rng` | **not downloaded yet** | |
+| `https://raw.githubusercontent.com/srophe/gaddel/master/documentation/editors.xml` (read by the Syriaca schemas' rules, like the next four) | canonical URL | CC BY 3.0 (stated in the file) |
+| `https://raw.githubusercontent.com/srophe/srophe-eXist-app/master/documentation/confessions.xml` | canonical URL | CC BY 3.0 (stated in the file) |
+| `https://raw.githubusercontent.com/srophe/syriaca/refs/heads/main/documentation/indexes/persons.xml` and `places.xml`, and `…/syriaca/master/documentation/indexes/persons.xml` | canonical URL | GPL-3.0 (repository LICENSE; none in the files) |
+| `https://raw.githubusercontent.com/srophe/syriaca-data/refs/heads/gaddel_development/data/taxonomy/taxonomy.rdf` | canonical URL | no licence file in the repository |
 
 The entries marked "not downloaded yet" could not be reached from the
 environment that created this store. Run `tei-rs schemas sync --schemas

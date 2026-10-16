@@ -30,6 +30,28 @@ pub enum IdType {
 }
 
 /// Which attributes of which elements have an ID-type in a schema.
+///
+/// ```
+/// use teixml::relaxng::{IdType, ResolveError, Schema, SchemaResolver, SchemaSource, SchemaSyntax};
+/// # struct NoIncludes;
+/// # impl SchemaResolver for NoIncludes {
+/// #     fn resolve(&self, href: &str, _: &str) -> Result<SchemaSource, ResolveError> {
+/// #         Err(ResolveError::new(href))
+/// #     }
+/// # }
+///
+/// let source = SchemaSource::new(
+///     "element doc { element p { attribute xml:id { xsd:ID }?, attribute corresp { xsd:IDREFS }? }* }",
+///     "doc.rnc",
+///     SchemaSyntax::Compact,
+/// );
+/// let ids = Schema::compile(&source, &NoIncludes)?.id_types().clone();
+/// const XML: &str = "http://www.w3.org/XML/1998/namespace";
+/// assert_eq!(ids.get(("", "p"), (XML, "id")), Some(IdType::Id));
+/// assert_eq!(ids.get(("", "p"), ("", "corresp")), Some(IdType::Idrefs));
+/// assert_eq!(ids.get(("", "doc"), (XML, "id")), None);
+/// # Ok::<(), teixml::relaxng::CompileError>(())
+/// ```
 #[derive(Clone, Debug, Default)]
 pub struct IdTypes {
     /// Attribute local names with an ID-type somewhere, to rule out most

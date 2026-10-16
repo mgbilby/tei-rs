@@ -6,6 +6,7 @@ use std::cmp::Ordering;
 use std::fmt::Write as _;
 
 use super::XError;
+use super::datetime::{DateKind, DateTime, Duration, DurationKind};
 
 /// The XML namespace, bound to the `xml` prefix in every document.
 pub(crate) const XML_NS: &str = "http://www.w3.org/XML/1998/namespace";
@@ -174,6 +175,10 @@ pub(crate) enum Atomic {
     Dec(f64),
     Dbl(f64),
     Bool(bool),
+    /// `xs:dateTime`, `xs:date`, `xs:time` and the `xs:g…` types.
+    DateTime(DateTime),
+    /// `xs:duration`, `xs:dayTimeDuration` and `xs:yearMonthDuration`.
+    Duration(Duration),
 }
 
 /// An item in a sequence.
@@ -211,6 +216,8 @@ pub(crate) enum AtomicType {
     Decimal,
     Double,
     AnyUri,
+    DateTime(DateKind),
+    Duration(DurationKind),
     /// `xs:NCName`, `xs:Name`, `xs:token`, … strings with a lexical check.
     Restricted(StringRestriction),
     /// `xs:nonNegativeInteger` and friends: an integer with a range check.
@@ -254,6 +261,17 @@ impl AtomicType {
             "decimal" => Self::Decimal,
             "double" | "float" => Self::Double,
             "anyURI" => Self::AnyUri,
+            "dateTime" => Self::DateTime(DateKind::DateTime),
+            "date" => Self::DateTime(DateKind::Date),
+            "time" => Self::DateTime(DateKind::Time),
+            "gYearMonth" => Self::DateTime(DateKind::GYearMonth),
+            "gYear" => Self::DateTime(DateKind::GYear),
+            "gMonthDay" => Self::DateTime(DateKind::GMonthDay),
+            "gDay" => Self::DateTime(DateKind::GDay),
+            "gMonth" => Self::DateTime(DateKind::GMonth),
+            "duration" => Self::Duration(DurationKind::Duration),
+            "dayTimeDuration" => Self::Duration(DurationKind::DayTime),
+            "yearMonthDuration" => Self::Duration(DurationKind::YearMonth),
             "normalizedString" => Self::Restricted(NormalizedString),
             "token" => Self::Restricted(Token),
             "language" => Self::Restricted(Language),
@@ -279,6 +297,9 @@ impl AtomicType {
             (Self::IntegerRange(low, high), Atomic::Int(value)) => (low..=high).contains(value),
             (Self::Decimal, Atomic::Int(_) | Atomic::Dec(_)) => true,
             (Self::Double, Atomic::Dbl(_)) => true,
+            (Self::DateTime(kind), Atomic::DateTime(value)) => value.kind == kind,
+            (Self::Duration(DurationKind::Duration), Atomic::Duration(_)) => true,
+            (Self::Duration(kind), Atomic::Duration(value)) => value.kind == kind,
             _ => false,
         }
     }
@@ -288,6 +309,17 @@ fn cast_error(value: &Atomic, target: &str) -> XError {
     XError::new(
         "FORG0001",
         format!("cannot cast `{}` to {target}", value.to_string_value()),
+    )
+}
+
+/// A cast XPath never allows between the two types, whatever the value.
+fn impossible_cast(value: &Atomic, target: &str) -> XError {
+    XError::new(
+        "XPTY0004",
+        format!(
+            "casting `{}` to {target} can never succeed",
+            value.to_string_value()
+        ),
     )
 }
 
@@ -308,6 +340,8 @@ impl Atomic {
             Self::Dec(value) => format_decimal(*value),
             Self::Dbl(value) => format_double(*value),
             Self::Bool(value) => value.to_string(),
+            Self::DateTime(value) => value.to_string(),
+            Self::Duration(value) => value.to_string(),
         }
     }
 
@@ -338,6 +372,19 @@ impl Atomic {
 
     /// `cast as`.
     pub(crate) fn cast(&self, target: AtomicType) -> Result<Atomic, XError> {
+        if matches!(self, Self::DateTime(_) | Self::Duration(_))
+            && matches!(
+                target,
+                AtomicType::Boolean
+                    | AtomicType::Integer
+                    | AtomicType::IntegerRange(..)
+                    | AtomicType::Decimal
+                    | AtomicType::Double
+                    | AtomicType::AnyUri
+            )
+        {
+            return Err(impossible_cast(self, "that type"));
+        }
         match target {
             AtomicType::AnyAtomic => Ok(self.clone()),
             AtomicType::Numeric => match self {
@@ -384,6 +431,7 @@ impl Atomic {
                     Self::Untyped(text) | Self::Str(text) => {
                         parse_integer(text).ok_or_else(|| cast_error(self, "xs:integer"))?
                     }
+                    Self::DateTime(_) | Self::Duration(_) => unreachable!("rejected above"),
                 };
                 if let AtomicType::IntegerRange(low, high) = target
                     && !(low..=high).contains(&value)
@@ -401,6 +449,7 @@ impl Atomic {
                     .map(Self::Dec)
                     .ok_or_else(|| cast_error(self, "xs:decimal")),
                 Self::Dbl(_) => Err(cast_error(self, "xs:decimal")),
+                Self::DateTime(_) | Self::Duration(_) => unreachable!("rejected above"),
             },
             AtomicType::Double => match self {
                 Self::Untyped(text) | Self::Str(text) => parse_double(text)
@@ -408,6 +457,23 @@ impl Atomic {
                     .ok_or_else(|| cast_error(self, "xs:double")),
                 Self::Bool(value) => Ok(Self::Dbl(f64::from(u8::from(*value)))),
                 _ => Ok(Self::Dbl(self.as_f64().unwrap_or(f64::NAN))),
+            },
+            AtomicType::DateTime(kind) => match self {
+                Self::Untyped(text) | Self::Str(text) => DateTime::parse(kind, text)
+                    .map(Self::DateTime)
+                    .ok_or_else(|| cast_error(self, kind.name())),
+                Self::DateTime(value) => value
+                    .convert(kind)
+                    .map(Self::DateTime)
+                    .ok_or_else(|| impossible_cast(self, kind.name())),
+                _ => Err(impossible_cast(self, kind.name())),
+            },
+            AtomicType::Duration(kind) => match self {
+                Self::Untyped(text) | Self::Str(text) => Duration::parse(kind, text)
+                    .map(Self::Duration)
+                    .ok_or_else(|| cast_error(self, kind.name())),
+                Self::Duration(value) => Ok(Self::Duration(value.convert(kind))),
+                _ => Err(impossible_cast(self, kind.name())),
             },
         }
     }
@@ -424,6 +490,10 @@ impl Atomic {
                 Some(a.as_str().unwrap().cmp(b.as_str().unwrap()))
             }
             (Self::Bool(a), Self::Bool(b)) => Some(a.cmp(b)),
+            (Self::DateTime(a), Self::DateTime(b)) if a.kind == b.kind => {
+                Some(a.instant().cmp(&b.instant()))
+            }
+            (Self::Duration(a), Self::Duration(b)) => Some(a.compare(b)),
             _ => None,
         }
     }
@@ -433,6 +503,19 @@ impl Atomic {
         (self.is_numeric() && other.is_numeric())
             || (self.is_stringlike() && other.is_stringlike())
             || matches!((self, other), (Self::Bool(_), Self::Bool(_)))
+            || matches!((self, other), (Self::DateTime(a), Self::DateTime(b)) if a.kind == b.kind)
+            || matches!((self, other), (Self::Duration(_), Self::Duration(_)))
+    }
+
+    /// Whether `lt`, `gt` and friends are defined between two comparable
+    /// values (the `xs:g…` types and mixed or plain `xs:duration`s only have
+    /// `eq` and `ne`).
+    pub(crate) fn ordered_with(&self, other: &Atomic) -> bool {
+        match (self, other) {
+            (Self::DateTime(a), _) => a.kind.is_ordered(),
+            (Self::Duration(a), Self::Duration(b)) => a.ordered_with(b),
+            _ => true,
+        }
     }
 }
 

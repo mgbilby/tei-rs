@@ -122,3 +122,6 @@ Changes made in teixml (all MIT-licensed, like the original):
   match has its derivative cached once for every value that pattern
   accepts, so attributes with unique values (`xml:id`) no longer each
   rederive the whole attribute group.
+- Documentation only: runnable examples for `SchemaResolver`,
+  `DatatypeLibrary`, `DatatypeRegistry`, `IdTypes`, `ElementPath` and
+  `ExpandedName`.

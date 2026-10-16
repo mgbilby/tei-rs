@@ -3,8 +3,8 @@
 //! Validate TEI XML documents against RELAX NG schemas, in pure Rust.
 //!
 //! With the `schematron` feature (on by default), the ISO Schematron rules
-//! a schema embeds, as TEI ODD-generated schemas do, are checked too; see
-//! [`Schema::set_schematron`] and the `schematron` module.
+//! a schema embeds in either syntax, as TEI ODD-generated schemas do, are
+//! checked too; see [`Schema::set_schematron`] and the `schematron` module.
 //!
 //! ```no_run
 //! let schema = teixml::Schema::from_file("tei_all.rng")?;
@@ -99,13 +99,11 @@ pub struct Schema {
 #[cfg(feature = "schematron")]
 struct EmbeddedSchematron {
     enabled: bool,
-    /// Text and URI of a schema in the XML syntax; `None` for the compact
-    /// syntax, whose annotations this crate doesn't read.
-    source: Option<(String, String)>,
-    /// The text of a schema in the compact syntax, only to report the
-    /// Schematron rules it embeds as unchecked.
-    compact: String,
+    source: SchemaSource,
     compiled: std::sync::OnceLock<Result<schematron::Schematron, String>>,
+    /// What the rules may read besides the schema's and the document's
+    /// directories.
+    access: xpath::Access,
 }
 
 impl Schema {
@@ -158,14 +156,9 @@ impl Schema {
             #[cfg(feature = "schematron")]
             schematron: EmbeddedSchematron {
                 enabled: true,
-                source: (syntax == SchemaSyntax::Xml)
-                    .then(|| (text.to_owned(), base_uri.to_owned())),
-                compact: if syntax == SchemaSyntax::Compact {
-                    text.to_owned()
-                } else {
-                    String::new()
-                },
+                source,
                 compiled: std::sync::OnceLock::new(),
+                access: xpath::Access::default(),
             },
         })
     }
@@ -184,6 +177,53 @@ impl Schema {
     #[cfg(feature = "schematron")]
     pub fn set_schematron(&mut self, enabled: bool) {
         self.schematron.enabled = enabled;
+    }
+
+    /// Gives the schema's Schematron rules a schema store to read from.
+    /// Rules may read other XML documents with `doc()` and XSLT's
+    /// `document()`: files under the schema's directory, the validated
+    /// document's directory and, once this is set, the store directory.
+    /// Validation never touches the network, so documents named by
+    /// `http(s)` URIs are read from the store, where
+    /// `sync::add` (`tei-rs schemas add URL`) puts them;
+    /// [`Schematron::remote_documents`](schematron::Schematron::remote_documents)
+    /// lists the ones a schema names. A document that can't be read makes
+    /// the rules that read it report an evaluation error, and
+    /// `doc-available()` false.
+    ///
+    /// ```
+    /// use teixml::{relaxng::SchemaSyntax, DiagnosticKind, Schema, SchemaStore};
+    ///
+    /// # let dir = std::env::temp_dir().join("teixml-doc-set-store");
+    /// # std::fs::create_dir_all(dir.join("example.org"))?;
+    /// # std::fs::write(dir.join("example.org/kinds.xml"), "<kinds><kind>poem</kind></kinds>")?;
+    /// # std::fs::write(dir.join("manifest.json"), r#"{"schemas": [{
+    /// #   "url": "https://example.org/kinds.xml", "file": "example.org/kinds.xml"
+    /// # }]}"#)?;
+    /// let rng = r#"<element name="text" xmlns="http://relaxng.org/ns/structure/1.0"
+    ///     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+    ///   <sch:pattern>
+    ///     <sch:rule context="text">
+    ///       <sch:let name="kinds" value="doc('https://example.org/kinds.xml')//kind"/>
+    ///       <sch:assert test="@type = $kinds">unknown type <sch:value-of select="@type"/></sch:assert>
+    ///     </sch:rule>
+    ///   </sch:pattern>
+    ///   <attribute name="type"/>
+    /// </element>"#;
+    /// let mut schema = Schema::from_text(rng, "text.rng", SchemaSyntax::Xml)?;
+    /// let store = SchemaStore::open(&dir)?; // holds https://example.org/kinds.xml
+    /// assert_eq!(schema.schematron()?.remote_documents(), ["https://example.org/kinds.xml"]);
+    /// assert!(store.resolve("https://example.org/kinds.xml").is_some());
+    /// schema.set_store(&store);
+    ///
+    /// assert!(schema.validate_str(r#"<text type="poem"/>"#)?.is_empty());
+    /// let diagnostics = schema.validate_str(r#"<text type="novel"/>"#)?;
+    /// assert_eq!(diagnostics[0].message().to_string(), "Schematron assert failed: unknown type novel");
+    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// ```
+    #[cfg(feature = "schematron")]
+    pub fn set_store(&mut self, store: &SchemaStore) {
+        self.schematron.access.store = Some(store.clone());
     }
 
     /// Whether validation checks the embedded Schematron rules.
@@ -232,18 +272,9 @@ impl Schema {
     pub fn schematron(&self) -> Result<&schematron::Schematron, Error> {
         let compiled = self.schematron.compiled.get_or_init(|| {
             on_large_stack(|| {
-                let (text, uri) = match &self.schematron.source {
-                    Some((text, uri)) => (text.as_str(), uri.as_str()),
-                    None => {
-                        return Ok(schematron::Schematron::from_compact(
-                            &self.schematron.compact,
-                        ));
-                    }
-                };
-                schematron::Schematron::from_relaxng(text, uri, &|href, base| {
+                schematron::Schematron::from_relaxng(&self.schematron.source, &|href, base| {
                     FileResolver
                         .resolve(href, base)
-                        .map(|source| (source.text().to_owned(), source.base_uri().to_owned()))
                         .map_err(|error| error.to_string())
                 })
             })
@@ -434,11 +465,7 @@ impl Schema {
         if rules.is_empty() {
             return Ok(diagnostics);
         }
-        let uri = path.map(|path| {
-            let path = std::path::absolute(path).unwrap_or_else(|_| path.to_owned());
-            format!("file:{}", path.to_string_lossy().replace('\\', "/"))
-        });
-        for (node, message) in rules.check(doc, uri) {
+        for (node, message) in rules.check(doc, path, &self.schematron.access) {
             let lines = lines.get_or_init(|| document::LineIndex::new(xml));
             diagnostics.push(Diagnostic::schematron(lines, node, message));
         }

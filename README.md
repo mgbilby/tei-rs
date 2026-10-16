@@ -23,18 +23,17 @@ command-line tool (`tei-rs`), with no Java or libxml2 needed.
 - Reads both the XML (`.rng`) and compact (`.rnc`) syntax, including
   `include`/`externalRef`, which are resolved as local files only: validation
   never touches the network.
-- Checks the ISO Schematron rules TEI ODD-generated schemas embed, with its
-  own XPath 2.0 evaluator, and reports the same messages as the reference
-  pipeline (SchXslt on Saxon-HE) on every bundled test document. 203 of the
-  205 tests in the bundled TEI, EpiDoc, ELTeC and papyri.info schemas are
-  supported; the rest are listed and skipped, never guessed.
+- Checks the ISO Schematron rules TEI ODD-generated schemas embed, in either
+  syntax, with its own XPath 2.0 evaluator, and reports the same messages as
+  the reference pipeline (SchXslt on Saxon-HE) on every bundled test document.
+  All 1,358 tests in the 25 bundled schemas that embed rules are supported;
+  tests using XPath it lacks are listed and skipped, never guessed.
 - Validates each document against the schema it declares in
   `<?xml-model?>`, from a local schema store.
 
 **Status: early development.** Schematron tests that use XPath teixml doesn't
-implement (dates and durations, `doc()`, XPath 3 syntax, …), and Schematron
-embedded in compact-syntax (`.rnc`) schemas, are reported as unsupported and
-skipped.
+implement (back-references in regular expressions, most XPath 3 functions,
+schema types, …) are reported as unsupported and skipped.
 
 ## Usage
 
@@ -131,6 +130,21 @@ store and `schemas which doc.xml` prints the schema a document resolves to;
 fallback download locations. The store defaults to `$TEI_RS_SCHEMAS`, else a
 `tei-rs` folder in your user cache directory; `--schemas DIR` picks another.
 Run `tei-rs --help` for the full reference.
+
+Some schemas' Schematron rules read other XML documents with `doc()` or
+`document()`, such as a project's taxonomy published at a URL. Those are read
+from the schema store too: when a schema names one the store lacks, `tei-rs
+validate` says so once, with the command that adds it, and the rules that
+read it report an error until then.
+
+```sh
+tei-rs schemas add https://raw.githubusercontent.com/srophe/syriaca-data/refs/heads/gaddel_development/data/taxonomy/taxonomy.rdf
+```
+
+Rules only read files under the schema's directory, the validated document's
+directory and the schema store (symbolic links and `..` resolved first); for
+anything else, `doc-available()` is false and `doc()` an error. In the
+library, `Schema::set_store` gives a schema the store to read from.
 
 ## Cargo features
 

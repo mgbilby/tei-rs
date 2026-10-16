@@ -7,6 +7,11 @@
 //! when the canonical host is unavailable. Files are stored under a path
 //! derived from the URL, so relative `include`s resolve inside the store.
 //! Keeping the store up to date (the network side) is in [`crate::sync`].
+//!
+//! The store also holds the XML documents Schematron rules read by URL with
+//! `doc()` or `document()` (a taxonomy, an index of names, …): added like a
+//! schema, they are read from here during validation
+//! (`Schema::set_store`).
 
 use std::path::{Path, PathBuf};
 
@@ -50,12 +55,23 @@ pub struct Entry {
 
 impl Entry {
     /// Whether `href` names this schema.
+    ///
+    /// ```
+    /// let entry = teixml::store::Entry {
+    ///     url: "https://example.org/tei.rng".into(),
+    ///     aliases: vec!["http://example.org/tei.rng".into()],
+    ///     ..Default::default()
+    /// };
+    /// assert!(entry.matches("https://example.org/tei.rng"));
+    /// assert!(entry.matches("http://example.org/tei.rng"));
+    /// assert!(!entry.matches("tei.rng"));
+    /// ```
     pub fn matches(&self, href: &str) -> bool {
         self.url == href || self.aliases.iter().any(|alias| alias == href)
     }
 }
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 struct Manifest {
     schemas: Vec<Entry>,
 }
@@ -85,7 +101,7 @@ struct Manifest {
 /// assert!(store.resolve("https://example.org/other.rnc").is_none());
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct SchemaStore {
     dir: PathBuf,
     manifest: Manifest,
@@ -108,6 +124,14 @@ impl SchemaStore {
 
     /// The default store location: `$TEI_RS_SCHEMAS` if set, otherwise
     /// `tei-rs/schemas` in the user's cache directory.
+    ///
+    /// ```no_run
+    /// use teixml::SchemaStore;
+    ///
+    /// // SAFETY: set before any other thread reads the environment.
+    /// unsafe { std::env::set_var("TEI_RS_SCHEMAS", "/srv/tei/schemas") };
+    /// assert_eq!(SchemaStore::default_dir(), std::path::Path::new("/srv/tei/schemas"));
+    /// ```
     pub fn default_dir() -> PathBuf {
         if let Some(dir) = std::env::var_os("TEI_RS_SCHEMAS") {
             return dir.into();
@@ -155,7 +179,36 @@ impl SchemaStore {
         path.is_file().then_some(path)
     }
 
+    /// Why [`resolve`](Self::resolve) finds no file for `href`, and the
+    /// command that fixes it.
+    pub(crate) fn missing(&self, href: &str) -> String {
+        if self.entries().iter().any(|entry| entry.matches(href)) {
+            format!(
+                "`{href}` is listed in the schema store at {} but not downloaded yet; \
+                 run `tei-rs schemas sync`",
+                self.dir.display()
+            )
+        } else {
+            format!(
+                "`{href}` is not in the schema store at {}; run `tei-rs schemas add {href}`",
+                self.dir.display()
+            )
+        }
+    }
+
     /// Writes `manifest.json`.
+    ///
+    /// ```
+    /// use teixml::SchemaStore;
+    ///
+    /// # let dir = std::env::temp_dir().join("teixml-doc-save");
+    /// # let _ = std::fs::remove_dir_all(&dir);
+    /// let store = SchemaStore::open(&dir)?; // nothing on disk yet
+    /// assert!(store.entries().is_empty());
+    /// store.save()?;
+    /// assert!(store.dir().join("manifest.json").is_file());
+    /// # Ok::<(), teixml::Error>(())
+    /// ```
     pub fn save(&self) -> Result<(), Error> {
         std::fs::create_dir_all(&self.dir).map_err(|source| Error::Io {
             path: self.dir.clone(),
@@ -210,21 +263,9 @@ pub fn schema_for_document(
             return Ok(local);
         }
     }
-    store.resolve(href).ok_or_else(|| {
-        let listed = store.entries().iter().any(|entry| entry.matches(href));
-        Error::Store(if listed {
-            format!(
-                "schema `{href}` is listed in the schema store at {} but not downloaded yet; \
-                 run `tei-rs schemas sync`",
-                store.dir().display()
-            )
-        } else {
-            format!(
-                "schema `{href}` is not in the schema store at {}; run `tei-rs schemas add {href}`",
-                store.dir().display()
-            )
-        })
-    })
+    store
+        .resolve(href)
+        .ok_or_else(|| Error::Store(format!("schema {}", store.missing(href))))
 }
 
 /// The hrefs of all `<?xml-model?>` processing instructions in `xml` that

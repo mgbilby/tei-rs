@@ -60,6 +60,44 @@ impl DatatypeContext {
 /// (type validity, parameter validity, value matching, value equality) —
 /// independently designed for Rust, not ported from any existing
 /// implementation.
+///
+/// ```
+/// use teixml::relaxng::{DatatypeContext, DatatypeLibrary, DatatypeRegistry};
+///
+/// /// `urn:example:datatypes`: one type, `even`, for even integers.
+/// struct Even;
+///
+/// impl DatatypeLibrary for Even {
+///     fn validate_params(&self, type_name: &str, params: &[(&str, &str)]) -> Result<(), String> {
+///         match (type_name, params) {
+///             ("even", []) => Ok(()),
+///             ("even", _) => Err("`even` takes no parameters".into()),
+///             _ => Err(format!("unknown type `{type_name}`")),
+///         }
+///     }
+///     fn matches(&self, _: &str, _: &[(&str, &str)], value: &str, _: &DatatypeContext) -> bool {
+///         value.trim().parse::<i64>().is_ok_and(|n| n % 2 == 0)
+///     }
+///     fn values_equal(
+///         &self,
+///         _: &str,
+///         expected: &str,
+///         _: &DatatypeContext,
+///         actual: &str,
+///         _: &DatatypeContext,
+///     ) -> bool {
+///         expected.trim().parse::<i64>().ok() == actual.trim().parse::<i64>().ok()
+///     }
+///     fn is_context_dependent(&self, _: &str) -> bool {
+///         false
+///     }
+/// }
+///
+/// let mut registry = DatatypeRegistry::new();
+/// registry.register("urn:example:datatypes", Even);
+/// // Pass `registry` to `teixml::relaxng::Schema::validate` for schemas
+/// // declaring `datatypes ex = "urn:example:datatypes"` and using `ex:even`.
+/// ```
 pub trait DatatypeLibrary: Send + Sync {
     /// Checks that `type_name` is known to this library and that `params`
     /// are individually well-formed and applicable to it (e.g. XSD's
@@ -149,6 +187,38 @@ impl std::error::Error for DatatypeError {}
 
 /// Maps `datatypeLibrary` URIs to [`DatatypeLibrary`] implementations for
 /// one [`crate::relaxng::validate`] call.
+///
+/// ```
+/// use teixml::relaxng::{DatatypeRegistry, Schema, SchemaSource, SchemaSyntax};
+/// # use teixml::relaxng::{ResolveError, SchemaResolver};
+/// # struct NoIncludes;
+/// # impl SchemaResolver for NoIncludes {
+/// #     fn resolve(&self, href: &str, _: &str) -> Result<SchemaSource, ResolveError> {
+/// #         Err(ResolveError::new(href))
+/// #     }
+/// # }
+/// # struct Leaf(&'static str);
+/// # impl teixml::relaxng::Element for Leaf {
+/// #     type Location = ();
+/// #     fn name(&self) -> teixml::relaxng::ExpandedName {
+/// #         teixml::relaxng::ExpandedName::new(None::<String>, "n")
+/// #     }
+/// #     fn attributes(&self) -> impl Iterator<Item = (teixml::relaxng::ExpandedName, String)> {
+/// #         std::iter::empty()
+/// #     }
+/// #     fn children(&self) -> impl Iterator<Item = teixml::relaxng::Content<Self>> {
+/// #         std::iter::once(teixml::relaxng::Content::Text(self.0.to_owned()))
+/// #     }
+/// # }
+/// let source = SchemaSource::new("element n { xsd:integer }", "n.rnc", SchemaSyntax::Compact);
+/// let schema = Schema::compile(&source, &NoIncludes)?;
+///
+/// // The default registry knows XSD types...
+/// assert!(schema.validate(&DatatypeRegistry::new(), &Leaf("42"))?.is_empty());
+/// // ...a built-in-only one refuses to validate rather than guess.
+/// assert!(schema.validate(&DatatypeRegistry::builtin_only(), &Leaf("42")).is_err());
+/// # Ok::<(), Box<dyn std::error::Error>>(())
+/// ```
 pub struct DatatypeRegistry {
     libraries: BTreeMap<String, Box<dyn DatatypeLibrary>>,
 }

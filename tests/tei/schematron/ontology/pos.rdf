@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A made-up part-of-speech ontology for dictionary.xml, whose @ana
+     attributes point here (FreeDict-style document(@ana) checks). -->
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+  <rdf:Description xml:id="noun"><rdfs:label>noun</rdfs:label></rdf:Description>
+  <rdf:Description xml:id="verb"><rdfs:label>verb</rdfs:label></rdf:Description>
+  <rdf:Description xml:id="unlabelled"/>
+</rdf:RDF>

@@ -21,6 +21,8 @@ pub(crate) enum Expr {
     Step(Step),
     /// `a/b`: `b` evaluated for each node `a` selects.
     Path(Box<Expr>, Box<Expr>),
+    /// `a ! b` (XPath 3.0): `b` evaluated for each item of `a`, in order.
+    Map(Box<Expr>, Box<Expr>),
     Or(Box<Expr>, Box<Expr>),
     And(Box<Expr>, Box<Expr>),
     GeneralCompare(CompareOp, Box<Expr>, Box<Expr>),
@@ -35,6 +37,8 @@ pub(crate) enum Expr {
     If(Box<Expr>, Box<Expr>, Box<Expr>),
     /// `for $var in a return b` (several bindings are nested).
     For(String, Box<Expr>, Box<Expr>),
+    /// `let $var := a return b` (XPath 3.0; several bindings are nested).
+    Let(String, Box<Expr>, Box<Expr>),
     /// `some`/`every $var in a satisfies b`; `true` for `every`.
     Quantified(bool, String, Box<Expr>, Box<Expr>),
     InstanceOf(Box<Expr>, SequenceType),
@@ -205,7 +209,8 @@ impl Expr {
     pub(crate) fn may_be_positional(&self) -> bool {
         match self {
             Self::Literal(atomic) => atomic.is_numeric(),
-            Self::Arithmetic(..) | Self::Negate(_) | Self::Var(_) => true,
+            Self::Arithmetic(..) | Self::Negate(_) | Self::Var(_) | Self::Map(..) => true,
+            Self::Let(_, value, body) => value.uses_focus_position() || body.may_be_positional(),
             Self::Call(function, args) => {
                 function.uses_position()
                     || function.may_return_number()
@@ -224,7 +229,7 @@ impl Expr {
             Self::Step(_) | Self::Literal(_) | Self::Var(_) | Self::ContextItem | Self::Root => {
                 false
             }
-            Self::Path(left, _) => left.uses_focus_position(),
+            Self::Path(left, _) | Self::Map(left, _) => left.uses_focus_position(),
             Self::Filter(base, _) => base.uses_focus_position(),
             Self::Sequence(items) => items.iter().any(Self::uses_focus_position),
             Self::Or(a, b)
@@ -238,6 +243,7 @@ impl Expr {
             | Self::Intersect(a, b)
             | Self::Except(a, b)
             | Self::For(_, a, b)
+            | Self::Let(_, a, b)
             | Self::Quantified(_, _, a, b) => a.uses_focus_position() || b.uses_focus_position(),
             Self::If(a, b, c) => {
                 a.uses_focus_position() || b.uses_focus_position() || c.uses_focus_position()

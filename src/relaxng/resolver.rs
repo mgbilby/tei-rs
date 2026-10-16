@@ -54,6 +54,34 @@ impl SchemaSource {
 /// mechanism (files, an in-memory map, HTTP, ...) fits the caller, with
 /// whatever security boundary (allowed schemes, path restrictions) is
 /// appropriate there.
+///
+/// ```
+/// use std::collections::HashMap;
+/// use teixml::relaxng::{ResolveError, Schema, SchemaResolver, SchemaSource, SchemaSyntax};
+///
+/// /// Schemas held in memory, by name.
+/// struct InMemory(HashMap<&'static str, &'static str>);
+///
+/// impl SchemaResolver for InMemory {
+///     fn resolve(&self, href: &str, _base_uri: &str) -> Result<SchemaSource, ResolveError> {
+///         let text = self.0.get(href).ok_or_else(|| ResolveError::new(format!("no {href}")))?;
+///         Ok(SchemaSource::new(*text, href, SchemaSyntax::Compact))
+///     }
+/// }
+///
+/// let resolver = InMemory(HashMap::from([("names.rnc", "name = element name { text }")]));
+/// let main = SchemaSource::new(
+///     "include \"names.rnc\"\nstart = element person { name+ }",
+///     "main.rnc",
+///     SchemaSyntax::Compact,
+/// );
+/// let schema = Schema::compile(&main, &resolver)?;
+/// # let _ = schema;
+///
+/// let missing = SchemaSource::new("include \"other.rnc\"", "main.rnc", SchemaSyntax::Compact);
+/// assert!(Schema::compile(&missing, &resolver).is_err());
+/// # Ok::<(), teixml::relaxng::CompileError>(())
+/// ```
 pub trait SchemaResolver {
     /// Resolves `href` (as it literally appears in the schema) relative to
     /// `base_uri`, or fails with a [`ResolveError`] if it can't be found,

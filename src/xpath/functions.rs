@@ -1,15 +1,18 @@
-//! The XPath 2.0 (and XSLT `current()`) functions the evaluator supports.
+//! The XPath 2.0 functions the evaluator supports, with XSLT's `current()`
+//! and some XPath 3.0 additions.
 
 use std::sync::Arc;
 
 use super::XError;
-use super::ast::Expr;
+use super::ast::{ArithmeticOp, Expr};
+use super::datetime::{self, DateKind, DateTime, Duration, DurationKind};
 use super::eval::{
     Evaluator, Focus, atomize, boolean, context_item, context_node, effective_boolean,
     numeric_operand, sorted_nodes,
 };
 use super::parse::CompileError;
-use super::regex::CompiledRegex;
+use super::regex::{CompiledRegex, RegexError};
+use super::resources::StaticBase;
 use super::value::{Atomic, AtomicType, Item, Seq, XML_NS, XNode, collapse_whitespace};
 
 type Result<T> = std::result::Result<T, XError>;
@@ -17,7 +20,10 @@ type Result<T> = std::result::Result<T, XError>;
 #[derive(Clone, Debug)]
 pub(crate) enum Function {
     Abs,
+    /// `adjust-dateTime-to-timezone()` and its `date` and `time` versions.
+    AdjustToTimezone(DateKind),
     Avg,
+    BaseUri,
     Boolean,
     Ceiling,
     CodepointsToString,
@@ -26,10 +32,24 @@ pub(crate) enum Function {
     Contains,
     Count,
     Current,
+    CurrentDate,
+    CurrentDateTime,
+    CurrentTime,
     Data,
+    /// `year-from-date()`, `hours-from-dateTime()`, …: a component of a
+    /// value of the given type.
+    DateComponent(DateKind, Component),
+    /// `fn:dateTime()`: a date and a time combined.
+    CombineDateTime,
     DistinctValues,
-    DocAvailable,
+    /// `doc()`, `doc-available()` and XSLT's `document()`, with the static
+    /// base URI relative URIs resolve against.
+    Doc(StaticBase),
+    DocAvailable(StaticBase),
+    Document(StaticBase),
     DocumentUri,
+    /// `years-from-duration()`, …: a component of a duration.
+    DurationComponent(Component),
     Empty,
     EndsWith,
     Error,
@@ -38,9 +58,12 @@ pub(crate) enum Function {
     False,
     Floor,
     GenerateId,
+    HasChildren,
     Head,
     Id,
+    ImplicitTimezone,
     IndexOf,
+    Innermost,
     InsertBefore,
     Lang,
     Last,
@@ -55,6 +78,8 @@ pub(crate) enum Function {
     Not,
     Number,
     OneOrMore,
+    Outermost,
+    Path,
     Position,
     Remove,
     Replace,
@@ -83,6 +108,18 @@ pub(crate) enum Function {
     CompiledRegex(Arc<CompiledRegex>),
 }
 
+/// A component of a date, time or duration.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum Component {
+    Year,
+    Month,
+    Day,
+    Hours,
+    Minutes,
+    Seconds,
+    Timezone,
+}
+
 impl Function {
     /// The function with this local name in the standard function
     /// namespace, checking the number of arguments.
@@ -90,7 +127,11 @@ impl Function {
         use Function::*;
         let (function, min, max) = match name {
             "abs" => (Abs, 1, 1),
+            "adjust-dateTime-to-timezone" => (AdjustToTimezone(DateKind::DateTime), 1, 2),
+            "adjust-date-to-timezone" => (AdjustToTimezone(DateKind::Date), 1, 2),
+            "adjust-time-to-timezone" => (AdjustToTimezone(DateKind::Time), 1, 2),
             "avg" => (Avg, 1, 1),
+            "base-uri" => (BaseUri, 0, 1),
             "boolean" => (Boolean, 1, 1),
             "ceiling" => (Ceiling, 1, 1),
             "codepoints-to-string" => (CodepointsToString, 1, 1),
@@ -99,9 +140,18 @@ impl Function {
             "contains" => (Contains, 2, 2),
             "count" => (Count, 1, 1),
             "current" => (Current, 0, 0),
+            "current-date" => (CurrentDate, 0, 0),
+            "current-dateTime" => (CurrentDateTime, 0, 0),
+            "current-time" => (CurrentTime, 0, 0),
             "data" => (Data, 0, 1),
+            "dateTime" => (CombineDateTime, 2, 2),
+            "day-from-date" => (DateComponent(DateKind::Date, Component::Day), 1, 1),
+            "day-from-dateTime" => (DateComponent(DateKind::DateTime, Component::Day), 1, 1),
+            "days-from-duration" => (DurationComponent(Component::Day), 1, 1),
             "distinct-values" => (DistinctValues, 1, 1),
-            "doc-available" => (DocAvailable, 1, 1),
+            "doc" => (Doc(None), 1, 1),
+            "doc-available" => (DocAvailable(None), 1, 1),
+            "document" => (Document(None), 1, 2),
             "document-uri" => (DocumentUri, 0, 1),
             "empty" => (Empty, 1, 1),
             "ends-with" => (EndsWith, 2, 2),
@@ -111,9 +161,15 @@ impl Function {
             "false" => (False, 0, 0),
             "floor" => (Floor, 1, 1),
             "generate-id" => (GenerateId, 0, 1),
+            "has-children" => (HasChildren, 0, 1),
             "head" => (Head, 1, 1),
+            "hours-from-dateTime" => (DateComponent(DateKind::DateTime, Component::Hours), 1, 1),
+            "hours-from-duration" => (DurationComponent(Component::Hours), 1, 1),
+            "hours-from-time" => (DateComponent(DateKind::Time, Component::Hours), 1, 1),
             "id" => (Id, 1, 2),
+            "implicit-timezone" => (ImplicitTimezone, 0, 0),
             "index-of" => (IndexOf, 2, 2),
+            "innermost" => (Innermost, 1, 1),
             "insert-before" => (InsertBefore, 3, 3),
             "lang" => (Lang, 1, 2),
             "last" => (Last, 0, 0),
@@ -122,18 +178,33 @@ impl Function {
             "matches" => (Matches, 2, 3),
             "max" => (Max, 1, 1),
             "min" => (Min, 1, 1),
+            "minutes-from-dateTime" => {
+                (DateComponent(DateKind::DateTime, Component::Minutes), 1, 1)
+            }
+            "minutes-from-duration" => (DurationComponent(Component::Minutes), 1, 1),
+            "minutes-from-time" => (DateComponent(DateKind::Time, Component::Minutes), 1, 1),
+            "month-from-date" => (DateComponent(DateKind::Date, Component::Month), 1, 1),
+            "month-from-dateTime" => (DateComponent(DateKind::DateTime, Component::Month), 1, 1),
+            "months-from-duration" => (DurationComponent(Component::Month), 1, 1),
             "name" => (Name, 0, 1),
             "namespace-uri" => (NamespaceUri, 0, 1),
             "normalize-space" => (NormalizeSpace, 0, 1),
             "not" => (Not, 1, 1),
             "number" => (Number, 0, 1),
             "one-or-more" => (OneOrMore, 1, 1),
+            "outermost" => (Outermost, 1, 1),
+            "path" => (Path, 0, 1),
             "position" => (Position, 0, 0),
             "remove" => (Remove, 2, 2),
             "replace" => (Replace, 3, 4),
             "reverse" => (Reverse, 1, 1),
             "root" => (Root, 0, 1),
             "round" => (Round, 1, 1),
+            "seconds-from-dateTime" => {
+                (DateComponent(DateKind::DateTime, Component::Seconds), 1, 1)
+            }
+            "seconds-from-duration" => (DurationComponent(Component::Seconds), 1, 1),
+            "seconds-from-time" => (DateComponent(DateKind::Time, Component::Seconds), 1, 1),
             "starts-with" => (StartsWith, 2, 2),
             "string" => (String, 0, 1),
             "string-join" => (StringJoin, 1, 2),
@@ -145,12 +216,20 @@ impl Function {
             "substring-before" => (SubstringBefore, 2, 2),
             "sum" => (Sum, 1, 2),
             "tail" => (Tail, 1, 1),
+            "timezone-from-date" => (DateComponent(DateKind::Date, Component::Timezone), 1, 1),
+            "timezone-from-dateTime" => {
+                (DateComponent(DateKind::DateTime, Component::Timezone), 1, 1)
+            }
+            "timezone-from-time" => (DateComponent(DateKind::Time, Component::Timezone), 1, 1),
             "tokenize" => (Tokenize, 1, 3),
             "trace" => (Trace, 1, 2),
             "translate" => (Translate, 3, 3),
             "true" => (True, 0, 0),
             "unordered" => (Unordered, 1, 1),
             "upper-case" => (UpperCase, 1, 1),
+            "year-from-date" => (DateComponent(DateKind::Date, Component::Year), 1, 1),
+            "year-from-dateTime" => (DateComponent(DateKind::DateTime, Component::Year), 1, 1),
+            "years-from-duration" => (DurationComponent(Component::Year), 1, 1),
             "zero-or-one" => (ZeroOrOne, 1, 1),
             _ => return Err(CompileError(format!("function {name}() is not supported"))),
         };
@@ -161,6 +240,18 @@ impl Function {
             )));
         }
         Ok(function)
+    }
+
+    /// The function with `base` as its static base URI, for those that
+    /// resolve relative URIs.
+    pub(crate) fn with_static_base(self, base: Option<&str>) -> Self {
+        let base = || base.map(Arc::from);
+        match self {
+            Self::Doc(_) => Self::Doc(base()),
+            Self::DocAvailable(_) => Self::DocAvailable(base()),
+            Self::Document(_) => Self::Document(base()),
+            other => other,
+        }
     }
 
     pub(crate) fn uses_position(&self) -> bool {
@@ -190,6 +281,8 @@ impl Function {
                 | Self::ZeroOrOne
                 | Self::OneOrMore
                 | Self::Subsequence
+                | Self::DateComponent(..)
+                | Self::DurationComponent(_)
         )
     }
 
@@ -461,6 +554,26 @@ pub(crate) fn call<'a>(
                 };
             }
             let count = values.len();
+            if values
+                .iter()
+                .any(|value| matches!(value, Atomic::Duration(_)))
+            {
+                // Durations of one ordered subtype add up like numbers.
+                let mut values = values.into_iter();
+                let first = values.next().expect("not empty");
+                let mut total = first;
+                for value in values {
+                    total = datetime::arithmetic(ArithmeticOp::Add, &total, &value)?;
+                }
+                if matches!(function, F::Avg) {
+                    total = datetime::arithmetic(
+                        ArithmeticOp::Divide,
+                        &total,
+                        &Atomic::Int(count as i64),
+                    )?;
+                }
+                return Ok(vec![Item::Atomic(total)]);
+            }
             let mut all_integers = true;
             let mut total_int: i64 = 0;
             let mut total = 0.0;
@@ -510,9 +623,15 @@ pub(crate) fn call<'a>(
                 best = Some(match best {
                     None => value,
                     Some(current) => {
-                        let ordering = value.compare(&current).ok_or_else(|| {
-                            XError::new("FORG0006", "min()/max() of values that can't be compared")
-                        })?;
+                        let ordering = value
+                            .compare(&current)
+                            .filter(|_| value.comparable(&current) && value.ordered_with(&current))
+                            .ok_or_else(|| {
+                                XError::new(
+                                    "FORG0006",
+                                    "min()/max() of values that can't be compared",
+                                )
+                            })?;
                         let better = if matches!(function, F::Min) {
                             ordering.is_lt()
                         } else {
@@ -655,12 +774,22 @@ pub(crate) fn call<'a>(
                         .unwrap_or_default()
                         .to_owned(),
                 ),
-                F::GenerateId => string(match node {
-                    XNode::Node(node) => format!("n{}", node.id().get()),
-                    XNode::Attr(owner, index) => format!("n{}a{index}", owner.id().get()),
-                }),
+                F::GenerateId => {
+                    // Unique across documents: others than the validated
+                    // one get a prefix.
+                    let prefix = match evaluator.document_of(node).rank {
+                        0 => std::string::String::new(),
+                        rank => format!("d{rank}"),
+                    };
+                    string(match node {
+                        XNode::Node(node) => format!("{prefix}n{}", node.id().get()),
+                        XNode::Attr(owner, index) => {
+                            format!("{prefix}n{}a{index}", owner.id().get())
+                        }
+                    })
+                }
                 F::Root => single(Item::Node(node.root())),
-                _ => Ok(match (node, &evaluator.doc.uri) {
+                _ => Ok(match (node, &evaluator.document_of(node).uri) {
                     (XNode::Node(node), Some(uri)) if node.is_root() => {
                         vec![Item::Atomic(Atomic::Str(uri.clone()))]
                     }
@@ -670,16 +799,20 @@ pub(crate) fn call<'a>(
         }
         F::Id => {
             let ids = atomize(arg!(0)?);
-            if args.len() > 1 {
-                // The node only selects the document, and there is one.
-                arg!(1)?;
+            // The node only selects the document to search.
+            let node = if args.len() > 1 {
+                match arg!(1)?.as_slice() {
+                    [Item::Node(node), ..] => *node,
+                    _ => return Err(XError::new("XPTY0004", "id() needs a node")),
+                }
             } else {
-                context_node(focus)?;
-            }
+                context_node(focus)?
+            };
+            let document = evaluator.document_of(node);
             let mut found = Vec::new();
             for value in ids {
                 for id in value.to_string_value().split_whitespace() {
-                    if let Some(element) = evaluator.doc.element_by_id(id) {
+                    if let Some(element) = document.element_by_id(id) {
                         found.push(XNode::Node(element));
                     }
                 }
@@ -711,9 +844,155 @@ pub(crate) fn call<'a>(
                         .is_some_and(|rest| rest.starts_with('-'))
             })))
         }
-        F::DocAvailable => {
+        F::Doc(base) => {
+            let value = arg!(0)?;
+            if value.is_empty() {
+                return Ok(Vec::new());
+            }
+            let uri = optional_string(&value)?;
+            single(Item::Node(evaluator.doc(&uri, base.as_deref())?))
+        }
+        F::DocAvailable(base) => {
             let uri = optional_string(&arg!(0)?)?;
-            Ok(boolean(doc_available(&uri)?))
+            Ok(boolean(evaluator.doc_available(&uri, base.as_deref())?))
+        }
+        F::Document(base) => {
+            let items = arg!(0)?;
+            let base_node = if args.len() > 1 {
+                match arg!(1)?.as_slice() {
+                    [Item::Node(node)] => Some(*node),
+                    _ => {
+                        return Err(XError::new(
+                            "XPTY0004",
+                            "document() needs a single node as its second argument",
+                        ));
+                    }
+                }
+            } else {
+                None
+            };
+            evaluator.xslt_document(items, base_node, base.as_deref())
+        }
+        F::CurrentDateTime | F::CurrentDate | F::CurrentTime => {
+            let now = evaluator.doc.now();
+            let kind = match function {
+                F::CurrentDate => DateKind::Date,
+                F::CurrentTime => DateKind::Time,
+                _ => DateKind::DateTime,
+            };
+            single(Item::Atomic(Atomic::DateTime(
+                now.convert(kind).expect("a dateTime converts to anything"),
+            )))
+        }
+        F::ImplicitTimezone => single(Item::Atomic(Atomic::Duration(
+            Duration::parse(DurationKind::DayTime, "PT0S").expect("valid"),
+        ))),
+        F::DateComponent(kind, component) => {
+            let Some(value) = date_argument(arg!(0)?, *kind)? else {
+                return Ok(Vec::new());
+            };
+            Ok(match component {
+                Component::Year => vec![Item::Atomic(Atomic::Int(value.year))],
+                Component::Month => vec![Item::Atomic(Atomic::Int(i64::from(value.month)))],
+                Component::Day => vec![Item::Atomic(Atomic::Int(i64::from(value.day)))],
+                Component::Hours => vec![Item::Atomic(Atomic::Int(i64::from(value.hour)))],
+                Component::Minutes => vec![Item::Atomic(Atomic::Int(i64::from(value.minute)))],
+                Component::Seconds => vec![Item::Atomic(Atomic::Dec(value.seconds()))],
+                Component::Timezone => value
+                    .timezone_duration()
+                    .map(|zone| Item::Atomic(Atomic::Duration(zone)))
+                    .into_iter()
+                    .collect(),
+            })
+        }
+        F::DurationComponent(component) => {
+            let Some(value) = duration_argument(arg!(0)?, DurationKind::Duration)? else {
+                return Ok(Vec::new());
+            };
+            integer(match component {
+                Component::Year => value.years(),
+                Component::Month => value.months_part(),
+                Component::Day => value.days(),
+                Component::Hours => value.hours(),
+                Component::Minutes => value.minutes(),
+                _ => return Ok(vec![Item::Atomic(Atomic::Dec(value.seconds()))]),
+            })
+        }
+        F::AdjustToTimezone(kind) => {
+            let Some(value) = date_argument(arg!(0)?, *kind)? else {
+                return Ok(Vec::new());
+            };
+            let timezone = if args.len() > 1 {
+                match duration_argument(arg!(1)?, DurationKind::DayTime)? {
+                    Some(zone) => Some(datetime::timezone_from_duration(&zone)?),
+                    None => None,
+                }
+            } else {
+                // The implicit timezone, UTC.
+                Some(0)
+            };
+            single(Item::Atomic(Atomic::DateTime(
+                value.adjust_timezone(timezone)?,
+            )))
+        }
+        F::CombineDateTime => {
+            let date = date_argument(arg!(0)?, DateKind::Date)?;
+            let time = date_argument(arg!(1)?, DateKind::Time)?;
+            let (Some(date), Some(time)) = (date, time) else {
+                return Ok(Vec::new());
+            };
+            single(Item::Atomic(Atomic::DateTime(DateTime::combine(
+                &date, &time,
+            )?)))
+        }
+        F::BaseUri | F::HasChildren | F::Path => {
+            let node = if args.is_empty() {
+                context_node(focus)?
+            } else {
+                match arg!(0)?.as_slice() {
+                    [] if matches!(function, F::HasChildren) => return Ok(boolean(false)),
+                    [] => return Ok(Vec::new()),
+                    [Item::Node(node)] => *node,
+                    _ => return Err(XError::new("XPTY0004", "expected a single node")),
+                }
+            };
+            match function {
+                F::BaseUri => Ok(base_uri(node, evaluator.doc.uri.as_deref())
+                    .map(|uri| Item::Atomic(Atomic::Str(uri)))
+                    .into_iter()
+                    .collect()),
+                F::HasChildren => Ok(boolean(matches!(
+                    node,
+                    XNode::Node(node) if node.has_children()
+                ))),
+                _ => string(path(node)),
+            }
+        }
+        F::Innermost | F::Outermost => {
+            let nodes = evaluator.nodes(&args[0], focus)?;
+            let orders: std::collections::HashSet<(u32, u32)> =
+                nodes.iter().map(|node| node.order()).collect();
+            let ancestors = |node: &XNode<'a>| {
+                std::iter::successors(node.parent(), |ancestor| ancestor.parent())
+            };
+            let kept = if matches!(function, F::Outermost) {
+                nodes
+                    .iter()
+                    .filter(|node| !ancestors(node).any(|a| orders.contains(&a.order())))
+                    .copied()
+                    .collect()
+            } else {
+                let mut has_descendant = std::collections::HashSet::new();
+                for node in &nodes {
+                    has_descendant.extend(ancestors(node).map(|ancestor| ancestor.order()));
+                }
+                nodes
+                    .iter()
+                    .filter(|node| !has_descendant.contains(&node.order()))
+                    .copied()
+                    .collect()
+            };
+            Ok(sorted_nodes(kept))
         }
         F::CompiledRegex(_) => Err(XError::new(
             "XPST0017",
@@ -722,52 +1001,196 @@ pub(crate) fn call<'a>(
     }
 }
 
-/// `doc-available()` for local files: whether `uri` (an absolute path or a
-/// `file:` URI) names a readable, well-formed XML document. Validation never
-/// touches the network, so other URIs are an error rather than a guess, as
-/// are relative ones (XSLT would resolve them against the stylesheet).
-/// The largest file `doc-available()` reads.
-const MAX_DOCUMENT_BYTES: u64 = 256 * 1024 * 1024;
+/// The argument of a function that expects an optional value of `kind`:
+/// an untyped value is cast to it, anything else must have that type.
+fn date_argument(value: Seq<'_>, kind: DateKind) -> Result<Option<DateTime>> {
+    match atomize(value).as_slice() {
+        [] => Ok(None),
+        [Atomic::DateTime(value)] if value.kind == kind => Ok(Some(*value)),
+        [value @ Atomic::Untyped(_)] => match value.cast(AtomicType::DateTime(kind))? {
+            Atomic::DateTime(value) => Ok(Some(value)),
+            _ => unreachable!("cast to a date/time type"),
+        },
+        _ => Err(XError::new(
+            "XPTY0004",
+            format!("expected a single {}", kind.name()),
+        )),
+    }
+}
 
-fn doc_available(uri: &str) -> Result<bool> {
-    let path = match uri
-        .strip_prefix("file://")
-        .or_else(|| uri.strip_prefix("file:"))
-    {
-        Some(path) => path,
-        None if uri.contains("://") => {
-            return Err(XError::new(
-                "FODC0002",
-                format!("doc-available(\"{uri}\"): only local files can be checked"),
-            ));
+/// Like [`date_argument`], for a duration of `kind` (or a subtype).
+fn duration_argument(value: Seq<'_>, kind: DurationKind) -> Result<Option<Duration>> {
+    match atomize(value).as_slice() {
+        [] => Ok(None),
+        [Atomic::Duration(value)] if kind == DurationKind::Duration || value.kind == kind => {
+            Ok(Some(*value))
         }
-        None => uri,
-    };
-    if !std::path::Path::new(path).is_absolute() {
-        return Err(XError::new(
-            "FODC0002",
-            format!("doc-available(\"{uri}\"): relative URIs are not supported"),
-        ));
+        [value @ Atomic::Untyped(_)] => match value.cast(AtomicType::Duration(kind))? {
+            Atomic::Duration(value) => Ok(Some(value)),
+            _ => unreachable!("cast to a duration type"),
+        },
+        _ => Err(XError::new(
+            "XPTY0004",
+            format!("expected a single {}", kind.name()),
+        )),
     }
-    // Only regular files of a reasonable size: not devices, pipes or
-    // anything that would take unbounded time or memory to read.
-    let Ok(metadata) = std::fs::metadata(path) else {
-        return Ok(false);
-    };
-    if !metadata.is_file() || metadata.len() > MAX_DOCUMENT_BYTES {
-        return Ok(false);
+}
+
+/// The base URI of a node: the document's URI, resolved against every
+/// `xml:base` on the way down to the node's element.
+fn base_uri(node: XNode<'_>, document_uri: Option<&str>) -> Option<String> {
+    let mut bases: Vec<&str> = node
+        .element()
+        .into_iter()
+        .flat_map(|element| element.ancestors())
+        .filter_map(|ancestor| ancestor.attribute((XML_NS, "base")))
+        .collect();
+    bases.reverse();
+    let mut uri = document_uri.map(str::to_owned);
+    for base in bases {
+        uri = Some(match uri {
+            Some(uri) => resolve_uri(base, &uri),
+            None => base.to_owned(),
+        });
     }
-    let Ok(text) = std::fs::read_to_string(path) else {
-        return Ok(false);
+    uri
+}
+
+/// Resolves a URI reference against an absolute base URI (RFC 3986,
+/// section 5.2).
+fn resolve_uri(reference: &str, base: &str) -> String {
+    let has_scheme = |uri: &str| {
+        uri.split_once(':').is_some_and(|(scheme, _)| {
+            scheme.starts_with(|c: char| c.is_ascii_alphabetic())
+                && scheme
+                    .chars()
+                    .all(|c| c.is_ascii_alphanumeric() || matches!(c, '+' | '-' | '.'))
+        })
     };
-    if crate::limits::xml_nesting_exceeds(&text, crate::limits::MAX_DOCUMENT_DEPTH) {
-        return Ok(false);
+    if has_scheme(reference) || !has_scheme(base) {
+        return reference.to_owned();
     }
-    let options = roxmltree::ParsingOptions {
-        allow_dtd: true,
-        ..Default::default()
+    let base = base.split('#').next().unwrap_or_default();
+    let (scheme, rest) = base.split_once(':').expect("has a scheme");
+    let (authority, path_and_query) = match rest.strip_prefix("//") {
+        Some(after) => {
+            let end = after.find(['/', '?']).unwrap_or(after.len());
+            (Some(&after[..end]), &after[end..])
+        }
+        None => (None, rest),
     };
-    Ok(roxmltree::Document::parse_with_options(&text, options).is_ok())
+    let base_path = path_and_query.split('?').next().unwrap_or_default();
+    let prefix = match authority {
+        Some(authority) => format!("{scheme}://{authority}"),
+        None => format!("{scheme}:"),
+    };
+    if reference.starts_with("//") {
+        return format!("{scheme}:{reference}");
+    }
+    if reference.is_empty() {
+        return base.to_owned();
+    }
+    if reference.starts_with('#') {
+        return format!("{base}{reference}");
+    }
+    if reference.starts_with('?') {
+        return format!("{prefix}{base_path}{reference}");
+    }
+    let split = reference.find(['?', '#']).unwrap_or(reference.len());
+    let (path, suffix) = reference.split_at(split);
+    let merged = if path.starts_with('/') {
+        path.to_owned()
+    } else if authority.is_some() && base_path.is_empty() {
+        format!("/{path}")
+    } else {
+        let directory = base_path.rfind('/').map_or("", |at| &base_path[..=at]);
+        format!("{directory}{path}")
+    };
+    format!("{prefix}{}{suffix}", remove_dot_segments(&merged))
+}
+
+/// Removes `.` and `..` segments from a URI path.
+fn remove_dot_segments(path: &str) -> String {
+    let mut segments: Vec<&str> = Vec::new();
+    let mut parts = path.split('/').peekable();
+    let absolute = path.starts_with('/');
+    if absolute {
+        parts.next();
+    }
+    let mut trailing_slash = false;
+    while let Some(part) = parts.next() {
+        let last = parts.peek().is_none();
+        match part {
+            "." => trailing_slash = last,
+            ".." => {
+                segments.pop();
+                trailing_slash = last;
+            }
+            _ => {
+                segments.push(part);
+                trailing_slash = false;
+            }
+        }
+    }
+    let mut out = String::new();
+    if absolute {
+        out.push('/');
+    }
+    out.push_str(&segments.join("/"));
+    if trailing_slash && !out.ends_with('/') {
+        out.push('/');
+    }
+    out
+}
+
+/// `fn:path()`: `/Q{uri}local[n]/…`, as XPath 3.0 defines it.
+fn path(node: XNode<'_>) -> String {
+    let mut segments = Vec::new();
+    let mut current = Some(node);
+    while let Some(node) = current {
+        match node {
+            XNode::Attr(..) => {
+                let (namespace, local) = node.expanded_name().unwrap_or((None, ""));
+                segments.push(match namespace {
+                    Some(namespace) => format!("@Q{{{namespace}}}{local}"),
+                    None => format!("@{local}"),
+                });
+            }
+            XNode::Node(inner) => {
+                let same = |sibling: &roxmltree::Node<'_, '_>| {
+                    if inner.is_element() {
+                        sibling.is_element() && sibling.tag_name() == inner.tag_name()
+                    } else {
+                        sibling.node_type() == inner.node_type()
+                            && (!inner.is_pi()
+                                || sibling.pi().map(|pi| pi.target)
+                                    == inner.pi().map(|pi| pi.target))
+                    }
+                };
+                let position = inner.prev_siblings().filter(same).count();
+                match inner.node_type() {
+                    roxmltree::NodeType::Root => {}
+                    roxmltree::NodeType::Element => {
+                        let name = inner.tag_name();
+                        segments.push(format!(
+                            "Q{{{}}}{}[{position}]",
+                            name.namespace().unwrap_or_default(),
+                            name.name()
+                        ));
+                    }
+                    roxmltree::NodeType::Text => segments.push(format!("text()[{position}]")),
+                    roxmltree::NodeType::Comment => segments.push(format!("comment()[{position}]")),
+                    roxmltree::NodeType::PI => segments.push(format!(
+                        "processing-instruction({})[{position}]",
+                        inner.pi().map(|pi| pi.target).unwrap_or_default()
+                    )),
+                }
+            }
+        }
+        current = node.parent();
+    }
+    segments.reverse();
+    format!("/{}", segments.join("/"))
 }
 
 fn no_focus() -> XError {
@@ -829,11 +1252,12 @@ fn regex_argument<'a>(
     };
     CompiledRegex::new(&pattern, &flags)
         .map(Arc::new)
-        .map_err(|message| {
-            XError::new(
-                "FORX0002",
-                format!("regular expression `{pattern}`: {message}"),
-            )
+        .map_err(|error| {
+            let code = match error {
+                RegexError::Invalid(code, _) => code,
+                RegexError::Unsupported(_) => "FORX0002",
+            };
+            XError::new(code, format!("regular expression `{pattern}`: {error}"))
         })
 }
 

@@ -27,6 +27,11 @@ validate   Validates documents against a RELAX NG schema (.rng or .rnc) and
            the schema it declares in <?xml-model?>, taken from the local
            schema store, so no network access is needed. Each schema is
            compiled once per run.
+           Schematron rules may read other XML documents with doc() and
+           document(), but only files under the schema's directory, the
+           document's directory or the schema store; documents they name by
+           an http(s) URL are read from the store (add them with `schemas
+           add URL`, as a warning says), never from the network.
   --no-schematron  Check RELAX NG only.
 
 schemas    Manages the local schema store.
@@ -36,6 +41,7 @@ schemas    Manages the local schema store.
   sync     Like check, but downloads every outdated or missing schema.
   add      Downloads the schema at URL into the store. --alias records another
            href documents use for it; --mirror adds a fallback download URL.
+           Also stores the XML documents Schematron rules read by URL.
   which    Prints the schema file each document would be validated against.
   FILTER   Only schemas whose URL contains this text.
 
@@ -130,20 +136,18 @@ fn run(args: &[String]) -> Result<ExitCode, String> {
 }
 
 fn validate(options: &Options) -> ExitCode {
-    let store = if options.schema.is_none() {
-        let dir = options
-            .store
-            .clone()
-            .unwrap_or_else(SchemaStore::default_dir);
-        match SchemaStore::open(&dir) {
-            Ok(store) => Some(store),
-            Err(error) => {
-                eprintln!("{error}");
-                return ExitCode::from(2);
-            }
+    // The store gives documents their schemas (without --schema) and
+    // Schematron rules the documents they read by URL.
+    let dir = options
+        .store
+        .clone()
+        .unwrap_or_else(SchemaStore::default_dir);
+    let store = match SchemaStore::open(&dir) {
+        Ok(store) => store,
+        Err(error) => {
+            eprintln!("{error}");
+            return ExitCode::from(2);
         }
-    } else {
-        None
     };
 
     let mut compiled: HashMap<PathBuf, Result<Schema, String>> = HashMap::new();
@@ -158,23 +162,20 @@ fn validate(options: &Options) -> ExitCode {
                 continue;
             }
         };
-        let schema_path = match (&options.schema, &store) {
-            (Some(path), _) => path.clone(),
-            (None, Some(store)) => {
-                match teixml::store::schema_for_document(&xml, document, store) {
-                    Ok(path) => path,
-                    Err(error) => {
-                        eprintln!("{}: {error}", document.display());
-                        status = 2;
-                        continue;
-                    }
+        let schema_path = match &options.schema {
+            Some(path) => path.clone(),
+            None => match teixml::store::schema_for_document(&xml, document, &store) {
+                Ok(path) => path,
+                Err(error) => {
+                    eprintln!("{}: {error}", document.display());
+                    status = 2;
+                    continue;
                 }
-            }
-            (None, None) => unreachable!("a store is opened whenever --schema is absent"),
+            },
         };
         let schema = compiled
             .entry(schema_path.clone())
-            .or_insert_with(|| load_schema(&schema_path, !options.no_schematron));
+            .or_insert_with(|| load_schema(&schema_path, !options.no_schematron, &store));
         let schema = match schema {
             Ok(schema) => schema,
             Err(error) => {
@@ -213,13 +214,15 @@ fn validate(options: &Options) -> ExitCode {
 }
 
 /// Compiles a schema and, when Schematron checking is on, its embedded
-/// rules, warning on stderr about any tests that can't be checked.
-fn load_schema(path: &Path, schematron: bool) -> Result<Schema, String> {
+/// rules, warning on stderr about any tests that can't be checked and any
+/// documents they read that the store lacks.
+fn load_schema(path: &Path, schematron: bool, store: &SchemaStore) -> Result<Schema, String> {
     #[cfg_attr(not(feature = "schematron"), allow(unused_mut))]
     let mut schema = Schema::from_file(path).map_err(|error| error.to_string())?;
     #[cfg(feature = "schematron")]
     {
         schema.set_schematron(schematron);
+        schema.set_store(store);
         if schematron {
             let rules = schema.schematron().map_err(|error| error.to_string())?;
             if !rules.unsupported().is_empty() {
@@ -233,11 +236,38 @@ fn load_schema(path: &Path, schematron: bool) -> Result<Schema, String> {
                     eprintln!("  {entry}");
                 }
             }
+            for url in rules.remote_documents() {
+                if store.resolve(url).is_none() {
+                    eprintln!(
+                        "warning: {}: Schematron rules read {}; until then, the rules that \
+                         read it report an error",
+                        path.display(),
+                        missing_document(store, url)
+                    );
+                }
+            }
         }
     }
     #[cfg(not(feature = "schematron"))]
-    let _ = schematron;
+    let _ = (schematron, store);
     Ok(schema)
+}
+
+/// `url`, and why the store can't give it yet.
+#[cfg(feature = "schematron")]
+fn missing_document(store: &SchemaStore, url: &str) -> String {
+    if store.entries().iter().any(|entry| entry.matches(url)) {
+        format!(
+            "{url}, which is listed in the schema store at {} but not downloaded yet; \
+             run `tei-rs schemas sync`",
+            store.dir().display()
+        )
+    } else {
+        format!(
+            "{url}, which is not in the schema store at {}; run `tei-rs schemas add {url}`",
+            store.dir().display()
+        )
+    }
 }
 
 fn list(store: &SchemaStore) -> ExitCode {

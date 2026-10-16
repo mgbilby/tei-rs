@@ -1,11 +1,11 @@
-//! Tokenizer and recursive-descent parser for the XPath 2.0 subset and for
-//! XSLT 2.0 match patterns.
+//! Tokenizer and recursive-descent parser for the XPath 2.0 subset (with
+//! the XPath 3.0 `!`, `||`, `let` and `=>`) and for XSLT match patterns.
 
 use std::collections::HashMap;
 
 use super::ast::*;
 use super::functions::Function;
-use super::regex::CompiledRegex;
+use super::regex::{CompiledRegex, RegexError};
 use super::value::{Atomic, AtomicType, XML_NS, is_name_char, is_name_start};
 
 const XS_NS: &str = "http://www.w3.org/2001/XMLSchema";
@@ -29,11 +29,14 @@ fn error<T>(message: impl Into<String>) -> Result<T> {
 }
 
 /// What names mean while parsing: namespace prefixes and in-scope
-/// variables.
+/// variables, plus the static base URI.
 #[derive(Clone, Debug, Default)]
 pub(crate) struct StaticContext {
     pub namespaces: HashMap<String, String>,
     pub variables: Vec<String>,
+    /// What `doc()`, `document()` and `doc-available()` resolve relative
+    /// URIs against: the URI of the schema file the expression is in.
+    pub base_uri: Option<String>,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -52,9 +55,9 @@ enum Token {
     Symbol(&'static str),
 }
 
-const SYMBOLS: [&str; 24] = [
-    "//", "::", "..", "!=", "<=", ">=", "<<", ">>", ":=", "(", ")", "[", "]", ",", "/", "@", ".",
-    "|", "=", "<", ">", "+", "-", "*",
+const SYMBOLS: [&str; 27] = [
+    "//", "::", "..", "!=", "<=", ">=", "<<", ">>", ":=", "||", "=>", "(", ")", "[", "]", ",", "/",
+    "@", ".", "|", "=", "<", ">", "+", "-", "*", "!",
 ];
 
 fn tokenize(text: &str) -> Result<Vec<Token>> {
@@ -242,13 +245,11 @@ pub(crate) fn parse_expr(text: &str, context: &StaticContext) -> Result<Expr> {
     Ok(expr)
 }
 
-/// Parses an XSLT 2.0 match pattern (a Schematron rule context).
+/// Parses an XSLT match pattern (a Schematron rule context): an XSLT 2.0
+/// pattern, or an XSLT 3.0 one with parenthesised unions as steps.
 pub(crate) fn parse_pattern(text: &str, context: &StaticContext) -> Result<Pattern> {
     let mut parser = Parser::new(text, context)?;
-    let mut alternatives = vec![parser.path_pattern()?];
-    while parser.eat_symbol("|") || parser.eat_keyword("union") {
-        alternatives.push(parser.path_pattern()?);
-    }
+    let alternatives = parser.union_pattern()?;
     parser.finish()?;
     Ok(Pattern { alternatives })
 }
@@ -257,7 +258,7 @@ struct Parser<'c> {
     tokens: Vec<Token>,
     position: usize,
     context: &'c StaticContext,
-    /// Variables bound by `for`/`some`/`every` inside the expression.
+    /// Variables bound by `for`/`let`/`some`/`every` inside the expression.
     locals: Vec<String>,
     /// How many expressions enclose the current one.
     depth: usize,
@@ -267,6 +268,10 @@ struct Parser<'c> {
 /// later evaluated) recursively, so a limit keeps a malicious schema from
 /// overflowing the stack; real Schematron tests nest a few levels.
 const MAX_DEPTH: usize = 256;
+
+/// How many path patterns a pattern may expand to once its parenthesised
+/// unions are distributed (`(a | b)/(c | d)` is four).
+const MAX_ALTERNATIVES: usize = 1024;
 
 impl<'c> Parser<'c> {
     fn new(text: &str, context: &'c StaticContext) -> Result<Self> {
@@ -374,14 +379,20 @@ impl<'c> Parser<'c> {
         let next_is_variable = matches!(self.peek_at(1), Some(Token::Variable(..)));
         if self.at_keyword("for") && next_is_variable {
             self.position += 1;
-            return self.bindings("return", |var, domain, body| {
+            return self.bindings("in", "return", |var, domain, body| {
                 Expr::For(var, Box::new(domain), Box::new(body))
+            });
+        }
+        if self.at_keyword("let") && next_is_variable {
+            self.position += 1;
+            return self.bindings(":=", "return", |var, value, body| {
+                Expr::Let(var, Box::new(value), Box::new(body))
             });
         }
         if (self.at_keyword("some") || self.at_keyword("every")) && next_is_variable {
             let every = self.at_keyword("every");
             self.position += 1;
-            return self.bindings("satisfies", move |var, domain, body| {
+            return self.bindings("in", "satisfies", move |var, domain, body| {
                 Expr::Quantified(every, var, Box::new(domain), Box::new(body))
             });
         }
@@ -402,9 +413,11 @@ impl<'c> Parser<'c> {
         self.or_expr()
     }
 
-    /// `$a in X, $b in Y keyword body`, nested right to left.
+    /// `$a in X, $b in Y keyword body` (or `$a := X, …` for `let`), nested
+    /// right to left.
     fn bindings(
         &mut self,
+        binder: &str,
         keyword: &str,
         build: impl Fn(String, Expr, Expr) -> Expr,
     ) -> Result<Expr> {
@@ -416,7 +429,11 @@ impl<'c> Parser<'c> {
             if prefix.is_some() {
                 return error("prefixed variable names are not supported");
             }
-            self.expect_keyword("in")?;
+            if binder == ":=" {
+                self.expect_symbol(binder)?;
+            } else {
+                self.expect_keyword(binder)?;
+            }
             let domain = self.expr_single()?;
             self.locals.push(name.clone());
             bound.push((name, domain));
@@ -450,7 +467,7 @@ impl<'c> Parser<'c> {
     }
 
     fn comparison_expr(&mut self) -> Result<Expr> {
-        let left = self.range_expr()?;
+        let left = self.string_concat_expr()?;
         let general = match self.peek() {
             Some(Token::Symbol("=")) => Some(CompareOp::Eq),
             Some(Token::Symbol("!=")) => Some(CompareOp::Ne),
@@ -462,7 +479,7 @@ impl<'c> Parser<'c> {
         };
         if let Some(op) = general {
             self.position += 1;
-            let right = self.range_expr()?;
+            let right = self.string_concat_expr()?;
             return Ok(Expr::GeneralCompare(op, Box::new(left), Box::new(right)));
         }
         let value = match self.peek() {
@@ -479,7 +496,7 @@ impl<'c> Parser<'c> {
         };
         if let Some(op) = value {
             self.position += 1;
-            let right = self.range_expr()?;
+            let right = self.string_concat_expr()?;
             return Ok(Expr::ValueCompare(op, Box::new(left), Box::new(right)));
         }
         let node = match self.peek() {
@@ -490,10 +507,35 @@ impl<'c> Parser<'c> {
         };
         if let Some(op) = node {
             self.position += 1;
-            let right = self.range_expr()?;
+            let right = self.string_concat_expr()?;
             return Ok(Expr::NodeCompare(op, Box::new(left), Box::new(right)));
         }
         Ok(left)
+    }
+
+    /// `a || b || …` (XPath 3.0): `concat(a, b, …)`.
+    fn string_concat_expr(&mut self) -> Result<Expr> {
+        let first = self.range_expr()?;
+        if !self.at_symbol("||") {
+            return Ok(first);
+        }
+        let mut parts = vec![first];
+        while self.eat_symbol("||") {
+            parts.push(self.range_expr()?);
+        }
+        Ok(Expr::Call(Function::Concat, parts))
+    }
+
+    /// Checks that a chain of `links` operators that nest their left operand
+    /// (`!`, `=>`) stays within the nesting limit, as evaluating it recurses
+    /// once per link.
+    fn check_chain(&self, links: usize) -> Result<()> {
+        if self.depth + links > MAX_DEPTH {
+            return error(format!(
+                "expression nested more than {MAX_DEPTH} levels deep"
+            ));
+        }
+        Ok(())
     }
 
     fn range_expr(&mut self) -> Result<Expr> {
@@ -597,7 +639,7 @@ impl<'c> Parser<'c> {
     }
 
     fn cast_expr(&mut self) -> Result<Expr> {
-        let expr = self.unary_expr()?;
+        let expr = self.arrow_expr()?;
         if self.at_keyword("cast")
             && matches!(self.peek_at(1), Some(Token::Name(None, n)) if n == "as")
         {
@@ -679,6 +721,24 @@ impl<'c> Parser<'c> {
         })
     }
 
+    /// `a => f(b)` (XPath 3.1): `f(a, b)`.
+    fn arrow_expr(&mut self) -> Result<Expr> {
+        let mut expr = self.unary_expr()?;
+        let mut links = 0;
+        while self.eat_symbol("=>") {
+            links += 1;
+            self.check_chain(links)?;
+            let Some(Token::Name(prefix, local)) = self.next() else {
+                return error("expected a function name after `=>`");
+            };
+            self.expect_symbol("(")?;
+            let mut args = vec![expr];
+            args.extend(self.arguments()?);
+            expr = self.function_call(prefix.as_deref(), &local, args)?;
+        }
+        Ok(expr)
+    }
+
     fn unary_expr(&mut self) -> Result<Expr> {
         let mut negate = false;
         let mut signed = false;
@@ -692,7 +752,7 @@ impl<'c> Parser<'c> {
                 break;
             }
         }
-        let expr = self.path_expr()?;
+        let expr = self.simple_map_expr()?;
         Ok(if negate {
             Expr::Negate(Box::new(expr))
         } else if signed {
@@ -705,6 +765,18 @@ impl<'c> Parser<'c> {
         } else {
             expr
         })
+    }
+
+    /// `a ! b ! …` (XPath 3.0).
+    fn simple_map_expr(&mut self) -> Result<Expr> {
+        let mut expr = self.path_expr()?;
+        let mut links = 0;
+        while self.eat_symbol("!") {
+            links += 1;
+            self.check_chain(links)?;
+            expr = Expr::Map(Box::new(expr), Box::new(self.path_expr()?));
+        }
+        Ok(expr)
     }
 
     fn path_expr(&mut self) -> Result<Expr> {
@@ -972,21 +1044,27 @@ impl<'c> Parser<'c> {
             Some(Token::Symbol(".")) => Ok(Expr::ContextItem),
             Some(Token::Name(prefix, local)) if self.at_symbol("(") => {
                 self.position += 1;
-                let mut args = Vec::new();
-                if !self.eat_symbol(")") {
-                    loop {
-                        args.push(self.expr_single()?);
-                        if self.eat_symbol(")") {
-                            break;
-                        }
-                        self.expect_symbol(",")?;
-                    }
-                }
+                let args = self.arguments()?;
                 self.function_call(prefix.as_deref(), &local, args)
             }
             Some(token) => error(format!("unexpected {}", describe(&token))),
             None => error("unexpected end of expression"),
         }
+    }
+
+    /// A function call's arguments, after the `(`.
+    fn arguments(&mut self) -> Result<Vec<Expr>> {
+        let mut args = Vec::new();
+        if !self.eat_symbol(")") {
+            loop {
+                args.push(self.expr_single()?);
+                if self.eat_symbol(")") {
+                    break;
+                }
+                self.expect_symbol(",")?;
+            }
+        }
+        Ok(args)
     }
 
     fn function_call(&self, prefix: Option<&str>, local: &str, args: Vec<Expr>) -> Result<Expr> {
@@ -1012,9 +1090,12 @@ impl<'c> Parser<'c> {
                 prefix.unwrap_or_default()
             ));
         }
-        let function = Function::from_name(local, args.len())?;
+        let function = Function::from_name(local, args.len())?
+            .with_static_base(self.context.base_uri.as_deref());
         let mut args = args;
-        // Regular expressions given as literals are compiled once, here.
+        // Regular expressions given as literals are compiled once, here. An
+        // invalid one stays a literal, and is an error when evaluated, as in
+        // XPath; one this crate can't translate is unsupported.
         if let Some((pattern, flags)) = function.regex_arguments() {
             let literal = |expr: Option<&Expr>| match expr {
                 Some(Expr::Literal(Atomic::Str(text))) => Some(text.clone()),
@@ -1024,13 +1105,18 @@ impl<'c> Parser<'c> {
             if let (Some(regex), Some(flag_text)) =
                 (literal(args.get(pattern)), literal(args.get(flags)))
             {
-                let compiled = CompiledRegex::new(&regex, &flag_text).map_err(|message| {
-                    CompileError(format!("regular expression `{regex}`: {message}"))
-                })?;
-                args[pattern] = Expr::Call(
-                    Function::CompiledRegex(std::sync::Arc::new(compiled)),
-                    Vec::new(),
-                );
+                match CompiledRegex::new(&regex, &flag_text) {
+                    Ok(compiled) => {
+                        args[pattern] = Expr::Call(
+                            Function::CompiledRegex(std::sync::Arc::new(compiled)),
+                            Vec::new(),
+                        );
+                    }
+                    Err(RegexError::Invalid(..)) => {}
+                    Err(RegexError::Unsupported(message)) => {
+                        return error(format!("regular expression `{regex}`: {message}"));
+                    }
+                }
             }
         }
         Ok(Expr::Call(function, args))
@@ -1038,34 +1124,84 @@ impl<'c> Parser<'c> {
 
     // --- Patterns -------------------------------------------------------
 
-    fn path_pattern(&mut self) -> Result<PathPattern> {
+    /// `p | p | …`, as the path patterns it matches.
+    fn union_pattern(&mut self) -> Result<Vec<PathPattern>> {
+        let mut alternatives = self.path_pattern()?;
+        while self.eat_symbol("|") || self.eat_keyword("union") {
+            alternatives.extend(self.path_pattern()?);
+            if alternatives.len() > MAX_ALTERNATIVES {
+                return error(format!(
+                    "pattern has more than {MAX_ALTERNATIVES} alternatives"
+                ));
+            }
+        }
+        Ok(alternatives)
+    }
+
+    /// A path pattern. A parenthesised union used as a step is distributed
+    /// over the path, so `(a | b)/c` gives the path patterns `a/c` and `b/c`.
+    fn path_pattern(&mut self) -> Result<Vec<PathPattern>> {
         let mut rooted = false;
         let mut descendant = false;
         if self.eat_symbol("/") {
             rooted = true;
-            if !self.at_step_start() {
-                return Ok(PathPattern {
+            if !self.at_step_start() && !self.at_symbol("(") {
+                return Ok(vec![PathPattern {
                     rooted,
                     steps: Vec::new(),
-                });
+                }]);
             }
         } else if self.eat_symbol("//") {
             descendant = true;
         }
-        let mut steps = Vec::new();
+        let mut paths = vec![PathPattern {
+            rooted,
+            steps: Vec::new(),
+        }];
         loop {
-            let step = self
-                .axis_step()?
-                .ok_or_else(|| CompileError("patterns may only contain axis steps".into()))?;
-            if !matches!(step.axis, Axis::Child | Axis::Attribute) {
-                return error("patterns may only use the child and attribute axes");
+            if self.eat_symbol("(") {
+                let inner = self.parenthesised_pattern()?;
+                let mut joined = Vec::new();
+                for path in &paths {
+                    for alternative in &inner {
+                        let joins_a_path = !path.steps.is_empty() || rooted || descendant;
+                        if joins_a_path && (alternative.rooted || alternative.steps[0].descendant) {
+                            return error("a parenthesised pattern after `/` must be relative");
+                        }
+                        let mut steps = path.steps.clone();
+                        let first = steps.len();
+                        steps.extend(alternative.steps.iter().cloned());
+                        steps[first].descendant |= descendant;
+                        joined.push(PathPattern {
+                            rooted: path.rooted || alternative.rooted,
+                            steps,
+                        });
+                    }
+                }
+                if joined.len() > MAX_ALTERNATIVES {
+                    return error(format!(
+                        "pattern has more than {MAX_ALTERNATIVES} alternatives"
+                    ));
+                }
+                paths = joined;
+            } else {
+                let step = self.axis_step()?.ok_or_else(|| {
+                    CompileError(
+                        "patterns may only contain axis steps and parenthesised patterns".into(),
+                    )
+                })?;
+                if !matches!(step.axis, Axis::Child | Axis::Attribute) {
+                    return error("patterns may only use the child and attribute axes");
+                }
+                let positional = step.predicates.iter().any(Expr::may_be_positional);
+                for path in &mut paths {
+                    path.steps.push(PatternStep {
+                        descendant,
+                        step: step.clone(),
+                        positional,
+                    });
+                }
             }
-            let positional = step.predicates.iter().any(Expr::may_be_positional);
-            steps.push(PatternStep {
-                descendant,
-                step,
-                positional,
-            });
             if self.eat_symbol("/") {
                 descendant = false;
             } else if self.eat_symbol("//") {
@@ -1074,7 +1210,34 @@ impl<'c> Parser<'c> {
                 break;
             }
         }
-        Ok(PathPattern { rooted, steps })
+        Ok(paths)
+    }
+
+    /// `( pattern )` with any predicates, after the `(`. The predicates apply
+    /// to each alternative's last step, which only gives the same nodes when
+    /// they don't depend on positions.
+    fn parenthesised_pattern(&mut self) -> Result<Vec<PathPattern>> {
+        if self.depth == MAX_DEPTH {
+            return error(format!(
+                "expression nested more than {MAX_DEPTH} levels deep"
+            ));
+        }
+        self.depth += 1;
+        let inner = self.union_pattern();
+        self.depth -= 1;
+        let mut inner = inner?;
+        self.expect_symbol(")")?;
+        let predicates = self.predicates()?;
+        if predicates.iter().any(Expr::may_be_positional) {
+            return error("positional predicates on a parenthesised pattern are not supported");
+        }
+        for alternative in &mut inner {
+            let Some(last) = alternative.steps.last_mut() else {
+                return error("`/` in a parenthesised pattern is not supported");
+            };
+            last.step.predicates.extend(predicates.iter().cloned());
+        }
+        Ok(inner)
     }
 }
 

@@ -11,6 +11,19 @@ pub const MAX_DOCUMENT_DEPTH: usize = 1024;
 /// How deeply a schema's patterns may nest, in either syntax.
 pub(crate) const MAX_SCHEMA_DEPTH: usize = 512;
 
+/// The largest file Schematron rules read with `doc()`, `document()` or
+/// `doc-available()`; larger files, like anything but regular files, are
+/// never read.
+#[cfg(feature = "schematron")]
+pub(crate) const MAX_RESOURCE_BYTES: u64 = 256 * 1024 * 1024;
+
+/// How many documents, and how many bytes in all, `doc()` and `document()`
+/// may read while one document's Schematron rules run.
+#[cfg(feature = "schematron")]
+pub(crate) const MAX_RESOURCES: usize = 1000;
+#[cfg(feature = "schematron")]
+pub(crate) const MAX_RESOURCES_BYTES: u64 = 1024 * 1024 * 1024;
+
 /// Whether the elements in the XML `text` nest more than `limit` levels
 /// deep. A quick scan of the markup that skips comments, CDATA sections,
 /// processing instructions, the document type declaration and attribute
