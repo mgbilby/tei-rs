@@ -1,6 +1,6 @@
 [package]
 name = "teixml"
-version = "0.1.2"
+version = "0.1.3"
 description = "Validate TEI XML documents against RELAX NG schemas, in pure Rust"
 license = "MIT"
 edition = "2024"
