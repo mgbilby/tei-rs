@@ -1,11 +1,10 @@
 # teixml
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23427034.svg)](https://doi.org/10.5281/zenodo.23427034)
-
 [![crates.io](https://img.shields.io/crates/v/teixml.svg)](https://crates.io/crates/teixml)
 [![Documentation](https://docs.rs/teixml/badge.svg)](https://docs.rs/teixml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Rust 1.88+](https://img.shields.io/badge/rust-1.88%2B-orange.svg)](#rust-version-support)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23427034.svg)](https://doi.org/10.5281/zenodo.23427034)
 
 Validate [TEI](https://tei-c.org/) XML documents against RELAX NG schemas and
 the Schematron rules they embed, in pure Rust — a library (`teixml`) and a
