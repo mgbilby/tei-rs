@@ -42,6 +42,17 @@ pub struct Report {
 /// Compares every schema in `store` (or only those whose URL contains
 /// `filter`) with its published version. With `apply`, outdated and missing
 /// schemas are downloaded and the manifest is saved.
+///
+/// ```no_run
+/// use teixml::{SchemaStore, sync};
+///
+/// let mut store = SchemaStore::open(SchemaStore::default_dir())?;
+/// // Check only the TEI schemas, without writing anything.
+/// for report in sync::sync(&mut store, Some("tei-c.org"), false)? {
+///     println!("{}: {:?}", report.url, report.status);
+/// }
+/// # Ok::<(), teixml::Error>(())
+/// ```
 pub fn sync(
     store: &mut SchemaStore,
     filter: Option<&str>,
@@ -71,6 +82,20 @@ pub fn sync(
 /// Adds the schema published at `url` to `store` (with optional alias hrefs
 /// and mirrors), downloads it with its dependencies, and saves the manifest.
 /// If `url` is already listed, its aliases and mirrors are extended instead.
+///
+/// ```no_run
+/// use teixml::{SchemaStore, sync};
+///
+/// let mut store = SchemaStore::open(SchemaStore::default_dir())?;
+/// let report = sync::add(
+///     &mut store,
+///     "https://example.org/schema/project.rng",
+///     &["http://example.org/schema/project.rng".to_owned()],
+///     &[],
+/// )?;
+/// println!("{:?} from {:?}", report.status, report.source);
+/// # Ok::<(), teixml::Error>(())
+/// ```
 pub fn add(
     store: &mut SchemaStore,
     url: &str,

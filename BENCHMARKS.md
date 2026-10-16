@@ -83,6 +83,7 @@ a dedicated 2018 Mac Intel machine running Ubuntu 26._
 | Tolstoy Digital | *War and Peace*, variants to volume 1 | 2.2 MB | 952.3 ± 11.4 ms | 76.9 ± 0.3 ms | 12.4× |
 | U.S. Epigraphy | Princeton University Art Museum 3603-I56 | 27 KB | 320.4 ± 2.5 ms | 44.0 ± 1.0 ms | 7.3× |
 | VICAV | Dictionary of Baghdad Arabic | 2.4 MB | 498.2 ± 9.3 ms | 85.8 ± 0.4 ms | 5.8× |
+| **Median** | | | 374.8 ms | 58.2 ms | 7.0× |
 
 tei-rs is faster than Jing on every sample: 4.4–24.2×, 7.0× at the median. The
 largest speed-ups are for Beta maṣāḥǝft, Frankenstein Variorum and DISCO; the
@@ -165,6 +166,7 @@ a dedicated 2018 Mac Intel machine running Ubuntu 26._
 | Tolstoy Digital | *War and Peace*, variants to volume 1 | 2.2 MB | 2345.1 ± 34.6 ms | 87.1 ± 0.6 ms | 26.9× |
 | U.S. Epigraphy | Princeton University Art Museum 3603-I56 | 27 KB | 1290.4 ± 3.6 ms | 51.7 ± 0.9 ms | 25.0× |
 | VICAV | Dictionary of Baghdad Arabic | 2.4 MB | 1861.9 ± 22.1 ms | 103.1 ± 0.4 ms | 18.1× |
+| **Median** | | | 1508.4 ms | 67.9 ms | 23.2× |
 
 With Schematron, tei-rs is faster than the reference pipeline on every sample:
 17.1–36.1×, 23.2× at the median. Checking the rules adds a median of 10 ms to

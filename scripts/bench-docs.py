@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Writes benchmark results from scripts/bench-table.sh into BENCHMARKS.md and
-README.md: each table, a line saying where and when it was measured, and the
+README.md: each table with a median row, a line saying where and when it was measured, and the
 sentences that quote its figures. Only the text between these markers
 changes:
 
@@ -9,7 +9,13 @@ changes:
   README.md      <!-- bench:readme --> ... <!-- /bench:readme -->
 
 Usage: scripts/bench-docs.py --info TEXT --relaxng TABLE.md [--schematron TABLE.md]
-  --info  where and when the tables were measured, one sentence
+       scripts/bench-docs.py --refresh
+  --info     where and when the tables were measured, one sentence
+  --refresh  recompute the median rows of the tables already in BENCHMARKS.md
+Each table ends with a median row: the median of the Jing, tei-rs and
+speed-up columns over all samples, each column on its own (the speed-up
+median is not the ratio of the time medians). With an even number of samples
+it is the mean of the middle two.
 A table file holds a Markdown table as bench-table.sh prints it. The README
 line is only rewritten when both tables are given.
 """
@@ -22,15 +28,22 @@ import textwrap
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 CELL = re.compile(r"^([\d.]+) ± ([\d.]+) ms$")
+MEDIAN = "**Median**"
 
 
 def parse(path):
     """The table's lines and, per row, (label, theirs, ours, sd theirs, sd ours,
     speed-up as the table shows it)."""
-    lines = [line.rstrip("\n") for line in open(path, encoding="utf-8") if line.startswith("|")]
+    return parse_lines(open(path, encoding="utf-8").read().split("\n"), path)
+
+
+def parse_lines(text_lines, path):
+    lines = [line.rstrip("\n") for line in text_lines if line.startswith("|")]
     rows = []
     for line in lines[2:]:
         cells = [cell.strip() for cell in line.strip("|").split("|")]
+        if cells[0] == MEDIAN:
+            continue
         theirs, ours = CELL.match(cells[-3]), CELL.match(cells[-2])
         if not (theirs and ours):
             sys.exit(f"{path}: can't read timings in: {line}")
@@ -41,6 +54,13 @@ def parse(path):
         ))
     if not rows:
         sys.exit(f"{path}: no rows")
+    lines = [line for line in lines if not line.startswith(f"| {MEDIAN} ")]
+    columns = len(lines[0].strip("|").split("|"))
+    median = [statistics.median(row[i] for row in rows) for i in (1, 2, 5)]
+    lines.append(
+        f"| {MEDIAN} |" + " |" * (columns - 4)
+        + f" {median[0]:.1f} ms | {median[1]:.1f} ms | {median[2]:.1f}× |"
+    )
     return "\n".join(lines), rows
 
 
@@ -110,13 +130,31 @@ def replace_block(path, name, body):
     open(path, "w", encoding="utf-8").write(text)
 
 
+def refresh(path):
+    """Rewrites each table in BENCHMARKS.md with its median row recomputed."""
+    text = open(path, encoding="utf-8").read()
+    for name in ("relaxng", "schematron"):
+        match = re.search(rf"<!-- bench:{name} -->\n(.*?)<!-- /bench:{name} -->", text, re.S)
+        if not match:
+            sys.exit(f"{path}: no <!-- bench:{name} --> block")
+        old = "\n".join(line for line in match[1].split("\n") if line.startswith("|"))
+        new, _ = parse_lines(old.split("\n"), f"{path} ({name})")
+        text = text[: match.start(1)] + match[1].replace(old, new) + text[match.end(1) :]
+    open(path, "w", encoding="utf-8").write(text)
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--info", required=True)
-    parser.add_argument("--relaxng", required=True)
+    parser.add_argument("--info")
+    parser.add_argument("--relaxng")
     parser.add_argument("--schematron")
+    parser.add_argument("--refresh", action="store_true")
     args = parser.parse_args()
     benchmarks = os.path.join(ROOT, "BENCHMARKS.md")
+    if args.refresh:
+        return refresh(benchmarks)
+    if not (args.info and args.relaxng):
+        parser.error("--info and --relaxng are required")
 
     table, relaxng_rows = parse(args.relaxng)
     info = wrap(f"_{args.info}_")

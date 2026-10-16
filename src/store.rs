@@ -61,6 +61,30 @@ struct Manifest {
 }
 
 /// A schema store directory.
+///
+/// ```
+/// use teixml::{Schema, SchemaStore};
+///
+/// # let dir = std::env::temp_dir().join("teixml-doc-store");
+/// # std::fs::create_dir_all(dir.join("example.org"))?;
+/// # std::fs::write(dir.join("example.org/tei.rnc"), "element TEI { empty }")?;
+/// # std::fs::write(dir.join("manifest.json"), r#"{"schemas": [{
+/// #   "url": "https://example.org/tei.rnc",
+/// #   "aliases": ["http://example.org/tei.rnc"],
+/// #   "file": "example.org/tei.rnc"
+/// # }]}"#)?;
+/// let store = SchemaStore::open(&dir)?; // or SchemaStore::default_dir()
+/// for entry in store.entries() {
+///     println!("{} ({:?})", entry.url, entry.file);
+/// }
+///
+/// // Canonical URLs and aliases resolve to the stored copy.
+/// let path = store.resolve("http://example.org/tei.rnc").expect("fetched");
+/// let schema = Schema::from_file(path)?;
+/// assert!(schema.validate_str("<TEI/>")?.is_empty());
+/// assert!(store.resolve("https://example.org/other.rnc").is_none());
+/// # Ok::<(), Box<dyn std::error::Error>>(())
+/// ```
 #[derive(Debug)]
 pub struct SchemaStore {
     dir: PathBuf,
@@ -149,6 +173,26 @@ impl SchemaStore {
 /// first RELAX NG `<?xml-model?>` processing instruction, resolved against
 /// the document's own path when it is relative and exists on disk, and
 /// otherwise looked up in `store`.
+///
+/// ```
+/// use std::path::Path;
+/// use teixml::{Schema, SchemaStore, store};
+///
+/// # let dir = std::env::temp_dir().join("teixml-doc-schema-for-document");
+/// # std::fs::create_dir_all(dir.join("example.org"))?;
+/// # std::fs::write(dir.join("example.org/tei.rnc"), "element TEI { empty }")?;
+/// # std::fs::write(dir.join("manifest.json"),
+/// #     r#"{"schemas": [{"url": "https://example.org/tei.rnc", "file": "example.org/tei.rnc"}]}"#)?;
+/// let store = SchemaStore::open(&dir)?;
+/// let xml = r#"<?xml-model href="https://example.org/tei.rnc"?><TEI/>"#;
+/// let path = store::schema_for_document(xml, Path::new("letters/1.xml"), &store)?;
+/// let schema = Schema::from_file(path)?;
+/// assert!(schema.validate_str(xml)?.is_empty());
+///
+/// // Undeclared or unknown schemas are an `Error::Store` saying what to do.
+/// assert!(store::schema_for_document("<TEI/>", Path::new("2.xml"), &store).is_err());
+/// # Ok::<(), Box<dyn std::error::Error>>(())
+/// ```
 pub fn schema_for_document(
     xml: &str,
     document: &Path,
@@ -186,6 +230,20 @@ pub fn schema_for_document(
 /// The hrefs of all `<?xml-model?>` processing instructions in `xml` that
 /// declare a RELAX NG schema, in document order. A declaration without
 /// `schematypens` counts when its href ends in `.rng` or `.rnc`.
+///
+/// ```
+/// let xml = r#"<?xml version="1.0"?>
+/// <?xml-model href="https://example.org/tei.rng"
+///     schematypens="http://relaxng.org/ns/structure/1.0"?>
+/// <?xml-model href="https://example.org/tei.sch"
+///     schematypens="http://purl.oclc.org/dsdl/schematron"?>
+/// <?xml-model href="local.rnc"?>
+/// <TEI xmlns="http://www.tei-c.org/ns/1.0"/>"#;
+/// assert_eq!(
+///     teixml::store::declared_schemas(xml),
+///     ["https://example.org/tei.rng", "local.rnc"]
+/// );
+/// ```
 pub fn declared_schemas(xml: &str) -> Vec<String> {
     let mut hrefs = Vec::new();
     // Only the prolog (before the root element's start tag) declares schemas.

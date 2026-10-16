@@ -72,6 +72,21 @@ fn on_large_stack<T: Send>(work: impl FnOnce() -> T + Send) -> T {
 /// With the `schematron` feature, validation also checks the Schematron
 /// rules the schema embeds, unless turned off with `set_schematron(false)`.
 /// The rules are compiled on first use, once per schema.
+///
+/// ```
+/// use teixml::{relaxng::SchemaSyntax, Schema};
+///
+/// let schema = Schema::from_text(
+///     "element TEI { element text { text } }",
+///     "",
+///     SchemaSyntax::Compact,
+/// )?;
+/// assert!(schema.validate_str("<TEI><text>Hello</text></TEI>")?.is_empty());
+///
+/// let diagnostics = schema.validate_str("<TEI><body/></TEI>")?;
+/// assert!(diagnostics.iter().any(|d| d.is_error()));
+/// # Ok::<(), teixml::Error>(())
+/// ```
 pub struct Schema {
     inner: crate::relaxng::Schema,
     registry: DatatypeRegistry,
@@ -97,6 +112,17 @@ impl Schema {
     /// Reads and compiles a schema file. The syntax is chosen from the
     /// extension: `.rnc` is the compact syntax, anything else the XML syntax.
     /// `include`/`externalRef` are resolved relative to the including file.
+    ///
+    /// ```
+    /// # let dir = std::env::temp_dir().join("teixml-doc-from-file");
+    /// # std::fs::create_dir_all(&dir)?;
+    /// # std::fs::write(dir.join("text.rnc"), "body = element text { text }")?;
+    /// # std::fs::write(dir.join("doc.rnc"), "include \"text.rnc\"\nstart = element TEI { body }")?;
+    /// // doc.rnc includes text.rnc from the same directory.
+    /// let schema = teixml::Schema::from_file(dir.join("doc.rnc"))?;
+    /// assert!(schema.validate_str("<TEI><text/></TEI>")?.is_empty());
+    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// ```
     pub fn from_file(path: impl AsRef<Path>) -> Result<Self, Error> {
         let path = path.as_ref();
         let text = std::fs::read_to_string(path).map_err(|source| Error::Io {
@@ -108,6 +134,20 @@ impl Schema {
 
     /// Compiles a schema from text. `base_uri` is the path that relative
     /// `include`/`externalRef` hrefs are resolved against.
+    ///
+    /// ```
+    /// use teixml::{relaxng::SchemaSyntax, Schema};
+    ///
+    /// let rng = r#"<element name="p" xmlns="http://relaxng.org/ns/structure/1.0"
+    ///     datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    ///   <attribute name="n"><data type="integer"/></attribute>
+    ///   <text/>
+    /// </element>"#;
+    /// let schema = Schema::from_text(rng, "schemas/p.rng", SchemaSyntax::Xml)?;
+    /// assert!(schema.validate_str(r#"<p n="1">text</p>"#)?.is_empty());
+    /// assert!(!schema.validate_str(r#"<p n="one">text</p>"#)?.is_empty());
+    /// # Ok::<(), teixml::Error>(())
+    /// ```
     pub fn from_text(text: &str, base_uri: &str, syntax: SchemaSyntax) -> Result<Self, Error> {
         let source = SchemaSource::new(text, base_uri, syntax);
         let inner = on_large_stack(|| crate::relaxng::Schema::compile(&source, &FileResolver))
@@ -132,6 +172,15 @@ impl Schema {
 
     /// Turns checking of the schema's embedded Schematron rules on (the
     /// default) or off. Off, validation is RELAX NG only.
+    ///
+    /// ```
+    /// # let schema_text = "element TEI { empty }";
+    /// let mut schema =
+    ///     teixml::Schema::from_text(schema_text, "", teixml::relaxng::SchemaSyntax::Compact)?;
+    /// schema.set_schematron(false);
+    /// assert!(!schema.schematron_enabled());
+    /// # Ok::<(), teixml::Error>(())
+    /// ```
     #[cfg(feature = "schematron")]
     pub fn set_schematron(&mut self, enabled: bool) {
         self.schematron.enabled = enabled;
@@ -147,6 +196,38 @@ impl Schema {
     /// Use it to see how many tests there are and which ones are
     /// [unsupported](schematron::Schematron::unsupported) and skipped.
     /// Fails if the schema, or a file it includes, can't be read again.
+    ///
+    /// ```
+    /// use teixml::{relaxng::SchemaSyntax, DiagnosticKind, Schema, Severity};
+    ///
+    /// let rng = r#"<element name="list" xmlns="http://relaxng.org/ns/structure/1.0"
+    ///     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+    ///   <sch:pattern>
+    ///     <sch:rule context="list">
+    ///       <sch:assert test="item">a list needs at least one item</sch:assert>
+    ///       <sch:report test="count(item) gt 3" role="warning">a long list</sch:report>
+    ///     </sch:rule>
+    ///   </sch:pattern>
+    ///   <zeroOrMore><element name="item"><text/></element></zeroOrMore>
+    /// </element>"#;
+    /// let schema = Schema::from_text(rng, "list.rng", SchemaSyntax::Xml)?;
+    ///
+    /// let rules = schema.schematron()?;
+    /// assert_eq!(rules.test_count(), 2);
+    /// assert!(rules.unsupported().is_empty());
+    ///
+    /// // Valid RELAX NG, but the assert fails.
+    /// let diagnostics = schema.validate_str("<list/>")?;
+    /// assert_eq!(diagnostics.len(), 1);
+    /// assert_eq!(diagnostics[0].severity(), Severity::Error);
+    /// match &diagnostics[0].kind {
+    ///     DiagnosticKind::Schematron(message) => {
+    ///         assert_eq!(message.text, "a list needs at least one item");
+    ///     }
+    ///     other => panic!("unexpected {other}"),
+    /// }
+    /// # Ok::<(), teixml::Error>(())
+    /// ```
     #[cfg(feature = "schematron")]
     pub fn schematron(&self) -> Result<&schematron::Schematron, Error> {
         let compiled = self.schematron.compiled.get_or_init(|| {
@@ -175,6 +256,25 @@ impl Schema {
     /// Validates an XML document given as text. Returns every problem found,
     /// RELAX NG errors first, then Schematron messages; the document is
     /// valid when none of them [is an error](Diagnostic::is_error).
+    ///
+    /// ```
+    /// use teixml::{relaxng::SchemaSyntax, Schema};
+    ///
+    /// let schema = Schema::from_text(
+    ///     "element TEI { element text { element p { text }+ } }",
+    ///     "",
+    ///     SchemaSyntax::Compact,
+    /// )?;
+    /// let xml = "<TEI>\n  <text>\n    <div/>\n  </text>\n</TEI>";
+    /// for diagnostic in schema.validate_str(xml)? {
+    ///     // Prints e.g. `3:10 error: unexpected element ... at /TEI/text`.
+    ///     if let Some(position) = diagnostic.position {
+    ///         print!("{}:{} ", position.line, position.column);
+    ///     }
+    ///     println!("{}: {} at {}", diagnostic.severity(), diagnostic.message(), diagnostic.path);
+    /// }
+    /// # Ok::<(), teixml::Error>(())
+    /// ```
     pub fn validate_str(&self, xml: &str) -> Result<Vec<Diagnostic>, Error> {
         self.validate(xml, None)
     }
@@ -182,6 +282,19 @@ impl Schema {
     /// Like [`validate_str`](Self::validate_str), for a document that was
     /// read from `path`. The file isn't read again: Schematron rules see the
     /// path as the document's `document-uri()`.
+    ///
+    /// ```
+    /// # let dir = std::env::temp_dir().join("teixml-doc-validate-str-from");
+    /// # std::fs::create_dir_all(&dir)?;
+    /// # let path = dir.join("letter.xml");
+    /// # std::fs::write(&path, "<TEI/>")?;
+    /// # let schema = teixml::Schema::from_text("element TEI { empty }", "", teixml::relaxng::SchemaSyntax::Compact)?;
+    /// let xml = std::fs::read_to_string(&path)?;
+    /// // ... inspect or transform `xml` ...
+    /// let diagnostics = schema.validate_str_from(&xml, &path)?;
+    /// # assert!(diagnostics.is_empty());
+    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// ```
     pub fn validate_str_from(
         &self,
         xml: &str,
@@ -191,6 +304,23 @@ impl Schema {
     }
 
     /// Reads and validates an XML file.
+    ///
+    /// ```
+    /// # let dir = std::env::temp_dir().join("teixml-doc-validate-file");
+    /// # std::fs::create_dir_all(&dir)?;
+    /// # std::fs::write(dir.join("letter.xml"), "<TEI/>")?;
+    /// # let schema = teixml::Schema::from_text("element TEI { empty }", "", teixml::relaxng::SchemaSyntax::Compact)?;
+    /// let diagnostics = schema.validate_file(dir.join("letter.xml"))?;
+    /// let valid = !diagnostics.iter().any(|d| d.is_error());
+    /// # assert!(valid);
+    ///
+    /// // A missing file is an `Error::Io`, not a diagnostic.
+    /// assert!(matches!(
+    ///     schema.validate_file(dir.join("missing.xml")),
+    ///     Err(teixml::Error::Io { .. })
+    /// ));
+    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// ```
     pub fn validate_file(&self, path: impl AsRef<Path>) -> Result<Vec<Diagnostic>, Error> {
         let path = path.as_ref();
         let xml = std::fs::read_to_string(path).map_err(|source| Error::Io {
@@ -317,6 +447,26 @@ impl Schema {
 }
 
 /// One validation problem in a document.
+///
+/// ```
+/// use teixml::{relaxng::SchemaSyntax, Position, Schema, Severity};
+///
+/// let schema = Schema::from_text(
+///     "element TEI { element text { empty } }",
+///     "",
+///     SchemaSyntax::Compact,
+/// )?;
+/// let diagnostics = schema.validate_str("<TEI>\n<text><div/></text>\n</TEI>")?;
+/// let first = &diagnostics[0];
+/// assert_eq!(first.severity(), Severity::Error);
+/// assert_eq!(first.position, Some(Position { line: 2, column: 13 }));
+/// // The element the problem was found in.
+/// assert_eq!(first.path.to_string(), "/TEI/text");
+/// assert_eq!(first.message().to_string(), "unexpected element `div`");
+/// // Displays as all of the above together.
+/// println!("{first}");
+/// # Ok::<(), teixml::Error>(())
+/// ```
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Diagnostic {
     /// Where in the document the problem was found.
