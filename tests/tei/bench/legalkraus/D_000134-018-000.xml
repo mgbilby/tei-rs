@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:base="https://id.acdh.oeaw.ac.at/legalkraus" xml:id="D_000134-018-000.xml" prev="https://id.acdh.oeaw.ac.at/legalkraus/D_000134-017-000.xml" next="https://id.acdh.oeaw.ac.at/legalkraus/D_000134-019-000.xml">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>134.18 Brief Samek an Jascha Horenstein</title>
+            <editor ref="https://orcid.org/0000-0002-5049-0779">Isabel Langkabel</editor>
+         </titleStmt>
+         <publicationStmt>
+            <publisher>
+               <name>Austrian Centre for Digital Humanities and Cultural Heritage,
+                  Österreichische Akademie der Wissenschaften </name>
+               <address>
+                  <street>Sonnenfelsgasse 19</street>
+                  <postCode>1010</postCode>
+                  <settlement>Wien</settlement>
+                  <country>Österreich</country>
+               </address>
+               <ref target="https://acdh.oeaw.ac.at">https://acdh.oeaw.ac.at</ref>
+            </publisher>
+            <publisher>
+               <name>Ludwig Boltzmann Institut für Digital History</name>
+               <address>
+                  <street>Hofburg, Batthianystiege</street>
+                  <postCode>1010</postCode>
+                  <settlement>Wien</settlement>
+                  <country>Österreich</country>
+               </address>
+               <ref target="https://geschichte.lbg.ac.at">https://geschichte.lbg.ac.at</ref>
+            </publisher>
+            <publisher>
+               <name>Wienbibliothek im Rathaus</name>
+               <address>
+                  <street>Friedrich-Schmidt-Platz 1</street>
+                  <postCode>1010</postCode>
+                  <country>Wien</country>
+                  <settlement>Österreich</settlement>
+               </address>
+               <ref target="https://www.wienbibliothek.at">https://www.wienbibliothek.at</ref>
+            </publisher>
+            <pubPlace>Wien, Österreich</pubPlace>
+            <date>2022</date>
+            <availability>
+               <licence target="http://creativecommons.org/licenses/by/4.0">Creative Commons
+                        Namensnennung 4.0 International Lizenz </licence>
+            </availability>
+            <idno type="URL" subtype="legalkraus">https://id.acdh.oeaw.ac.at/legalkraus/D_000134-018-000.xml</idno>
+            <idno type="URL" subtype="krausonline">http://www.kraus.wienbibliothek.at/node/3700 </idno>
+            <idno type="ID" subtype="transkribus">437373</idno>
+         </publicationStmt>
+         <seriesStmt>
+            <title type="collection" ref="https://id.acdh.oeaw.ac.at/legalkraus/C_000134">Paul
+                    Amadeus Pisk ca. Karl Kraus</title>
+         </seriesStmt>
+         <sourceDesc>
+            <listWit>
+               <witness xml:id="D_000134-018-000-wit01" facs="#D_000134-018-000-facs001"/>
+            </listWit>
+            <msDesc>
+               <physDesc>
+                  <ab type="materiality">
+                     <objectType source="D_000134-018-000-wit01" ref="https://vocabs.acdh.oeaw.ac.at/legalkraus/v1.0/M.T.DSL">Durchschlag</objectType>
+                  </ab>
+               </physDesc>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <profileDesc>
+         <correspDesc>
+            <correspAction type="sent">
+               <persName ref="#pmb38909"/> 
+               <address>
+                  <street corresp="#pmb50493"/> 
+                  <settlement ref="#pmb51"/> 
+               </address>
+               <date when-iso="1930-03-01">1. März 1930</date>
+            </correspAction>
+            <correspAction type="received">
+               <persName ref="#pmb38461">Herrn | Jascha Horenstein, |
+                        Generalmusikdirektor</persName>
+               <address>
+                  <street corresp="#"/>
+                  <settlement ref="#pmb863">Düsseldorf</settlement>
+               </address>
+               <date/> 
+            </correspAction>
+            <noteGrp>
+               <note type="subject">Kraus – Dr. Pisk.</note>
+               <note type="dictation">Dr.S/Fa.</note> 
+            </noteGrp>
+         </correspDesc>
+         <creation>
+            <date subtype="produced" type="sortDate" when-iso="1930-03-01">1. März 1930</date>
+         </creation>
+         <langUsage>
+            <language ident="de">Deutsch</language>
+         </langUsage>
+         <textClass>
+            <keywords>
+               <term source="D_000134-018-000-wit01">Brief</term>
+            </keywords>
+            <classCode source="D_000134-018-000-wit01" scheme="https://vocabs.acdh.oeaw.ac.at/legalkraus/v1.0/D.K.BRF">D.K.BRF</classCode>
+         </textClass>
+      </profileDesc>
+      <revisionDesc status="done">
+         <change when-iso="2020-10-08T13:50:43.726Z" who="#IB" status="draft">created by API </change>
+         <change when-iso="2021-09-06" who="#LU" status="draft">Replaced Text with Transcription
+                of Transkribus Document 437373. </change>
+         <change status="draft" type="header_facsimile" when-iso="2022-02-02" who="#AR"/>
+      </revisionDesc>
+   </teiHeader>
+   <facsimile xml:id="D_000134-018-000-facs001">
+      <surfaceGrp xml:id="D_000134-018-000-facs001-l001">
+         <surface xml:id="D_000134-018-000-facs001-l001-p001" type="recto">
+            
+            <graphic url="https://www.digital.wienbibliothek.at/wbrobv02/i3f/v21/2558303/full/full/0/default.jpg" source="wienbibliothek"/>
+         </surface>
+      </surfaceGrp>
+      <surfaceGrp xml:id="D_000134-018-000-facs001-l002">
+         <surface xml:id="D_000134-018-000-facs001-l002-p002" type="recto">
+            
+            <graphic url="https://www.digital.wienbibliothek.at/wbrobv02/i3f/v21/2558305/full/full/0/default.jpg" source="wienbibliothek"/>
+         </surface>
+         <surface xml:id="D_000134-018-000-facs001-l002-p003" type="verso">
+            
+            <graphic url="https://www.digital.wienbibliothek.at/wbrobv02/i3f/v21/2558306/full/full/0/default.jpg" source="wienbibliothek"/>
+         </surface>
+      </surfaceGrp>
+   </facsimile>
+   <text>
+      <body>
+         <pb xml:id="D_000134-018-000_p001" n="1" facs="#D_000134-018-000-facs001-l002-p002"/>
+         <p xml:id="uuid_d38499cc-1198-4173-bb74-3941c76fc8f7">
+            <lb xml:id="uuid_daea23ba-36e0-4e19-8705-444086450544"/>Sehr geehrter <rs type="person" ref="#pmb38461">Herr</rs>! </p>
+         <p xml:id="uuid_e5452334-b123-456c-92aa-2f5d29c53407">
+            <lb xml:id="uuid_63d955bb-f681-4512-b9ca-7a0018a51ad4"/>Herr <rs type="person" ref="#pmb11988">Karl Kraus</rs>, dessen Wiener
+               Rechtsanwalt<lb xml:id="uuid_efbeda15-9b93-475a-80d4-974e2f5d6b39"/>ich bin, hat mir
+            mitgeteilt, dass ich Sie als Zeugen dafür<lb xml:id="uuid_8349ab29-f085-4864-bd4e-a62dd94d6ac6"/>anführen könnte für die
+            Berechtigung der Bezeichnung des Herrn<lb xml:id="uuid_a2487c48-7d80-4b6a-bdd2-f9ecd09a9e07"/>Dr. <rs type="person" ref="#pmb39325">Paul Amadeus Pisk</rs> als
+            „Schliaferl“, unter dem der Wiener <lb xml:id="uuid_fe1ec179-2d52-4998-aaed-9e68926c5e60"/>Dialektausdruck einen widerlichen
+            Schmeichler und Liebediener<lb xml:id="uuid_68f23525-939e-4bbe-ac7e-6e3729b5d748"/>versteht. </p>
+         <p xml:id="uuid_2523557d-8466-4daa-916e-b2d50ca7bff7">
+            <lb xml:id="uuid_b9f94867-a861-49ac-8c9a-2f13dd920c6c"/>Ich bitte Sie, mir Ihre
+                Kenntnis zur Ver<lb xml:id="uuid_0e0ddd64-9a1e-4eef-b8b6-76d1064e2b81" break="no"/>fügung zu stellen und die Tatsachen, die zur Begründung dieser<lb xml:id="uuid_fd1c8312-5711-4397-a348-fc8791e9f515"/>Behauptung anzuführen wären,
+                entweder mit den Beweismitteln<lb xml:id="uuid_0e9983f1-4e53-4fbf-859d-7907f70a7d41"/>mitzuteilen oder mir bekanntzugeben, ob Sie selbst als Beweis<lb xml:id="uuid_2bc93ee5-8f37-440c-b8b2-2d4c10f95743"/>hierfür in Betracht kommen. </p>
+         <p xml:id="uuid_dbfecb7a-726a-4d12-9a34-9879ff15a656">
+            <lb xml:id="uuid_e6b081c7-6df1-4f03-b922-ff3df8a0079f"/>Mit bestem Dank zeichne ich
+                    mit<lb xml:id="uuid_bb08890f-3edb-4b75-949b-8a09b30de5f3"/>vorzüglicher
+                Hochachtung </p>
+         <p xml:id="uuid_7bb1c052-9bdb-41e0-8153-3df49c99eb5f">
+            <lb xml:id="uuid_3da9ffb8-021b-4810-b6b6-fe8ac588b0a7"/>Rekommandiert. </p>
+         <pb xml:id="D_000134-018-000_p002" n="2" facs="#D_000134-018-000-facs001-l002-p003"/>
+         <p xml:id="uuid_7278186a-1a1e-4267-bb85-8243971f6b74">
+            <lb xml:id="uuid_e9196ecd-41dc-4da8-b85b-8b6be323489b"/><note type="paratext" resp="law-firm">Betr. <rs type="person" ref="#pmb11988">Kraus</rs> – Dr. <rs type="person" ref="#pmb39325">Pisk</rs>
+               <lb xml:id="uuid_c060099b-9e76-475b-a98b-bb9e23c74cc6"/>exp. 1.3.1930.</note>
+         </p>
+      </body>
+   </text>
+</TEI>

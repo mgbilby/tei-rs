@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xml:lang="eng" xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Kāvērippākkam, time of Kampavarman, year 17</title>
+                <respStmt>
+                    <resp key="creator">author of digital edition</resp>
+                    <persName ref="part:emfr">
+                        <forename>Emmanuel</forename>
+                        <surname>Francis</surname>
+                    </persName>
+                </respStmt>
+            <funder>European Research Council (ERC), grant agreement no 809994</funder></titleStmt>
+            <publicationStmt>
+                <authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+                <pubPlace>Paris, CEIAS</pubPlace>
+                <idno type="filename">DHARMA_INSPallava00220.xml</idno>
+                <availability><licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence></availability>
+                <date from="2019" to="2026">2019-2026</date>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier><repository>as per external metadata</repository></msIdentifier>
+                    <msContents>
+                        <summary>Donation of gold for a daily food offering.</summary>
+                    </msContents>
+                    <physDesc>
+                        <handDesc>
+                            <p/>
+                        </handDesc>
+                    </physDesc>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+         <p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+      </encodingDesc>
+        <revisionDesc>
+            <change status="draft" when="2020-09-13" who="part:emfr">Creation of the file</change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:space="preserve">
+        <body>
+            
+            <div type="edition" xml:lang="tam-Latn" rendition="class:tamil maturity:83215">
+                
+                <ab>
+                    <lb n="1"/><hi rend="grantha">svasti śrī</hi>
+                </ab>
+                
+                <p>
+                    kō-vicaiya-kampa<unclear>va</unclear><hi rend="grantha">rmma</hi><reg>r</reg><unclear>k</unclear>ku yāṇṭu patiṉ ēḻ-<unclear>āvatu</unclear>
+                </p>
+                
+                <p>
+                    <unclear>paṭuvūrkō</unclear>ṭṭattu-k kāvati-p-pāk
+                    <lb break="no" n="2"/>kam-ākiya Avaṉi-nārāyaṇa-c-catu<hi rend="grantha">rvveti</hi>-maṅkalattu-c ciṟṟampalattu-p peru-makkaḷ kaṭai
+                    <lb break="no" n="3"/>kāṭci-y-āka-t tiru-<unclear>vā</unclear>naṅkamuti tamakkai nampirāṭṭi viruttū<unclear>ṇar</unclear>kku
+                    vaitta poṉ <num value="736"><gap reason="illegible" quantity="2" unit="character"/></num>
+                    Ēḻu-<supplied reason="omitted">nū</supplied><choice><orig>tt</orig><reg>ṟṟ</reg></choice>u mu-p
+                    <lb break="no" n="4"/>-pat<unclear>t’ aṟu</unclear> kaḻañcu
+                </p>        
+                
+                <p>
+                    Ip-poṉṉāl vanta viruttiyāl nicati oru viruttūṇar uṇpat-āka vaittāḷ
+                </p>
+                
+                <p>Itu
+                    <lb n="5"/><unclear>Ā</unclear>ca<hi rend="grantha">ndra</hi>kālamum muṭṭāmai Ūṭṭuvippat-āka-<unclear>y i</unclear>p-peru-makka<unclear>ḷ ka</unclear>ṭai-k kāṇpār āṉār</p>
+                
+                
+                <p>
+                    It-ta<hi rend="grantha">rmma</hi>muṭṭil k<choice><sic>e</sic><corr>a</corr></choice>ṅkai-y-i-
+                    <lb break="no" n="6"/>ṭai-k kumari-y iṭai-c ceytār ceyta pāvam pa<unclear>ṭu</unclear>vār āṉār
+                </p>
+                
+                <p>
+                    I<hi rend="grantha">d-dharmma<supplied reason="omitted">m</supplied> rakṣi</hi><supplied reason="omitted">t</supplied>tār kāl eṉ muṭi mēlaṉa
+                </p>
+                
+            </div>
+            
+            <div type="apparatus">
+                
+                <listApp>
+                    
+                    <app loc="3">
+                        <lem><num value="736"><gap reason="illegible" quantity="2" unit="character"/></num></lem>
+                        <note>In <ptr target="bib:VenkatasubbaAyyar1943_01"/>'s edition two symbols are printed, apparently reproducing what is visible on the stone and looking like 100 and 1. <ptr target="bib:VenkatasubbaAyyar1943_01"/> notes: <quote>This symbol probably stands for the figure 736.</quote> As 736 <foreign>kaḻañcu</foreign>s is a very unusual amount, an alternative reading could be: <foreign>36 Eḻuttu muppattāṟu</foreign>. The word <foreign>eḻuttu</foreign> would be preceded by the figures in symbol and by the same figures in letters.</note>
+                    </app>		
+                    
+                </listApp>
+                
+            </div>
+            
+            <div resp="part:emfr" type="translation">
+                
+                <p n="1">
+                    Prosperity! Fortune!
+                </p>
+                
+                <p n="1">
+                    Seventeenth year of the victorious king Kampavarmar.<note>Sanskrit Kampavarman.</note>
+                </p>
+                
+                <p n="1-3">
+                    The gold that ... gave ...: seven hundred thirty-six <foreign>kaḻañcu</foreign>s.
+                </p>
+                
+                <p n="4">
+                    With the interest that came through this gold, she gave ...            
+                </p>
+                
+                <p n="4-5">
+                    This ...
+                </p>
+                
+                <p n="5-6">
+                    If ...
+                </p>
+                
+                <p n="6">
+                    The feet <supplied reason="explanation"><foreign>kāl</foreign><note>Note the use of the word <foreign>kāl</foreign>, instead of the usual word <foreign>aṭi</foreign>.</note></supplied> of he who protects this pious act are on my head.
+                </p>
+                
+                
+            </div>
+            
+            <div type="commentary"/>
+            
+            <div type="bibliography">
+                
+                <p>Reported in <bibl><ptr target="bib:ARIE1905-1906"/></bibl> (ARIE/1905-1906/B/1905/391).</p>
+                <p>Edited in <bibl><ptr target="bib:VenkatasubbaAyyar1943_01"/></bibl> with visual documentation (SII 12.104). Text and summary in <bibl><ptr target="bib:Mahalingam1988_01"/></bibl> (IP 220).</p>
+                <p>This digital edition by Emmanuel Francis, based on previous edition(s).</p>
+                
+                <listBibl type="primary">
+                    
+                    <bibl n="SII">
+                        <ptr target="bib:VenkatasubbaAyyar1943_01"/>
+                        <citedRange unit="page">47-48</citedRange>
+                        <citedRange unit="item">104</citedRange>
+                    </bibl>
+                    
+                    <bibl n="IP">
+                        <ptr target="bib:Mahalingam1988_01"/>
+                        <citedRange unit="page">568</citedRange>
+                        <citedRange unit="item">220</citedRange>            		
+                    </bibl>
+                    
+                </listBibl>
+                
+                <listBibl type="secondary">
+                    <bibl n="ARIE">
+                        
+                        <ptr target="bib:ARIE1905-1906"/>
+                        <citedRange unit="page">25</citedRange>
+                        <citedRange unit="appendix">B/1905</citedRange>
+                        <citedRange unit="item">391</citedRange>
+                    </bibl>
+                </listBibl>
+                
+            </div>
+            
+        </body>
+    </text>
+</TEI>

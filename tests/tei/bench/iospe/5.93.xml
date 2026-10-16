@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?><?xml-model href="https://raw.githubusercontent.com/EpiDoc/Source/main/schema/schematron/ircyr-checking.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?><TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt><title xml:lang="ru">Демонстративная надпись</title><title xml:lang="en">Demonstrative inscription</title><editor xml:id="ip" role="translator"><persName xml:lang="ru">Ирина<forename/><surname>Полинская</surname></persName><persName xml:lang="en"><forename>Irene</forename><surname>Polinskaya</surname></persName></editor></titleStmt>
+         <publicationStmt><authority>King's College London</authority>
+            <idno type="filename">5.93</idno><idno type="PE">PE5000093</idno>
+            <idno type="AYV2012-number">byz093</idno>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <msIdentifier><country/>
+                  <altIdentifier xml:lang="ru">
+                     <repository>Национальный заповедник "Херсонес Таврический"</repository>
+                     <idno>25/35546</idno>
+                  </altIdentifier>
+                  <altIdentifier xml:lang="en">
+                      <repository>National Preserve of Tauric Chersonesos</repository>
+                     <idno>25/35546</idno>
+                  </altIdentifier>
+               </msIdentifier>
+               <physDesc>
+                  <objectDesc>
+                     <supportDesc>
+                        <support>
+                           <objectType xml:lang="ru" ref="monument-search.xml#mon24">Крышка.</objectType>
+                           <objectType xml:lang="en">Lid.</objectType>
+                           <material xml:lang="ru" ref="material-search.xml#m1">Белый мелкозернистый мрамор.</material>
+                           <material xml:lang="en">White fine-grained marble.</material>
+                           <p xml:lang="ru">Круглая крышка сосуда; на лицевой (т.е. верхней) стороне рельефное изображением креста (выс. 0,4) по центру и 
+                              рельефный ободок (выс. 0,75) по краю; выемка и бортик снизу. Обломана по двум радиусам.</p>
+                           <p xml:lang="en">Circular lid of a vessel. On the top side is a relief cross (H. 0.4cm) in the centre, and relief border along the edge (0.75cm).
+                           On the underside there is a concavity with a border. Broken along radial lines, leaving a segment of approximately 90 degrees.</p>
+                           <dimensions>
+                              <height>5,0</height>
+                              <dim type="diameter" precision="low">20,0-25,0</dim>
+                         </dimensions>
+                        </support>
+                     </supportDesc>
+                  </objectDesc>
+               </physDesc>
+               <history>
+                  <origin>
+                     <origPlace ref="origPlace.xml#p003">
+                        <seg xml:lang="ru">Херсон.</seg>
+                        <seg xml:lang="en">Cherson.</seg>
+                     </origPlace>
+                  </origin>
+                  <provenance type="observed" subtype="autopsy">
+                     <seg xml:lang="ru"><date when="1999-05">Май 1999</date>, <date when="2001-08"> август 2001</date>, <date when="2002-09"> сентябрь 2002</date>, <date when="2003-09"> сентябрь 2003</date>, <date when="2004-09"> сентябрь 2004</date>, <date when="2005-09"> сентябрь 2005</date>, <date when="2006-09"> сентябрь 2006</date>, <date when="2007-09"> сентябрь 2007</date>.</seg>
+                     <seg xml:lang="en"> <date when="1999-05">May 1999</date>, <date when="2001-08"> August 2001</date>, <date when="2002-09"> September 2002</date>, <date when="2003-09"> September 2003</date>, <date when="2004-09"> September 2004</date>, <date when="2005-09"> September 2005</date>, <date when="2006-09">September 2006</date>, <date when="2007-09"> September 2007</date>.</seg>
+                  </provenance>
+                  <provenance type="found">
+                     <seg xml:lang="ru">
+                        <placeName type="ancientFindspot" ref="findspot.xml#sevastopol">Севастополь (Херсонес).</placeName>
+                        <rs type="circumstances">1932 г., раскопки Г.Д. Белова.</rs>
+                        <rs type="context">Север, квартал XXV, около апсиды часовни, с наружной стороны, слой 2.</rs>
+                     </seg>
+                     <seg xml:lang="en">
+                        <placeName type="ancientFindspot">Sevastopol (Chersonesos).</placeName>
+                        <rs type="circumstances">1932, excavations of G.D. Belov.</rs>
+                        <rs type="context">North, Block XXV, near the apse of a chapel, outside, layer 2.</rs>
+                     </seg>
+                  </provenance>
+                  <provenance type="observed">
+                     <seg xml:lang="ru">Севастополь, Крым.</seg>
+                     <tei:seg xmlns:tei="http://www.tei-c.org/ns/1.0" xml:lang="en">Sevastopol, Crimea.</tei:seg>
+                  </provenance>
+               </history>
+               <msPart n="1">
+                  <msIdentifier><idno/>
+                  </msIdentifier>
+                  <msContents>
+                     <summary corresp="document-search.xml#doc4 document-search.xml#doc12">
+                        <seg xml:lang="ru" n="1">Демонстративная надпись.</seg>
+                        <seg xml:lang="en" n="1">Demonstrative.</seg>
+                     </summary>
+                  </msContents>
+                  <physDesc>
+                     <objectDesc>
+                        <layoutDesc>
+                           <layout ana="f4" n="1">
+                              <seg xml:lang="ru">В углах между рукавами креста.</seg>
+                              <seg xml:lang="en">In corners between the arms of the cross.</seg>
+                           </layout>
+                        </layoutDesc>
+                     </objectDesc>
+                     <handDesc>
+                        <handNote n="1">
+                           <seg xml:lang="ru"><rs type="execution" ref="execution.xml#scalpro">Лапидарный</rs>, bouletée. Альфа с петлей, дельта с удлиненной 
+                              правой диагональю. Лигатура ню-эта.</seg>
+                           <seg xml:lang="en">Lapidary, bouletée. Alpha with a loop, delta with projecting right hasta. Ligature nu-eta.</seg>
+                           <height unit="cm">2,2–3,3.</height>
+                        </handNote>
+                     </handDesc>
+                  </physDesc>
+                  <history>   
+                   <origin>  
+                      <origDate n="1" notBefore="0901" notAfter="1000" precision="low" evidence="палеография">
+                     <seg xml:lang="ru">X в.</seg>
+                     <seg xml:lang="en">Xth century C.E.</seg>
+                  </origDate>
+                   </origin>
+                  </history>
+               </msPart>
+               <msPart n="2">
+                  <msIdentifier><idno/>
+                  </msIdentifier>
+                  <msContents>
+                     <summary corresp="document-search.xml#doc4 document-search.xml#doc12">
+                        <seg xml:lang="ru" n="2">Литургическая <certainty cert="low" locus="value" match=".."/> надпись.</seg>
+                        <seg xml:lang="en" n="2">Liturgical <certainty cert="low" locus="value" match=".."/> inscription.</seg>
+                     </summary>
+                  </msContents>
+                  <physDesc>
+                     <objectDesc>
+                        <layoutDesc>
+                           <layout ana="f1" n="2">
+                              <seg xml:lang="ru">По краю.</seg>
+                              <seg xml:lang="en">Along the edge.</seg>
+                           </layout>
+                        </layoutDesc>
+                     </objectDesc>
+                  </physDesc>
+                  <history>   
+                     <origin>  
+                        <origDate n="2" notBefore="0901" notAfter="1000" precision="low" evidence="палеография">
+                           <seg xml:lang="ru">X в.</seg>
+                           <seg xml:lang="en">Xth century C.E.</seg>
+                        </origDate></origin>
+                  </history>
+               </msPart>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+     <xi:include href="encoding-desc.xml">
+     <xi:fallback><!--encodingDesc should have been included here--></xi:fallback>
+     </xi:include>
+
+<revisionDesc>
+         <change when="2015-04-30" who="CB">Textparts</change>
+          <change when="2013-10-24" who="TW">Added image code</change>
+         <change when="2012-08-14" who="AFS">inserted key name</change>
+         <change when="2012-07-19" who="GB">lemmatized Greek</change>
+         <change when="2012-07-12" who="AG">some corrections</change>
+         <change when="2012-05-23" who="AG">several lines translated, correctionsin findplace</change>
+          <change when="2012-04-17" who="AFS">translated a line</change>
+         <change when="2012-01-17" who="AG">1 line translated</change>
+         <change when="2012-01-03" who="AG">corrections, tagging</change>
+         <change when="2011-11-30" who="KFL">programmatically created from Word doc</change>
+      </revisionDesc>
+   </teiHeader>
+    <facsimile>
+        <surface>
+            <graphic url="5.93" n="2">
+                <desc xml:lang="en">Photograph of face 1(from ??)</desc>
+                <desc xml:lang="ru"/>
+            </graphic>
+          </surface>
+    </facsimile>
+   <text>
+      <body>
+         <div type="bibliography">
+            <listBibl n="1">
+               <bibl/>
+            </listBibl>
+            <listBibl n="2">
+               <bibl/>
+            </listBibl>
+         </div>
+         <div type="translation" xml:lang="ru">
+            <div type="textpart" n="1">
+               <p><supplied reason="lost">Иисус Христос</supplied> побеж<supplied reason="lost">дает</supplied>.</p>
+            </div>
+            <div type="textpart" n="2">
+               <p>… славы и…</p>
+            </div>
+         </div>
+         <div type="translation" xml:lang="en">
+            <div type="textpart" n="1">
+               <p>Jesus Christ is victorious.</p>
+            </div>
+            <div type="textpart" n="2">
+               <p>... of glory and...</p>
+            </div>
+         </div>
+         <div type="commentary" xml:lang="ru">
+            <div type="textpart" n="1">
+               <p>Относительно формулы см. <ref type="introduction">IV.3.C.e</ref>.</p>
+            </div>
+            <div type="textpart" n="2">
+               <p> По-видимому, надпись 2 содержала в себе какую-то литургическую формулу. Чтобы уместить ее, резчику пришлось сократить последние две буквы в 
+                  слове δόξης. Скорее всего, это крышка какого-то литургического сосуда.</p>
+               <p>Палеографически надпись близка <ref type="inscription">V 89</ref><!--byz089--> и относится также к Х в. Поскольку часовня, около которой найден камень, относится к более позднему 
+                   времени (Белов 1941, 243, рис. 68), то эта крышка может происходить из соседней «базилики 1932 г.».</p>
+            </div>
+         </div>
+         <div type="commentary" xml:lang="en">
+            <div type="textpart" n="1">
+               <p>On the formula, see Introduction <ref type="introduction">IV.3.C.e</ref>.</p>
+            </div>
+            <div type="textpart" n="2">
+               <p>Apparently, Text 2 contained some liturgical formula. In order to fit it onto the surface, the cutter was forced to abbreviated the last two letters
+                  of the word δόξης. The object is most likely a lid of a liturgical vessel.</p>
+               <p>Palaeographic features of the text are close to those of <ref type="inscription">V 89</ref><!--byz089--> and can be dated to the Xth century. Since the chapel
+                  in whose vicinity the monument was found is dated to a later period (Belov 1941, 243, fig. 68), it is possible that this lid originates from the
+               adjacent "Basilica of 1932."</p>
+            </div>
+         </div>
+         <div type="edition" xml:lang="grc" xml:space="preserve">
+            <div type="textpart" subtype="inscription" n="1">
+               <ab>
+                  <lb n="1"/><supplied reason="lost"><persName type="divine" key="iesous"><name nymRef="Ἰησοῦς"><expan><abbr>Ἰ</abbr><ex>ησοῦ</ex><abbr>ς</abbr></expan></name>
+                     <name nymRef="Χριστός"><expan><abbr>Χ</abbr><ex>ριστὸ</ex><abbr>ς</abbr></expan></name></persName></supplied>
+                  <lb n="2"/><w lemma="νικάω">νη<supplied reason="lost">κᾷ</supplied></w>.
+               </ab>
+            </div>
+            <div type="textpart" subtype="inscription" n="2">
+               <ab>
+                  <lb n="1"/><gap reason="lost" extent="unknown" unit="character"/>
+                  <w lemma="ὁ"><supplied reason="lost">τ</supplied><unclear>ῆ</unclear>ς</w>
+                  <w lemma="δόξα"><expan><abbr>δόξ</abbr><ex>ης</ex></expan></w>
+                  <w lemma="καί">κ<unclear>α</unclear><supplied reason="lost">ὶ</supplied></w>
+                  <gap reason="lost" extent="unknown" unit="character"/>
+               </ab>
+            </div>
+         </div>
+      </body>
+   </text>
+</TEI>

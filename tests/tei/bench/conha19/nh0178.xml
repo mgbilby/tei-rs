@@ -1,0 +1,1584 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../schema/keywords.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/cligs/reference/master/tei/cligs.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:cligs="https://cligs.hypotheses.org/ns/cligs">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="main">Gubi Amaya</title>
+                <title type="sub">-</title>
+                <title type="short">GubiAmaya</title>
+                <title type="sub">Historia de un salteador</title>
+                <title type="idno">
+                    <idno type="viaf">-</idno>
+                    <idno type="bibacme">W396</idno>
+                </title>
+                <author>
+                    <name type="full">Gorriti, Juana Manuela</name>
+                    <name type="short">GorritiJM</name>
+                    <idno type="viaf">100239982</idno>
+                    <idno type="bibacme">A161</idno>
+                </author>
+                <principal xml:id="uhk">Ulrike Henny-Krahmer</principal>
+            </titleStmt>
+            <extent>
+                <measure unit="words">15832</measure>
+            </extent>
+            <publicationStmt>
+                <publisher>
+                    <ref target="http://cligs.hypotheses.org/">CLiGS</ref>
+                </publisher>
+                <availability status="free">
+                    <p>This work is in the public domain. It is provided here with the <ref
+                            target="https://creativecommons.org/publicdomain/mark/1.0/deed.de"
+                            >Public Domain Mark Declaration</ref> and can be re-used without
+                        restrictions. The XML-TEI markup is also considered to be free of any
+                        copyright and is provided with the same declaration.</p>
+                </availability>
+                <date>2020</date>
+                <idno type="cligs">nh0178</idno>
+                <idno type="url">https://github.com/cligs/conha19/blob/master/tei/nh0178.xml</idno>
+            </publicationStmt>
+            <sourceDesc
+                xml:base="https://raw.githubusercontent.com/cligs/bibacme/master/app/data/editions.xml">
+                <bibl type="digital-source" xml:id="DS"> Gorriti, Juana Manuela. "Gubi Amaya." <seg
+                        rend="italic">Sueños y realidades.</seg> T. I. Berlin: Ibero-Amerikanisches
+                    Institut - Preußischer Kulturbesitz, <date when="2015">2015</date>, pp. 127-198.
+                        <ref target="http://resolver.iai.spk-berlin.de/IAI0000545600020000"
+                        >http://resolver.iai.spk-berlin.de/IAI0000545600020000</ref>. Accessed March
+                    16, 2017. </bibl>
+                <bibl type="print-source" xml:id="PS" corresp="#E535"> Gorriti, Juana Manuela. "Gubi
+                    Amaya." <seg rend="italic">Sueños y realidades.</seg> T. I. Buenos Aires: La
+                    Nación, <date when="1907">1907</date>, pp. 127-198. </bibl>
+                <bibl type="edition-first" xml:id="E1" corresp="#E534"> Gorriti, Juana Manuela.
+                    "Gubi Amaya." <seg rend="italic">Sueños y realidades</seg>, Vol. I. Buenos
+                    Aires: Imprenta de mayo, <date when="1865">1865</date>, pp. 107-200. </bibl>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <p>The source image files were processed with OCR. The software used was ABBYY
+                Finereader 12 Professional, with Spanish as recognition language. The result of the
+                OCR process was checked, but due to temporal restrictions, corrections were only
+                made in a rough manner and remaining errors cannot be excluded.</p>
+            <p>The spelling was checked and corrected where appropriate.</p>
+            <p>The following phenomena were marked up: front matter (where available, e.g. title
+                page, dedication, preface, introduction), part and chapter divisions, headings,
+                paragraphs, inserted texts (e.g. letters or newspaper articles), verse lines,
+                dramatic text, quotations (e.g. epigraphs), notes by the author, and gaps.</p>
+        </encodingDesc>
+        <profileDesc>
+            <abstract source="#Lichtblau_1997">
+                <p>
+                    <quote>
+                        <p>The author, disguised as a man, hears the story of Gubi Amaya, formerly
+                            called Miguel el Domador. Amaya turned to evil after the man whose life
+                            he had saved stole his girlfriend. One day, he saw a band of thieves
+                            attempting to pillage the ruins of a castle. He killed the leader of the
+                            band, Gubi Amaya, and then assumed his name and became chief of the band
+                            himself. Shortly after, Amaya meets a stranger who wounds him, but then
+                            takes him home to care for him. Amaya is awed by the stranger's good
+                            deeds and feels compelled to try to redeem himself. It turns out that
+                            the author is one of Amaya's daughters.</p>
+                    </quote>
+                    <bibl>Lichtblau, Myron. <seg rend="italic">The Argentine Novel: an annotated
+                            bibliography.</seg> Lanham, Maryland, 1997, p. 420.</bibl>
+                </p>
+            </abstract>
+            <abstract source="#Molina_2011">
+                <p>
+                    <quote> narrador homodiegético protagonista. Emma, disfrazada de varón, vuelve a
+                        su casa natal, ahora en manos de desconocidos. Visita distintos lugares, en
+                        particular el cementerio; recuerda la leyenda del "pacui" y la de las ruinas
+                        jesuíticas. Se encuentra con Miguel el Domador, antiguo servidor de su
+                        familia. Él, sin reconocerla, le contará su historia de cuando era conocido
+                        como Gubi Amaya. "Historia de un salteador": de joven, descubre que su amada
+                        Natalia se ha casado con su mejor amigo por la posición social de este; tras
+                        un intento fallido de matar a los recién casados y de un terremoto que
+                        destruye todo, decide borrar con crímenes su pasado inocente. Mata a un
+                        bandido, adopta su nombre - Gubi Amaya, el Terror de Tucumán - y encabeza su
+                        pandilla. Buscado por la policía, es finalmente hallado por un hombre joven
+                        que le ofrece ayuda desinteresada si acepta cambiar de vida. Este hombre le
+                        cuenta su historia ejemplar: le ha salvado la vida a la persona que había
+                        traicionado en su amistad y estafado a su padre. Gubi acepta el trato y se
+                        convierte en Miguel el Domador. Emma se da a conocer; más tarde, acompaña a
+                        Azucena o Rosalba y a su progenitor, veterano del ejército de San Martín, a
+                        las aguas termales de Rosario de la Frontera. El guía, viejo habitante del
+                        lugar, les habla de las creencias populares que circulan sobre las ruinas de
+                        Esteco. Un paraje le trae a Emma (o Emmanuel) el recuerdo de una aventura
+                        infantil, cuando ella y su hermano son salvados por Antolín y su madre;
+                        también rememora que su padre, cuando era gobernador de Salta en 1831, tuvo
+                        que tomar una medida judicial extrema: ejecutar al Carneador, asesino y
+                        rebelde, sin que la madre del reo pudiera interceder por él; el condenado
+                        resultó ser Antolín. En los baños de Aguas Calientes, todos los visitantes
+                        se preparan a escuchar la historia que contará un incógnito italiano (ver Un
+                        drama en el Adriático). </quote>
+                    <bibl> Molina, Hebe Beatriz. <seg rend="italic">Como crecen los hongos. La
+                            novela argentina entre 1838 y 1872.</seg> Buenos Aires: Teseo, 2011, p.
+                        445f. </bibl>
+                </p>
+            </abstract>
+            <textClass>
+                <keywords scheme="../schema/keywords.xml">
+                    <term type="author.continent">America</term>
+                    <term type="author.country">Argentina</term>
+                    <term type="author.country.birth">Argentina</term>
+                    <term type="author.country.death">Argentina</term>
+                    <term type="author.country.nationality">Argentina</term>
+                    <term type="author.gender">female</term>
+                    <term type="text.source.medium">digital</term>
+                    <term type="text.source.filetype">image</term>
+                    <term type="text.source.institution">Ibero-Amerikanisches Institut</term>
+                    <term type="text.source.edition">historical</term>
+                    <term type="text.publication.first.country">Argentina</term>
+                    <term type="text.publication.first.medium" cert="medium">book</term>
+                    <term type="text.publication.first.type" cert="medium">collection</term>
+                    <term type="text.publication.type.independent">yes</term>
+                    <term type="text.language">Spanish</term>
+                    <term type="text.form">prose</term>
+                    <term type="text.genre.supergenre">narrative</term>
+                    <term type="text.genre">novel</term>
+                    <term type="text.title" n="1865">Gubi-Amaya (Historia de un salteador)</term>
+                    <term type="text.genre.subgenre.title.explicit">historia de un salteador</term>
+                    <term type="text.genre.subgenre.title.implicit" resp="#uhk">-</term>
+                    <term type="text.genre.subgenre.paratext.explicit">not mentioned</term>
+                    <term type="text.genre.subgenre.paratext.implicit" resp="#uhk">-</term>
+                    <term type="text.genre.subgenre.historical.explicit">historia de un
+                        salteador</term>
+                    <term type="text.genre.subgenre.historical.explicit.norm" resp="#uhk"
+                        >historia</term>
+                    <term type="text.genre.subgenre.historical.implicit" resp="#uhk">-</term>
+                    <term type="text.genre.subgenre.litHist" resp="#Lichtblau_1959">romantic
+                        novel</term>
+                    <term type="text.genre.subgenre.litHist" resp="#Molina_2011">novela
+                        socializadora</term>
+                    <term type="text.genre.subgenre.litHist.interp" resp="#uhk">novela social</term>
+                    <term type="text.genre.subgenre.litHist.interp" resp="#uhk">novela
+                        romántica</term>
+                    <term type="text.genre.subgenre.summary.signal.explicit" resp="#uhk"
+                        >historia</term>
+                    <term type="text.genre.subgenre.summary.theme.litHist" resp="#uhk">novela
+                        social</term>
+                    <term type="text.genre.subgenre.summary.current.litHist" resp="#uhk">novela
+                        romántica</term>
+                    <term type="text.genre.subgenre.summary.mode.representation.explicit"
+                        resp="#uhk">historia</term>
+                    <term type="text.narration.narrator">homodiegetic</term>
+                    <term type="text.narration.narrator.person">first person</term>
+                    <term type="text.speech.sign">—</term>
+                    <term type="text.speech.sign.type">single</term>
+                    <term type="text.setting.continent">America</term>
+                    <term type="text.setting.country">Argentina</term>
+                    <term type="text.time.period">unknown</term>
+                    <term type="text.time.period.author">contemporary</term>
+                    <term type="text.time.period.publication">contemporary</term>
+                    <term type="text.prestige">high</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
+        <revisionDesc>
+            <change when="2017-03-17" who="#uhk">Initial TEI version.</change>
+        </revisionDesc>
+    </teiHeader>
+    <text>
+        <front>
+            <div source="#E1" n="1865">
+                <div type="titlepage">
+                    <ab>Sueños y realidades.</ab>
+                    <ab>Obras completas</ab>
+                    <ab>de la</ab>
+                    <ab>Señora Doña Juana Manuela Gorriti</ab>
+                    <ab>publicadas bajo la dirección</ab>
+                    <ab>de</ab>
+                    <ab>Vicente G. Quesada.</ab>
+                    <ab>Tomo I.</ab>
+                    <ab>Buenos-Aires.</ab>
+                    <ab>Imprenta de Mayo de C. Casavalle (Editor) - Moreno 241.</ab>
+                    <ab>1865.</ab>
+                </div>
+                <div type="introduction">
+                    <head>Introducción.</head>
+                    <p>Habíamos pensado preceder la presente edición con algunas noticias
+                        biográficas de la señora de Gorriti y de sus obras; pero queremos ceder la
+                        palabra a nuestro querido amigo el señor Torres Caicedo, que ha publicado la
+                        siguiente biografía de la ilustre argentina - En el próximo tomo haremos
+                        conocer el juicio de la prensa sobre esta edición.</p>
+                </div>
+                <div type="introduction">
+                    <head>Juana Manuel Gorriti.</head>
+                    <p>[...]</p>
+                </div>
+            </div>
+        </front>
+        <body>
+            <div type="chapter">
+                <head>I</head>
+                <head>Una ojeada a la patria.</head>
+                <p>Era una tarde ardiente de octubre. El cielo estaba obscurecido hacia el Este por
+                    densas y tempestuosas nubes, incesantemente surcadas por el rayo, y abrasado en
+                    el ocaso por los fuegos del sol poniente. La electricidad agitaba las hojas de
+                    los árboles, que se estremecían produciendo un rumor sordo, semejante al lejano
+                    murmullo del mar. El aire era cálido y sofocante. La cigarra, oculta en las
+                    sinuosidades de los troncos hacia oír su chillido monótono; bandadas de pájaros
+                    de todos tamaños y matices, rozando con su ala veloz las copas de los árboles,
+                    huían de la tempestad que se acercaba con lúgubre majestad.</p>
+                <p>¡Cómo expresar lo que pasaba en mi alma, mientras sola y a pie atravesaba el
+                    bosque que en otro tiempo me vio pasar entre aquella brillante familia que,
+                    arrebatada del suelo natal por la borrasca de un infortunio inaudito, devorada
+                    en su flor por la muerte, quedaba ya sólo reducida a cinco débiles vástagos,
+                    arrojados a inmensas distancias los unos de los otros!</p>
+                <p>Todas las ideas que pueden atormentar la mente y destrozar el corazón, pesaban
+                    sobre mí. Caminaba con la cabeza inclinada sobre el pecho, y absorta en los más
+                    dolorosos pensamientos, cuando alzando los ojos, vi clarear los árboles y conocí
+                    que llegaba al limite del bosque, y a la pradera que en forma de anfiteatro
+                    rodea la colina en cuya pendiente se eleva nuestra antigua morada.</p>
+                <p>Detúveme sobrecogida. Mi corazón dio saltos espantosos en mi pecho, y tuve miedo
+                    de mi soledad en ese momento supremo, como si fuesen a abrirse ante mí las
+                    puertas de la eternidad.</p>
+                <p>Después, bajo la influencia de una fascinación semejante a la que abre nuestros
+                    ojos cerrados al aspecto de un objeto doloroso, atravesó corriendo los últimos
+                    grupos de árboles...</p>
+                <p>Mis ojos se fijaron con una mirada profunda de indecible gozo, de indecible
+                    dolor, en aquel encantado panorama que, presente incesantemente en mi memoria,
+                    se desarrollaba en este momento ante mi.</p>
+                <p>En ese mi pequeño universo de otro tiempo, yo sola había cambiado: todo estaba
+                    como en el día, como en el instante en que lo dejé. Las colinas que costean la
+                    pradera por el norte, se extendían siempre verdes, siempre floridas, pobladas de
+                    árboles, y risueñas como en el tiempo que, alegre y confiada en el destino, las
+                    recorría yo saltando. Hacia el Sur, el río seguía impasible y sonoro su límpido
+                    curso en el mismo lecho de arena y pintadas piedrecillas. En frente de mí, sobre
+                    la roca solitaria, alzábanse las ruinas del castillo jesuítico, cuya venerable
+                    torre, intacta aún y ennegrecida por los últimos rayos del sol, se dibujaba en
+                    el tempestuoso horizonte; y más abajo, en fin, en el suave declive de una
+                    colina, la linda casa que edificó mi padre, y que también albergó mi infancia,
+                    se mostró a mis ojos, blanca y resplandeciente como en otro tiempo, cuando
+                    volviendo del baño me detenía a contemplarla con la distraída mirada del
+                    dichoso.</p>
+                <p>Cada árbol, cada hoja, cada recodo del camino despertaba en mi alma un mundo de
+                    dolorosos recuerdos. De este algarrobo, que ahora derrama sus flores sobro mi
+                    cabeza, había yo arrebatado un nido de pequeños pajarillos, y después que hube
+                    llorado toda la noche, pensando en el dolor de la madre, me había levantado al
+                    amanecer para restituírselos.</p>
+                <p>Aquel llano interminable, a la vista conduce a Ortega. Allí íbamos con
+                    frecuencia, y en esa verde explanada hacíamos correr, caracolear y dar saltos a
+                    nuestros caballos alrededor del coche de nuestra madre, de cuyo fondo la oíamos
+                    dar gritos de miedo a cada nueva locura, exhortándonos inútilmente a tener
+                    juicio, o invitándonos a mis hermanas y a raí a encerrarnos en la insoportable
+                    monotonía de su carruaje. ¡Pobre madre! ella no presentía entonces los
+                    verdaderos peligros que a lo lejos amenazaban ya a sus hijos; no percibía aún la
+                    negra nube de dolores y de lágrimas suspensa sobre esas risueñas cabezas.</p>
+                <p>¡Cuán misericordioso sois, Dios mío, velándonos el porvenir! Así, ella gozó
+                    largos días de dicha tranquila sobre las flores que ocultaban el abismo que nos
+                    ha devorado.</p>
+                <p>La tempestad entre tanto había comenzado a descargar con violencia, envolviendo
+                    en su lúgubre velo las colinas y el llano.</p>
+                <p>Pero ni las anchas gotas de agua que azotaban mi frente, ni la voz poderosa del
+                    huracán, ni el terrible estampido del trueno, nada era bastante a arrancar mi
+                    alma a su dolorosa contemplación. De pie o inmóvil, conteniendo con una mano los
+                    latidos de mi corazón, y apoyándome con la otra en el antiguo tronco, me había
+                    transportado en espíritu a los pasados tiempos, cuyas escenas, como reflejadas
+                    por un espejo mágico, se presentaban una a una a mi mente contristada. Volvía a
+                    ver a mi padre en medio de sus numerosos hijos en esa hermosa galería, donde
+                    agrupados en torno suyo y ocultos entre los pliegues de su capa mirábamos con
+                    curiosidad mezclada de terror los torrentes de agua y las columnas de fuego con
+                    que las tempestades desgajaban los árboles del bosque. Volvía a oír los gritos
+                    de alegría con que saludábamos el primer soplo de viento, el primer rayo de sol
+                    que barría las nubes y hacía brillar las gotas de agua pendiente, como los
+                    diamantes de una diadema, de las verdes hojas de los árboles. Miraba las
+                    carreras y saltos con que cada uno de nosotros se apresuraba a acudir al jardín
+                    y a los prados, para ver cuántas flores se habían abierto, y si los pajaritos
+                    necesitaban de nuestra intervención para reformar sus nidos destruidos por el
+                    agua, y cuántos zorros había matado el rayo.</p>
+                <p>¡Ah! ¿dónde estaba la brillante juventud que habitaba ese Edén? ¡Tadeo! ¡Pedro!
+                    ¡Celestina! ¡Severa! ¡Julián! ¡Antonina! ¡Teresa! ¿qué había sido de
+                    vosotros?</p>
+                <p>Y a cada uno de estos nombres, un eco lúgubre respondía en el fondo de mi
+                    corazón: pregúntalo a la tumba.</p>
+                <p>De todos esos seres llenos de vida, cuyos corazones palpitaban de juventud y de
+                    esperanzas a las puertas de un inmenso y halagüeño porvenir, yo sola había
+                    vuelto con el mío desolado a llorar, como el profeta de las lamentaciones sobre
+                    las ruinas de lo pasado; y extranjera en la casa paterna que contemplaba, no me
+                    quedaba de la herencia de mis padres, ni una piedra en que reposar mi cabeza.
+                    Todo había sido cambiado por el amargo pan de la tierra extranjera.</p>
+                <p>Una voz áspera y una vigorosa mano que se posó en mi hombro me volvieron a mí
+                    misma. Un hombre de cincuenta años, alto y fuerte, de tez morena y encendida, de
+                    cabellos grises, ojos negros y espesas y crecidas cejas, se hallaba a mi
+                    lado.</p>
+                <p>—Caballero—me dijo, engañado por mi vestido,— gustáis de mojaros o queréis
+                    hacerme un insulto? </p>
+                <p>—¡Yo, señor!—respondí asustada con aquel ademán de salvaje familiaridad, y
+                    sintiendo palpitar mi corazón de mujer bajo las pistolas con que heroicamente
+                    había adornado mi cinto. </p>
+                <p>—Sí—replicó él,—porque a dos cuadras de mi casa os refugiáis bajo un árbol, como
+                    si estuvierais en los desiertos de la Arabia. </p>
+                <p>Estas palabras y el acento de aquel hombre me revelaron un español. Era el actual
+                    propietario del país.</p>
+                <p>Aquella invitación, tan sencilla como benévola, propia del carácter franco y
+                    generoso de los hijos de España, produjo en mi una dolorosa impresión. Mi casa,
+                    había dicho él, señalando aquélla donde se meció mi cuna. Creí verme de nuevo
+                    desheredada, y me pareció que los muros de esa morada me rechazaban diciéndome:
+                    ¡Extranjera, vete! no te conocemos.</p>
+                <p>A mi entrada en la casa, voces suaves y hospitalarias desterraron mis tristes
+                    pensamientos. Las señoras de la familia salieron a mi encuentro, y me saludaron
+                    dándome la bienvenida con tan amable sencillez; ocupáronse en aliviar mi
+                    cansancio con tan tierna solicitud, con tan franca cordialidad, que por un
+                    momento dudó si el pasado era un sueño, y si esa familia era la mía.</p>
+                <p>¡Ah! sólo el proscrito, el enfermo, el huérfano y el peregrino pueden apreciar lo
+                    que hay de noble, generoso y tierno en el alma de mis bellas compatriotas. El
+                    poderoso las encuentra soberbias o indomables, porque, como el vergel cerrado
+                    del Sagrado Libro, ellas guardan los tesoros de su corazón para el
+                    desvalido.</p>
+                <p>Hijas del Plata, ángeles guardianes de ese Edén sembrado de tumbas, y entregado
+                    por tanto tiempo a matanzas espantosas, nada hay comparable a vuestra evangélica
+                    caridad, a vuestra sublimo abnegación. Vosotras olvidáis vuestros infortunios
+                    para consolar a los que sufren; madres y esposas desoladas, sofocáis los
+                    sollozos de vuestro propio duelo para dirigir suaves palabras de esperanza al
+                    prisionero, y aun proscritas y sin hogar, vais sobre los campos de batalla a
+                    arrebatar de entre las garras de los buitres al moribundo, cuyas heridas vendáis
+                    con los velos de vuestro casto seno. Dios os bendiga, y os lo tenga en cuenta
+                    para la redención de nuestra patria desventurada. </p>
+            </div>
+            <div type="chapter">
+                <head>II</head>
+                <p>Mis huéspedes, después de haber provisto a todo lo que yo podía necesitar, me
+                    dejaron sola en el departamento destinado a los extranjeros. Todo estaba allí
+                    como antes: adornaban sus paredes algunos cuadros de mi hermana, entre los que
+                    encontré una obra maestra de mi lápiz, un ángel custodio con el cual, yo que no
+                    conocía ni una línea de dibujo, pretendí igualar al diestro pincel de ésta.</p>
+                <p>Contemplando aquella imagen, admiró el poder de la voluntad, que guiando sólo mi
+                    mano ignorante, había dado a la figura de ese numen protector de nuestro lóbrego
+                    camino, los contornos aéreos de una belleza misteriosa y triste, y una expresión
+                    inefable de melancólica ternura con que parecía sonreír a la pobre
+                    peregrina.</p>
+                <p>¡Ah! ¡qué diferencia de aquel tiempo al presente! ¡qué diferencia entre la niña
+                    de cabellos rubios y mejillas sonrosadas, que charlando turbulentamente hizo ese
+                    cuadro y la viajera pálida, fatigada y enferma que ahora lo miraba
+                    silenciosa!</p>
+                <p>Mientras mis ojos y mi pensamiento vagaban de objeto en objeto y de recuerdo en
+                    recuerdo, la tempestad había pasado y bramaba a lo lejos sobre las agrestes
+                    cordilleras del Oeste.</p>
+                <p>Acerquéme a la ventana, que se abría sobre la campiña, y vi llegar la noche y
+                    alzarse la luna detrás de la cordillera del Colorado.</p>
+                <p>Todo era serenidad y silencio en torno de la casa, y sólo se oía el lejano mugido
+                    de las vacas y el ligero ruido del agua que destilaba gota a gota de los
+                    tejados. Una brisa húmeda y cargada de aromas mecía con dulce murmullo los
+                    grandes árboles que crecían cerca de la ventana, y sus móviles sombras parecían
+                    jugar con los rayos de la luna entre las tinieblas del cuarto.</p>
+                <p>Los criados, que entraron con luces, rompieron el encanto de aquella escena.</p>
+                <p>Cuando quedó otra vez sola, salí cerrando cautelosamente la puerta de la
+                    habitación hospitalaria; deslicéme a lo largo de la galería, descendí la
+                    escalinata, y tomé con paso rápido el sendero sombreado de algarrobos que
+                    conduce al manantial y a las ruinas.</p>
+                <p>Mientras caminaba, como si hubiera en mí dos personas diferentes, la una, hija
+                    agreste de aquellas selvas, la otra, viajera que de lejanos países había venido
+                    a contemplarlas, me refería a mí misma la historia de todos esos sitios, que
+                    conocía, desde la caverna del tigre hasta el albergue de la gacela, desde el
+                    árbol gigantesco hasta la menuda grama.—He allí,—me decía, para persuadirme de
+                    que todo aquello no era un sueño,—he allí los nopales, donde esconden sus crias
+                    esas víboras que con sus silbidos remedan pérfidamente el canto de un pájaro
+                    para morder con seguridad la mano incauta, que deseando apoderarse del ave se
+                    deslice en la cavidad de los troncos. He aquí las cuevas de los zorros; más allá
+                    está el barranco de los chacales. En la copa de ese nogal me refugió una vez
+                    huyendo de un enorme toro que imprudentemente llamé con un pañuelo rojo, y que
+                    me sitió la mitad de un día, pegado al tronco, cavando el suelo y mugiendo con
+                    rabia... ¿Y ese gemido lastimero que se eleva de lo más profundo de los bosques?
+                    ¡Ah! Es el canto del pacui, ave nocturna tan uraña que nadie la vio jamás y sólo
+                    es conocida por su canto, y por la fantástica leyenda que de ella se
+                    refiere.</p>
+                <p>Dos pastores de loa bosques, Pascual y María, se amaron; y desde ese momento,
+                    siempre juntos, apacentaron deliciosamente sus rebaños y su amor en los floridos
+                    prados yen las intrincadas selvas; y no hubo en toda la comarca seres tan
+                    felices como ellos.</p>
+                <p>Pero Pascual era celoso, y le hacía sombra aun la de un alcornoque.</p>
+                <p>Un día, al acercarse a su amada, que descansaba a orilla de una fuente, creyó oír
+                    el ruido de una persona que huía.</p>
+                <p>Quizá era un siervo que bajó a apagar su sed. Mas Pascual tornóse sombrío y
+                    taciturno, y miró a su querida con una mirada extrañamente profunda, cual si
+                    quisiera alcanzar al fondo de su alma. ¿Qué leyó en ella? ¡Los ojos de un amante
+                    son muy certeros!</p>
+                <p>Pascual llevó a María al centro de un apartado bosque, y la hizo ver en la cima
+                    de un árbol de prodigiosa elevación, una flor colosal como él y maravillosamente
+                    bella. Sus anchos pótalos tenían todos los colores del prisma, y el sol hacia
+                    brillar como estrellas las gotas de rocío que la noche había depositado en su
+                    ancho cáliz.</p>
+                <p>María adoraba las flores, y dando un grito de admiración se abalanzó al árbol y
+                    lo escaló. Al tocar la cima cogió con ávida mano el codiciado tesoro. Pero la
+                    hermosa flor, desprendiéndose sin esfuerzo de una liana que la sujetaba, se
+                    deshizo entre los dedos de la joven, convirtiéndose en mil florecillas reunidas
+                    por Una mano engañosa.</p>
+                <p>María creyó que su amante había querido divertirse con su decepción, o probar su
+                    agilidad, y envió a Pascual una mirada y una sonrisa. Pero esta sonrisa se heló
+                    en sus labios, y su mirada atónita se fijó con espanto en el árbol que la
+                    sostenía, de cuyo elevadísimo tronco habían desaparecido todas las ramas que la
+                    ayudaron a subir, presentando una superficie lisa y aterradora. Llamó a Pascual,
+                    y sólo le respondieron los ecos, repitiendo ese nombre como una satánica
+                    burla.</p>
+                <p>La desdichada lloró toda la noche, pronunciando entre sollozos el nombre de su
+                    amante. Pero cuando los primeros rayos de la aurora vinieron a iluminar los
+                    bosques, encontraron el árbol desierto. María había desaparecido. Desde
+                    entonces, al tender la noche su triste manto, se oye siempre la voz doliente de
+                    la joven que canta un nombre.</p>
+                <p>—¡Jesús María! ¡va a pasar el puente!—exclamó una voz al mismo tiempo que yo
+                    ponía el pie en el madero que servía para atravesar el manantial: miré hacia
+                    abajo y vi a una negra vieja que llenaba su cántaro, y que dejándolo en la
+                    orilla del agua, subía donde yo me hallaba. Acercóseme con esa solicitud
+                    benévola, casi maternal, que las ancianas de su raza tienen por la juventud, y
+                    poniendo su mano en mi hombro, me dijo, mirando con recelo en torno suyo: </p>
+                <p>—Si tiene usted intención de ir a las ruinas, desista usted de ello, ¡en nombre
+                    del cielo! </p>
+                <p>—¿Por qué, pues? </p>
+                <p>—¡Cómo! ¿no lo sabe usted? </p>
+                <p>—¡Yo no! </p>
+                <p>—¿No sabe usted que El—o hizo una cruz en su boca,—que El ronda las ruinas del
+                    castillo todas las noche s? </p>
+                <p>—Y ¿quién es El? </p>
+                <p>La negra hizo un gesto de espanto, y acercándose más a mí:— ¡Un... un brujo!—dijo
+                    con acento de terror.—¡Ah, caballero, si estima usted en algo su vida, no vaya
+                    usted allá!</p>
+                <p>Y santiguándose medrosamente, la negra alzó su cántaro y se marchó.</p>
+            </div>
+            <div type="chapter">
+                <head>III</head>
+                <p>El terror de la pobre negra me hizo sonreír. La historia de su brujo, era, sin
+                    duda, una de las mil espantosas consejas que con respecto al castillo saben las
+                    gentes de la comarca, y que yo, cuando lo habitaba con mi familia, antes que el
+                    soplo devastador de la guerra civil lo convirtiera en ruinas, había oído referir
+                    a las viejas, en las noches de luna, bajo los árboles de las vecinas
+                    cabañas.</p>
+                <p>Aquel castillo era una construcción jesuítica, una de esas fortalezas que,
+                    disfrazadas con el humilde nombre de Reducciones, levantó la Orden de Loyola en
+                    los últimos tiempos de su reinado. Después de su expulsión, el castillo con las
+                    riquezas que encerraba y la ancha extensión de terreno a él anexa, fueron
+                    confiscados; y mientras sus dueños, como barridos por los cuatro vientos, los
+                        <q>«situados»</q> llevaban a España el oro que ellos habían amontonado en
+                    esos baluartes de su poder en América.</p>
+                <p>Sin embargo, un anciano contemporáneo de aquellos acontecimientos, que había
+                    pertenecido, de niño, a la servidumbre de los jesuítas, y que vivía aún, pegado
+                    como una antigua mata de yedra a los muros del castillo, cuando oía hablar de la
+                    confiscación, movía la cabeza sonriendo con socarronería, y mezclando los
+                    delirios de la decrepitud a alguna realidad que recordaba, formaba de todo esto
+                    una extraña historia que refería a los niños y a los criados.</p>
+                <p>—Los jesuítas de aquella congregación—decía él, —algunas horas antes de su
+                    expulsión, habían sido avisados. Entonces celebraron un consejo secreto, como
+                    todos los actos de la vida de esos hijos del misterio. Al salir del consejo
+                    cerraron todas las puertas del segundo recinto, habitado sólo por ellos; y
+                    cuando las abrieron, y los criados entraron para servir la cena, encontraron el
+                    patio inundado de vino, y la bodega, que contenía grandes cubas de este licor,
+                    completamente vacía. </p>
+                <p>Nadie supo nunca lo que hicieron de aquellas cubas; pero—añadía el viejo, con su
+                    misteriosa sonrisa —nadie tampoco, excepto los <q>«padres»</q>, sabía hacia
+                    dónde están situados los subterráneos del castillo.</p>
+                <p>Y al llegar aquí, dando rienda suelta a su chochez, comenzaba a divagar
+                    absurdamente, y decía:</p>
+                <p>—Así, mientras los nuevos poseedores del castillo duermen tranquilos bajo la
+                    llave de sus puertas cerradas, los <q>«padres»</q>, sus legítimos dueños—porque
+                    todo aquello que ha vendido la <q>«Patria»</q> es robado,— los padres, sus
+                    legítimos dueños, vienen de dos en dos como antes; atraviesan el cementerio tan
+                    silenciosamente, que ni aun con la orla de sus largas sotanas tocan siquiera las
+                    margaritas y pasionarias que lo cu bren; dan en la grande puerta tres golpes
+                    simbólicos, y a esta señal, el Reverendo General de la Orden, que duerme hace
+                    dos siglos bajo su epitafio en el presbiterio, levanta lentamente la hoja de
+                    mármol que lo oculta, o más bien la hace girar sobre algún gozne del otro mundo,
+                    y va a abrir, con ademán solemne, la puerta de la iglesia a los vivos, que,
+                    precedidos por él, descienden uno tras otro al sepulcro, donde permanecen hasta
+                    el amanecer. Pero antes que el lucero palidezca en el horizonte, vuelven,
+                    siempre de dos en dos, y el muerto, después de cerrar la puerta, se vuelve a su
+                    tumba. </p>
+                <p>Cada vez que el viejo, acurrucado en la cocina, y extendiendo sus trémulas manos
+                    sobre el fuego contaba esta historia, el entusiasmo de la codicia se apoderaba
+                    de los criados, y a la mañana siguiente, en todos los rincones del castillo
+                    resonaban fuertes golpes de pisón aplicados al suelo y a las paredes en busca de
+                    la puerta que debía conducir a los subterráneos, es decir, a las deseadas cubas,
+                    y al oro que las llenaba.</p>
+                <p>Mi padre puso fin a estas investigaciones, prohibiéndolas severamente.</p>
+                <p>Amaba el castillo no sólo por sus tradiciones, sino por la pintoresca situación
+                    que ocupaba, en la cima de una elevada peña, dominando el más delicioso paisaje
+                    que han contemplado mis ojos. Así, sin hacer en él ninguna innovación, lo
+                    cuidaba esmeradamente; y al comprar al Estado esta hermosa posesión, esperaba
+                    reposar allí de las fatigas de la guerra de la independencia. Pero Dios no !o
+                    quiso así. El castillo yacía allí en ruinas, las tierras pertenecían a un
+                    extraño, y el viejo veterano no vio amanecer para él un sólo día de reposo,
+                    hasta aquél en que descendió a descansar eternamente en el sepulcro bajo un
+                    cielo extranjero.</p>
+                <p>Meditando así, había subido sin apercibirme de ello la rápida pendiente de la
+                    roca, y me halló de repente a la puerta del cementerio.</p>
+                <p>Allí reposaban seres que yo había amado y llorado. El rayo argentado de la luna
+                    alumbraba sus tumbas tranquilas y blancas como lechos de verano.</p>
+                <p>Aquí duerme Urbana, aquella niña a quien su padre en la agonía me confió, a mi,
+                    que niña como ella, la acogí en mi cuna, de donde voló al cielo. Allí está
+                    Manuel, el hermoso niño de mi hermana, que murió de pesar, porque su nodriza lo
+                    abandonó. Más allá está el sepulcro de Enrica, la bella y despiadada coqueta, a
+                    quien Dios, en un día, volvió todos los tormentos con que ella se había
+                    complacido en torturar a otros durante su vida. Sí, porque llegó un momento en
+                    que el amor que ella había parodiado para engañar a tantos, se despertó en su
+                    corazón, y entonces ya no fue coqueta; volvióse tímida y desconfió del poder de
+                    su belleza. Y a fe que tenía razón, porque aquél a quien ella amó, y que la
+                    adoraba cuando uncido a su yugo gemía entre la turba de sus rivales, la rechazó
+                    con desprecio desde el momento que fue digna de ser amada.</p>
+                <p>Aquel hombre era bueno, compasivo y generoso; mas por una extraña inconsecuencia,
+                    se complacía en despedazar sin piedad el corazón que lo amaba, buscando para
+                    herirlo sus fibras más sensibles con la infernal destreza de un verdugo. Pero
+                    aquel pobre corazón, infatigable en su amor fatal, se apegaba cada vez más al
+                    ser que lo rechazaba. A cada nueva decepción, a cada nueva herida, retrocedía
+                    gimiendo; pero luego lo olvidaba todo, besaba sonriendo la mano que lo hería y
+                    volvía a seguir su camino de dolor.</p>
+                <p>Yo era entonces una niña, y cuando a favor de la negligente confianza que inspira
+                    esa edad pude sondear las tinieblas en que se hundió aquella alma, y contempló
+                    con la medrosa admiración de la infancia las tempestades que la devastaron, esas
+                    terribles y para mí incomprensibles escenas, esos trances del amor que se
+                    obstina en vivir en un corazón donde quieren matarlo, tendía en derredor una
+                    mirada inquieta, preguntándome qué podía causar tan espantosos estragos en la
+                    existencia de esa joven, hermosa, rica, amada y mimada de todos.</p>
+                <p>Después, cuando los años y el dolor trajeron las borrascas a mi cielo, y
+                    cambiaron en gemidos los alegres cantos do la infancia, la imagen de esa mujer
+                    apareció en mi memoria. Vila como tantas veces la había contemplado, pálida,
+                    trémula, palpitante, con sus negros cabellos esparcidos sobre sus hombros; y en
+                    la amarga sonrisa que contraía sus labios, parecía decirme: «¡Heme aquí ya
+                    tranquila! la almohada en que reposo no tiene insomnios ni pesadillas. Pero tú,
+                    que conoces ahora el secreto de mi dolor, di, ¿no es cierto que es horrible el
+                    decir: soy joven, soy bella, tengo una alma llena de poesía, puedo dar y recibir
+                    torrentes de amor y de felicidad, y sin embargo, la desesperación habita en mi
+                    seno, y yo la siento devorar mi corazón?</p>
+                <p>En otro tiempo, cuando venía a visitar estas tumbas, lloraba mucho; habría
+                    querido que mis sollozos despertaran a Urbana, a Manuel y a Enrica; pero ahora
+                    envidié su inmovilidad y su eterno silencio; y aun con el poder de volverlos a
+                    la vida, les habría dicho: ¡dormid en paz!</p>
+                <p>Dejé el cementerio, y atravesando la iglesia, cuya bóveda se había desplomado, me
+                    internó en aquella inmensa masa de ruinas.</p>
+            </div>
+            <div type="chapter">
+                <head>IV</head>
+                <p>Profundo silencio reinaba en contorno mío, silencio sólo interrumpido por el
+                    lejano gemido del <q>«coyuyo»</q> y el susurro del viento de la noche entre las
+                    mutiladas arcadas, y la crecida hierba del cementerio. La luna de lo alto del
+                    cielo enviaba su luz pálida o incierta, como la mirada de un moribundo, sobre
+                    aquella escena de desolación, dándole vestigios tan fantásticos, que exaltada mi
+                    imaginación, comencé a dudar si yo misma no era una sombra que, dejando un
+                    momento el lecho de la tumba, venía favorecida por las tinieblas a visitar el
+                    sitio de su cuna. Pero los latidos de mi corazón me volvieron luego a mí misma,
+                    haciéndome sentir que aún pertenecía a toda esta tierra de lágrimas, en la que
+                    cada hora trae consigo un dolor, y cada objeto que contemplamos el recuerdo le
+                    una felicidad desvanecida.</p>
+                <p>Me acerqué a la torre, que blanca y majestuosa, se alzaba entre el grupo de
+                    edificios abatidos, y sentándome a la sombra, <q>«aquella antigua amiga que
+                        había quedado sola en medio de las ruinas»</q>, lloró como <q>«Chactas»</q>
+                    sobre la destruida y solitaria morada de mis padres.</p>
+                <p>Cuánto tiempo permanecí allí inmóvil, y con el pensamiento abismado en lo pasado,
+                    lo ignoro.</p>
+                <p>Los pasos de un caballo disiparon bruscamente mi profundo letargo.</p>
+                <p>Un jinete de estatura atlética se había detenido delante de mí.</p>
+                <p>Aquel hombre estaba envuelto, a manera de manto, en un gran <q>«poncho»</q>,
+                    cuyos anchos y fantásticos pliegues descendían hasta sus pies, calzados de
+                    enormes espuelas.</p>
+                <p>Ocultaba sus facciones una inmensa barba gris que descansaba en su pecho. Un
+                    sombrero exageradamente pequeño dejaba enteramente descubierta su larga y rizada
+                    cabellera. Su mano izquierda llevaba con distracción la brida de su fogoso
+                    caballo, y la derecha se apoyaba en el mango de un largo puñal.</p>
+                <p>En cualquiera otro momento, al ver a tal hora y entre las ruinas aquella sombría
+                    figura, muda o inmóvil tan cerca de mí, habría tenido un miedo horrible; pero
+                    las fuertes emociones que entonces agitaban mi alma, me hacían inaccesible a
+                    todo temor.</p>
+                <p>Miróle fijamente, o iba a preguntarle qué buscaba en aquel lugar a esa hora
+                    avanzada de la noche, cuando de aquella masa prodigiosa de barbas salió una voz
+                    fuerte y cavernosa, arrebatándome la pregunta.</p>
+                <p>—Soy un viajero—le respondí, — y visito estas ruinas. </p>
+                <p>—¿Y no os han dicho que estas ruinas son durante la noche mi propiedad? ¿no os
+                    han hablado, señor forastero, de Miguel el Domador? </p>
+                <p>Al oír este nombre, mi mano ahogó un grito que iba a exhalarse de mi pecho.
+                    ¡Miguel el Domador! Tenía delante de mí, sin que mi corazón lo hubiese
+                    reconocido, sin que el suyo lo presintiera, al amigo de mi infancia, a un hombre
+                    que había consagrado su vida y su alma a mis hermanos y a mi, con un afecto
+                    inmenso, infatigable, cual no se encuentra en la raza humana. La memoria de
+                    aquel fiel servidor jamás se había separado de nuestro corazón, y en nuestras
+                    pláticas del destierro, el nombre de Miguel era repetido incesantemente.
+                    Recordábamosle como un ser tutelar, cuya misteriosa y protectora adhesión
+                    echábamos de menos con amargura.</p>
+                <p>Lágrimas de alegría y de dolor ahogaban mi voz; pero él, atribuyendo mi silencio
+                    a un ataque de miedo, procuró tranquilizarme tendiéndome su mano y un cigarro,
+                    signo de alianza entre aquellos hombres sencillos y leales.</p>
+                <p>—Amiguito—me dijo con acento triste,—tranquilizaos. Miguel vale más que su fama:
+                    gusto de hallar solitarios estos sitios durante la noche para evocar fantasmas,
+                    como dicen allá abajo—añadió desdeñosamente, y mostrando sus blanquísimos
+                    dientes.—¡Cierto! — prosiguió,—fantasmas queridos a mi corazón vienen a
+                    visitarme en estos muros destruidos, y me sonríen tristemente, recordándome días
+                    que están ya lejos, muy lejos. Mas, pues os halláis aquí, quedad; pues, ¡cosa
+                    extraña! Miguel, que durante quince años ha anegado su corazón para impedir el
+                    llanto a sus ojos, y cuyos labios no han dejado escapar un ¡ay! siente en este
+                    momento una inmensa necesidad de quejarse. </p>
+                <p>Y desmontándose del caballo vino a sentarse a mi lado en un trozo de columna.</p>
+                <p>Largo rato permaneció silencioso, con el codo apoyado en la rodilla y la mano
+                    perdida entre su barba.</p>
+                <p>Yo también callaba. Mis miradas vagaban de la imponente figura de mi amigo, al
+                    espectáculo solemne que la naturaleza presentaba en aquella hora. La brisa de la
+                    noche traía a mis oidos el sordo murmullo del río como un eco lejano del tiempo
+                    pasado, de aquel tiempo en que ese Miguel que estaba a mi lado sin reconocerme,
+                    venia por la noche a ver a sus niños, y después de habernos abrazado y
+                    repartídonos las flores, la miel y los pájaros que nos traía, decía algunas
+                    veces para hacernos desistir de nuestro empeño en detenerlo:</p>
+                <p>«Es necesario que parta; de lo contrario, se ahogaría mi caballo. ¿No oís que el
+                    ruido del río ha disminuido? Es porque está de avenida. La luna va a ocultarse,
+                    y no podría hallar el vado.»</p>
+                <p>Los mismos objetos que entonces, se alzaban en torno nuestro. Nos rodeaban las
+                    mismas colinas, mirábamos elevarse en el horizonte las mismas montañas; sobre
+                    nuestras cabezas centelleaban con igual fulgor los astros de la noche, la misma
+                    brisa tibia y perfumada acariciaba nuestra frente, trayendo a nuestro odio los
+                    lejanos rumores de los bosques. La escena era la misma, pero los actores eran
+                    sólo dos ahora; y al representar el desenlace del lúgubre drama, el hombre
+                    fuerte y el risueño niño llegaban ya encorvados, el uno bajo el peso de los
+                    años, el otro bajo la garra del dolor.</p>
+            </div>
+            <div type="chapter">
+                <head>V</head>
+                <p>Miguel, como todos sus compatriotas, al hacer cualquiera narración, comenzó la
+                    suya con una pregunta.</p>
+                <p>—Señor—me dijo,—si, separado del trato humano por una vida criminal, rechazado y
+                    maldecido de todos, encontráis un hombre que, arrancándoos al estado miserable
+                    en que yacíais, os rehabilitara con su estimación, os consolara con su amistad,
+                    asilándoos bajo su propio techo, y confiándoos la guarda de sus hijos; y cuando
+                    os hubiereis acostumbrado a esa existencia de paz, de honradez y de dicha, os
+                    arrebataran de repente ese amigo, esa familia, ese asilo, dejándoos solo y
+                    aislado como antes, ¿qué haríais? </p>
+                <p>—Lloraría mucho, y echaría siempre de menos a ese amigo y mi perdida ventura;
+                    pero me resignaría a la voluntad de Dios, que es dueño de nuestra felicidad y de
+                    su duración. </p>
+                <p>—Habéis hablado como una mujer, señor—dijo Miguel,—midiéndome con una mirada
+                    desdeñosa. Resignarse, teniendo aquí—y señaló su pecho,—teniendo aquí un corazón
+                    que pide venganza, y dos brazos fuertes que pueden ejecutarla. Niño, la
+                    resignación es la virtud de los cobardes. Dios dice—ayúdate y te ayudaré. Tened
+                    presente esto, que os servirá de mucho en el porvenir. </p>
+                <p>En cuanto a mí, yo no me resigné. Mi amigo estaba muerto, sus hijos expatriados,
+                    yo perseguido; pero mi ánimo no desmayó. Busqué a su enemigo, logré acercarme a
+                    él, y algunas horas después, una inmensa multitud reunida en torno de un
+                    cadáver, contemplaba con espanto la profunda brecha que la bala de mi fusil
+                    había hecho en su corazón.</p>
+                <p>—¡Lo asesinasteis! </p>
+                <p>—Lo maté lealmente, señor. Miguel no ha asesinado a nadie, gracias a aquel que
+                    duerme en la tumba, y que convirtió en Miguel el honrado a... al infame Gubi
+                    Amaya. </p>
+                <p>—¡Gubi Amaya!—exclamé yo, evocando con terror un formidable recuerdo, y
+                    pareciéndome que la figura de Miguel crecía y tomaba a mi vista proporciones
+                    horribles. </p>
+                <p>—Sí:—replicó él, con triste y solemne acento,—yo fui ese bandido de terrible
+                    memoria: este hombre que ha mecido la cuna de los niños, y velado su dulce sueno
+                    era en otro tiempo el terror de las comarcas y la pesadilla de la <seg
+                        rend="italic">justicia</seg>.—¿Veis ese cementerio?—prosiguió él tendiendo
+                    su mano hacia el lugar de eterno reposo.—Mi puñal ha cavado en él muchas tumbas. </p>
+                <p>Pero antes de que os refiera la segunda parte de la vida de Gubi Amaya, escuchad
+                    la primera.</p>
+            </div>
+            <div type="chapter">
+                <head>VI</head>
+                <head>Historia de un salteador.</head>
+                <p>Miguel recorrió con una mirada sombría el inmenso horizonte, como buscando allí
+                    algún doloroso recuerdo de su pasado. Después, sonriendo con una expresión tan
+                    amarga y terrible que me dio miedo, acercóse más a mi y continuó:</p>
+                <p>Vosotros, los que hacéis las leyes, señor forastero, los que habéis formulado la
+                    pena que condena el crimen a la muerte, no habéis, antes de sancionarla, pensado
+                    en las causas que pueden llevar al hombre a ese fatal extremo. Cuando el fiscal
+                    os refiere la historia de un delincuente, presente y encadenado ante vuestros
+                    tribunales, y que de allí lo enviáis al matadero, os contentáis con decir: nació
+                    malvado.</p>
+                <p>¡Ah! por dicha de la humanidad, y para gloria de Dios que la formó, eso no es
+                    cierto. El bien y el mal existen en nosotros, y desde la infancia los tenemos
+                    delante cual dos caminos igualmente desconocidos. Nosotros no elegimos: el
+                    destino decide, y trae circunstancias felices o fatales que nos arrojan en el
+                    uno o en el otro. He aquí un ejemplo.</p>
+                <p>¿Veis en el flanco de aquella cordillera esa montaña cortada verticalmente desde
+                    su cima, y cuyo inmenso despeñadero blanquea a la luz de la luna como las
+                    cúpulas de una ciudad fantástica? A su pie, y en medio de una deliciosa cañada
+                    sombreada de vergeles, alzábase en otro tiempo una cabaña solitaria, y visitada
+                    sólo por la paz y la virtud. Habitábanla una anciana y un joven.</p>
+                <p>La anciana había empleado su vida entera en amar a Dios y a su hijo.</p>
+                <p>El joven amó exclusivamente a su madre, hasta el día que ésta lo dejó para volver
+                    al cielo.</p>
+                <p>El joven quedó solo, y éste fue su primer pesar. Mas los pesares de la juventud
+                    son como las nubes de la tarde: dóralos el sol de la esperanza, dándoles
+                    prestigios mágicos que nos hacen amar el dolor.</p>
+                <p>El joven, sin cesar de llorar a su madre, pedía con todo el anhelo de un alma
+                    ardiente, un ser a quien amar; y un día encontró a un hombre amenazado de
+                    muerte. Arrojóse ante el peligro que amagaba a ese hombre, y lo salvó.</p>
+                <p>Tuvo ya, pues, un amigo.</p>
+                <p>Pero luego, sintiendo que en su corazón había un santuario vacío, tendió en torno
+                    suyo una mirada, buscando el ídolo que debía llenarlo; y sus ojos se encontraron
+                    con los de una mujer.</p>
+                <p>—¡Natalia!—exclamó Miguel, con acento apasionado.—¡Natalia!—continuó con voz
+                    sombría.—¡Natalia!—repitió, en un largo sollozo que despedazó su pecho.—¡Ah!
+                    ¿por qué apareciste a mis ojos tan hermosa y pura, si habías de caer del etéreo
+                    pedestal donde yo te adoraba, al cieno de las mujeres vulgares? ¿por qué me
+                    hiciste soñar una perfección que no se hallaba en la tierra? Miguel apoyó la
+                    frente en su mano, y se hundió en dolorosa meditación. </p>
+                <p>—¡Ah! ¡ah!—dije yo, procurando atraer su atención, y dar a aquella historia un
+                    colorido menos lúgubre, pues sin saber por qué tenía miedo,—¡ah!—¿erais vos el
+                    habitante de la cabaña y el amante de Natalia? —Sí—respondió;—ese hijo sumiso y
+                    tierno, ese amante que idolatró en la belleza material la belleza que viene del
+                    alma, era yo. ¡Ahí—continuó él fijando una mirada en mi rostro, y engañado por
+                    mi disfraz,—vos sois todavía muy niño para comprender la vehemencia del primer
+                    amor en una alma fuerte, ardiente y pura. </p>
+                <p>Natalia pertenecía a una familia ilustre. Su padre era un hombre poderoso, cuyo
+                    orgullo habría encontrado criminal la mirada que un plebeyo osara alzar sobre la
+                    frente de su hija; y sin embargo, yo la amé; y aunque todo parecía separarnos,
+                    el amor que ardía en mi corazón era inmenso, y debía comunicarse al suyo. Ella
+                    me amó...</p>
+                <p>¿Me amó? ¡Ah! en la duda que ha consumido mi alma como el fuego del infierno, he
+                    repetido largo tiempo esta demanda insensata a todas la fuerzas de la creación.
+                    ¿Me amó?</p>
+                <p>¡Sí! necesito creerlo, porque esa certeza es el único rayo que ilumina mi alma en
+                    la lobreguez de sus recuerdos. Sí, me amaba entonces. ¿Por qué descendía de su
+                    dorado palacio para ir a buscarme en el fondo de los bosques, desafiando los
+                    temores de la noche y de la soledad? ¿qué decían esas largas y profundas miradas
+                    fue ella detenía sobre mi frente, en mis ojos, en mis labios, reclinada la
+                    cabeza en mi seno, y su pecho sobre mis rodillas? ¿qué esas castas pero
+                    ardientes caricias, cuyo recuerdo hace estremecer mi corazón, aun ahora, bajo el
+                    hielo de los años?</p>
+                <p>Sí, me amaba, y en la embriaguez de ese amor, lo olvidó todo, el mundo, la
+                    memoria de mi madre, y... a Dios mismo. Ella era mi universo, mi cielo, mi Dios.
+                    ¡Cuán brillantes eran mis días, iluminados por su recuerdo! ¡cuán hermosas las
+                    noches, que la traían a mis brazos!</p>
+                <p>Hablando así, la voz de Miguel vibraba armoniosa y joven; la huella de los años
+                    desapareció de su frente, que se alzó orgullosa y radiante, cual si reflejara
+                    todavía el sol de esos días de amor que evocaba.</p>
+                <p>Y yo, inclinada ante él contemplaba con admiración aquel hombre con afectos tan
+                    profundos, y dotado sin embargo de tan heroica serenidad. Habría deseado que
+                    fuese un extraño, para sondear con la fría mirada del filósofo los pavorosos
+                    abismos de esa alma.</p>
+                <p>De repente el semblante de Miguel se obscureció; un fulgor sombrío iluminó su
+                    mirada, sus labios se contrajeron con una risa sarcástica, y remedándose a si
+                    mismo, se puso a repetir con amarga burla sus propias Palabras.</p>
+                <p>—¡Ella era mi universo, mi cielo, mi Dios! ¡Ah! ¡ah! ¡ah! </p>
+                <p>Y el eco de aquella risa resonó lúgubre y siniestro entre las ruinas. Y él
+                    continuó:</p>
+                <p>— Una noche que mi corazón agitado por una extraña inquietud, la llamaba con más
+                    ansia que nunca, Natalia no vino. La luna, asomando sobre la cima de los árboles
+                    en la mitad de su carrera, me encontró sólo todavía. </p>
+                <p>—¡Ha muerto!—me dije,—¿qué sino la muerte la retendría lejos de mí? ¿No ha venido
+                    a buscarme en el delirio de la fiebre, entre los torbellinos del huracán, y los
+                    relámpagos de las tempestades? ¡Natalia ha muerto! </p>
+                <p>Y agitado de invencible terror, lánceme hacia la suntuosa morada que ella
+                    habitaba.</p>
+                <p>El palacio estaba iluminado; y yo creí ver en cada una de esas luces, lúgubres
+                    cirios que ardían en torno de su ataúd.</p>
+                <p>Ofuscado por aquella extraña alucinación, atravesé, corriendo como un loco las
+                    praderas, salvé con pie ligero los altos setos, y bañadas las sienes de un sudor
+                    helado, con la vista extraviada y erizados los cabellos, llegué al pie de una de
+                    las ventanas que derramaban torrentes de luz en las tinieblas del campo. Alcéme
+                    por entre las doradas rejas, y dejé caer en el interior mi ansiosa mirada</p>
+                <p>¡Ah! ¡ah! ¡ah!—y su risa era sarcástica, aguda y fría como una espada de dos
+                    filos.—¡Ah! ¡ah! ¡ah! Aquella mujer que iba a buscarme, desafiando el huracán y
+                    los lampos fragorosos de las tormentas; aquella mujer que pasaba las noches
+                    recostada en mi seno embriagándome con sus caricias; la que yo creía muerta,
+                    estaba allí, bella, fresca, risueña, coronada de rosas, en medio de un brillante
+                    circulo. A su lado se encontraba un hombre a quien ella daba la mano, jurando
+                    amarlo siempre. Delante de ellos un sacerdote bendecía ese juramento.</p>
+                <p>Miguel se interrumpió; fijó en mí una larga mirada, y me dijo con su tenebrosa
+                    sonrisa:</p>
+                <p>¿No me preguntáis quien era ese hombre? Era aquel que me llamaba su amigo, aquel
+                    a quien yo había salvado la vida.</p>
+                <p>Al escuchar la historia de esa espantosa traición, recuerdos dolorosos se alzaron
+                    en mi alma palpitantes y desgarradores.</p>
+                <p>Yo también había despertado un día a la luz de una terrible realidad; las manos
+                    heladas por la muerte que calenté en mi seno habían despedazado mi corazón; y en
+                    ese momento sentí sus heridas abrirse otra vez y verter sangre.</p>
+                <p>Miguel notó mi emoción.</p>
+                <p>—¡Pobre niño!—dijo—¡llora! ¿Será de compasión por ese corazón traicionado, o de
+                    terror por el castigo de los culpables? Tranquilizaos, su crimen quedó impune.
+                    ¡Oh! no confiéis jamás vuestra venganza a la cólera, porque no la cumplirá. En
+                    el momento que la reja de hierro se torció y deshizo entre mis crispadas manos,
+                    en el momento que acariciando la hoja de mi puñal, me lanzaba a devolver herida
+                    por herida, muerte por muerte, una ola de sangre inundó mi pecho, ahogó en mi
+                    garganta un grito de rabia, cegó mis ojos, y me derribó sin sentido. </p>
+                <p>Cuando volví en mi, la visión fatal había desaparecido. Era ya de día; los tintes
+                    rosados de la aurora coloreaban el cielo; una brisa fresca y perfumada mecía los
+                    tallos de las flores, y las cornisas del muro. El palacio estaba silencioso, y a
+                    lo lejos, en el camino real, una brillante comitiva marchaba rápidamente,
+                    enviando al aire gozosas aclamaciones.</p>
+                <p>Aleóme furioso, y pálido, trémulo, con los puños apretados, eché a correr tras el
+                    alegre convoy.</p>
+                <p>¿Qué quería yo? Lo ignoro. Estaba loco y corría, siempre gritando con voz ronca y
+                    ahogada por una rabia insensata.—¡Natalia! ¡Natalia!</p>
+                <p>Muy pronto alcancé el carruaje, y deslizándome entre el numeroso acompañamiento,
+                    abalancéme a la portezuela y quise abrirla, El esposo de Natalia se interpuso
+                    entonces entre ella y yo; y cogiendo de su cinto una pistola la descargó en mi
+                    pecho.</p>
+                <p>El golpe fue certero, y yo caí exánime en medio del camino.</p>
+                <p>Nada sentí ya, sino una ardiento oleada que bañó mi cuerpo, y paralizó los
+                    latidos del corazón.</p>
+                <p>Ignoro cuanto tiempo permanecí allí, tendido en tierra, anegado en mi propia
+                    sangre, entre la vida y la muerte. Al través de la doble sombra que obscurecía
+                    mis ojos y mi mente, veía las aves de rapiña cerniéndose sobre mi cabeza, en
+                    vertiginosos círculos y mi oído entorpeoido, percibía sin embargo, los
+                    siniestros graznidos con que celebraban mi agonía.</p>
+                <p>Llegó la noche y su frescura me reanimó: sobre mis labios secos por la fiebre,
+                    habíanse detenido algunas gotas de rocío que aspiré con ansia, devorado de
+                    sed.</p>
+                <p>Alcéme trabajosamente en el lago de sangre en que yacía, y arrastrándome sobre
+                    las rodillas, con una mano apoyada en tierra y la otra en mi herida, llegué
+                    hasta el pie de un árbol, al borde del camino, donde caí de nuevo, falto de
+                    fuerzas para ir adelante.</p>
+                <p>Allí, la memoria, que me había abandonado, vino de repente a asaltarme con su
+                    espantoso séquito de recuerdos. Quise refugiarme en el fondo de mi corazón, y
+                    sólo halló en él un montón de ruinas. Amor, fe, esperanza, ¡todo destruido! y un
+                    mar de dolor entrechocaba sus amargas olas en las tinieblas de mi alma. Y
+                    entregado a los transportes de una rabia impotente, lloró; y mis lágrimas eran
+                    gotas de fuego que quemaban mis mejillas, y mis gemidos rugidos espantosos a que
+                    respondieron los tigres desde el fondo de las florestas. Y rasgando con las uñas
+                    la herida que bandeaba mi pecho, arrojó mi sangre a la faz del cielo con
+                    horribles imprecaciones, y abismado en aquel extraño paroxismo, pasó horas tan
+                    largas como los siglos amontonados en la eternidad de los réprobos.</p>
+                <p>De repente, un ruido sordo, insólito, aterrador, estalló en las entrañas de la
+                    tierra, llenó los ámbitos del espacio del Oriente a Occidente, y acalló todas
+                    las voces de la creación. La tierra se estremeció con horribles sacudimientos;
+                    los árboles azotaron el suelo con sus altas copas; el aire se impregnó de
+                    mefíticos vapores; los abismos se abrieron, y de su seno se escaparon raudales
+                    de agua hirviente y torbellinos de llama; y la montaña, dividiéndose desde la
+                    altura de su cima hasta la profundidad de su base, cayó deshecha como una
+                    muralla, cubriéndolo todo con su inmensa mole.</p>
+                <p>Las aves del cielo, ahuyentadas de sus nidos, revoloteaban con vuelo incierto en
+                    el espacio; y las bestias feroces, escapándose de bajo los desmoronados peñascos
+                    de sus cavernas, aullaban, mezcladas confusamente en la llanura.</p>
+                <p>Y de toda esa multitud de seres que elevaban sus voces pidiendo misericordia,
+                    sólo aquel que poco antes yacía allí, poseído de rabioso dolor, se alzó
+                    tranquilo, sereno; y llevando en el labio una sonrisa impía, guió sus pasos
+                    hacia los lugares testigos de su pasada ventura... Pero al llegar a la cañada,
+                    encontró sólo un vasto montón de peñascos. La cabaña y el palacio, sus prados y
+                    sus jardines, todo había desaparecido.</p>
+                <p>A esa vista, un regocijo infernal estremeció mi corazón. El trastorno de la
+                    naturaleza había borrado en la tierra la huella del pasado: yo quise que el
+                    crimen la borrara también de mi alma.</p>
+                <p>Con los brazos cruzados sobre mi pecho ensangrentado, abracó con una mirada la
+                    vasta ruina, y reí con carcajadas lúgubres que repitieron, cual voces de la
+                    eternidad, los ecos del inmenso despeñadero.</p>
+                <p>Y sentado sobre los escombros de la montaña, como Luzbel en su caída, llamó al
+                        <q>«mal»</q>, y me puse a soñar en él.</p>
+                <p>Mientras estaba allí inmóvil y entregado a horrendos pensamientos, una tropa de
+                    hombres de salvaje aspecto, montados en ligeros caballos, extrañamente vestidos,
+                    y aun más extrañamente armados, invadieron aquel paraje, y se arrojaron sobre
+                    las ruinas como una bandada de aves de rapiña, procurando con insensatos
+                    esfuerzos levantar los amontonados despojos del cataclismo.</p>
+                <p>Hallábame tan absorto en mis pensamientos que tardó mucho tiempo en comprender la
+                    intención de aquellos hombres; pero cuando creí adivinarla, cuando vi que
+                    querían desenterrar para robarlo, el palacio cuyas aplastadas bóvedas pisaba yo
+                    con tan rencoroso placer, fuime al encuentro de aquel que parecía el jefe de
+                    aquella banda, y cruzó con él mi puñal.</p>
+                <p>Era un hombre de aventajada estatura, de atezado color y miembros hercúleos, que
+                    al ver mi actitud amenazante se puso a contemplarme con irónica risa. Pero muy
+                    luego conoció que el joven de quien se burlaba estaba animado por una fuerza
+                    infernal, cuando en medio al círculo formado por las siniestras figuras de sus
+                    compañeros, comenzamos una lucha espantosa. Su sarcástica risa se convirtió
+                    entonces en rugidos de rabia, ahogados pronto en el estertor de la agonía. Mi
+                    puñal había atravesado su pecho, y yacía a mis pies.</p>
+                <p>A la vista de su jefe muerto, los bandidos se inclinaron ante mi poseídos de
+                    temerosa admiración.</p>
+                <p>—¿Qué era este hombre?—pregunté. </p>
+                <p>—Nuestro capitán. </p>
+                <p>—¿Cómo se llamaba? </p>
+                <p>—Gubi Amaya, el terror de Tucumán. Habíanos traído para asaltar las haciendas de
+                    la vecina frontera. </p>
+                <p>¡Gubi Amaya! Al nombre de este bandido célebre en aquella época, la luz de un
+                    diabólico pensamiento alumbró mi mente.</p>
+                <p>—El bien me ha abandonado — me dije, — y he aquí el mal que viene a mí;
+                    consagrémonos a su culto; encarnémonos en él, y de hoy más seamos inseparables. </p>
+                <p>Y volviéndome a la desalmada tropa.</p>
+                <p>—¿Queréis ver reemplazado a vuestro jefe?—pregunté. </p>
+                <p>—Si—exclamaron unánimes,—con tal que lo sea por ti. </p>
+                <p>—Y bien—gritó tendiendo hacia ellos el brazo armado del sangriento puñal,—en
+                    nombre del poder destructor que acaba de asolar la tierra, juro engrandecer el
+                    nombre de Gubi Amaya y dejar muy atrás sus más espantosas hazañas. Aun más: para
+                    sellar este juramento, quiero un bautismo solemne que me dé este nombre. </p>
+                <p>Los bandidos exhalaron un aullido de gozo que repitió el eco formidable de la
+                    montaña; y sobre el cadáver de su jefe, cogiendo la sangre que brotaba a
+                    torrentes de su herida, la derramaron sobre mi frente, y me bautizaron en nombre
+                    de la violencia, del robo y del homicidio.</p>
+                <p>Desde ese día, y durante dos años llevó una vida de horrores y de exterminio.
+                    Jamás perdoné; y aquellos que tuvieron la desgracia de encontrarse en mi camino,
+                    nunca pudieron referirlo. Celoso de mi venganza, no combatía con mi banda sino
+                    cuando era asaltado: cuando yo era el agresor mi brazo sólo bastaba; y mis
+                    compañeros sabían que en estos encuentros debían ellos reducirse a simples
+                    testigos. Muchos perecieron a mis manos por haber infringido esta consigna.</p>
+                <p>Asi, si hubo ferocidad en la guerra que juré a la humanidad, jamás hubo
+                    cobardía...</p>
+                <p>¡Una vez, sin embargo!...</p>
+                <p>Y la voz del bandido tornóse trémula y la sombra del remordimiento obscureció su
+                    frente.</p>
+                <p>—¡Una vez!... Era un día de primavera, uno do esos días en que el alma se abre a
+                    la dicha o al dolor con pasmosa avidez. Yo estaba solo. Acostado a los pies de
+                    mi caballo bajo un grupo de sauces a la vera de un sendero solitario, pensaba en
+                    los días de mi pasada existencia. Las cálidas emanaciones de los prados traían
+                    al corazón en ondas de perfumes el recuerdo de su extinguida ventura. Una imagen
+                    amada y aborrecida, la imagen de la dicha, vagaba en torno mío, ora mezclándose
+                    al susurro del viento, al gorjeo de las aves, al estremecimiento de las hojas,
+                    ora sonriendo en cada una de las flores que se mecían al blando soplo de la
+                    brisa; mientras mi cuerpo yacía inmóvil, en mi alma ardía un mundo de
+                    tumultuosas sensaciones. En el aire, en la tierra, entre el follaje de las
+                    frondas había murmullos, palpitaciones, suspiros misteriosos; la dulce savia que
+                    circulaba en la naturaleza discurrió por mis venas; un profundo enternecimiento
+                    invadió mi corazón por vez primera después de mucho tiempo: pensó en mi
+                    infancia, en mi madre, en Dios; tuve horror de mi vida presente, deploré los
+                    dias perdidos en el culto del mal, y el alma encenagada en el crimen sintió de
+                    repente sed de amor. </p>
+                <p>De súbito oí una voz dulce y melodiosa que cantaba a lo lejos una tierna endecha;
+                    y a poco, al fin del sendero, apareció una joven vestida de blanco y cubierta
+                    con un velo que el viento rizaba en torno suyo como una azulada niebla. Caminaba
+                    lentamente con los brazos caídos y los ojos fijos en el cielo. Parecía absorta
+                    en algún dulce pensamiento, y todo su ser respiraba ternura, abandono,
+                    pasión.</p>
+                <p>Al verla, mi corazón se estremeció cual solía estremecerse en otro tiempo, cuando
+                    la felicidad lo habitaba.</p>
+                <p>—¡Bondad divina!—exclamé—¿me enviasen esta mujer un ángel de redención? </p>
+                <p>Y alzándome impetuoso, corrí hacia ella.</p>
+                <p>Mi presencia pareció asustarla, pero no la desconcertó.</p>
+                <p>—Eres un bandido y sé lo que quieres—me dijo quitando de su dedo un diamante.—He
+                    aquí mi anillo de novia: guárdalo, y mañana a esta hora, en este mismo sitio te
+                    daré por él un fuerte rescate. No temas que falte a mi palabra: esta noche voy a
+                    desposarme con un hombre acaudalado que pone a mis pies inmensas riquezas; y
+                    aunque yo amaba a otro, prefiero la opulencia; y en este instante arrojaba al
+                    viento los últimos recuerdos de ese amor. </p>
+                <p>¡Decepción! ¡Aquel ser ideal tenia un alma de fango! ¡no era amor el sentimiento
+                    que brillaba en sus celestes ojos, que hablaba en la melodía de su voz: era
+                    codicia!</p>
+                <p>Caí otra vez de la elevada región donde me cernía acariciando una engañosa
+                    quimera.</p>
+                <p>—¡Infame!—exclamé, y la memoria de la pérfida que me habla vendido se encarnó de
+                    repente en esa mujer, y las suaves emociones en que nadaba mi alma se
+                    convirtieron en una furiosa rabia—¡infame! corazón metalizado que con la sonrisa
+                    en los labios y la mirada en el cielo soñabas en tu ruin ambición, y preparabas
+                    fríamente un perjurio, condenando a eterno dolor el alma que te ama; ¿querías
+                    oro? ¡Hele ahí, y con él el premio de tu traición! </p>
+                <p>Y hundí mi puñal en el seno de aquella mujer, y abrí su pecho y la arranqué el
+                    corazón, y lo arrojé palpitante a un buitre que asentado cerca de allí esperaba
+                    una presa, llenando después el sangriento vacio con todo el oro que llevaba
+                    conmigo...</p>
+                <p>Y la voz de aquel hombre, vacilante y trémula al comenzar la narración del
+                    espantoso episodio, se precipitaba ahora como un torrente, y vibraba con una
+                    melodía terrible.</p>
+                <p>—Tres veces engañado por el bien—continuó él, cuando su exaltación se hubo
+                    calmado,—juró no creerlo, y me hundí de nuevo, pero más profundamente que nunca
+                    en el crimen: asolé las comarcas, incendié las poblaciones, e hice
+                    intransitables los caminos. </p>
+                <p>Las gentes de la justicia me perseguían con actividad; pero yo me burlaba de
+                    ellos y ayudado de la pasmosa velocidad de nuestros caballos robados a las
+                    mejores crías de las vecinas provincias, desaparecía cuando me creían ya en sus
+                    manos, e iba a mostrarme instantáneamente a largas distancias acompañado do mi
+                    temible bando y llevando conmigo la muerte y el estrago.</p>
+                <p>Así, no tardó mucho en mezclarse la superstición al espanto que inspiraba mi
+                    nombre. Creyóseme un ser sobrenatural enviado por el infierno; y en las veladas
+                    de las cabañas hablábase de Gubi Amaya en voz baja y con profundo terror.</p>
+                <p>—Un día hallábame apostado sobre un camino en los bosques de la <seg
+                        rend="italic">Ciénega.</seg> Era el nueve de noviembre —añadió él alzando la
+                    frente con un ademán solemne, y enviando al cielo una mirada vaga que parecía
+                    perderse en los recuerdos de aquel lejano día. </p>
+                <p>El sol iba a ponerse, mi banda me esperaba a tres leguas de distancia, y ya me
+                    disponía a retirarme, cuando sentí el ruido que hacía entre las ramas el paso de
+                    gente que se acercaba; y a poco vi aparecer un hombre montado en un caballo
+                    magnifico que codicié desde luego, y me propuse conquistar en el momento.</p>
+                <p>Salté al medio del camino y grité con fuerza:</p>
+                <p>A esta voz, el jinete, que caminaba distraído, levantó la cabeza y nuestras
+                    miradas se cruzaron.</p>
+                <p>—Tú eres Gubi Amaya—exclamó él,—al fin te encuentro, malvado. </p>
+                <p>Y se arrojó sobre mí, no con la cólera del agresor que ataca sino con la
+                    serenidad enérgica del juez que sentencia.</p>
+                <p>Había en el semblante y en la voz de aquel hombre, joven aún, algo tan imponente
+                    y majestuoso que, ¡cosa extraña! yo, el salteador desalmado, que había matado al
+                    miedo y hecho pacto con el arrojo, sentíme, la única vez de mi vida, helado de
+                    temor, y echó a huir por el bosque con toda la velocidad de mi caballo.</p>
+                <p>El me seguía de cerca; pero menos habituado que yo a la carrera entre las
+                    intrincadas asperezas de las selvas, llevaba gran desventaja, a pesar de la
+                    flexible ligereza de su corcel.</p>
+                <p>Habíamos llegado así a un corto escampado en medio del bosque, donde mi
+                    perseguidor haciendo dar un poderoso bote a su caballo, creyó seguro el
+                    alcanzarme.</p>
+                <p>Yo previ su intento; y <q>«sentando»</q> de pronto el mío hice un cuarto de
+                    conversión a la derecha, e iba ya a internarme de nuevo en el bosque, cuando mi
+                    enemigo llevando de repente la mano al bolsillo de su gabán, cogió un puñado de
+                    onzas y me lo arrojó a la cabeza con prodigiosa fuerza, gritándome con su voz
+                    sonora y aterrante: «¡Infame! ¿querías oro? ¡Pues toma oro!...»</p>
+                <p>Esas palabras más aún que el horroroso golpe que abrió mi sien, me hicieron caer
+                    exánime en tierra, porque eran las mismas que yo había pronunciado al ejecutar
+                    la sola acción cobarde que marcaba los crímenes de mi vida; palabras que ahora
+                    llegaban a mi oído fatídicas y solemnes, cual si las pronunciara la mística
+                    trompeta del juicio.</p>
+                <p>Al través del síncope que embargó mis facultades, sentía yo la tremenda mano que
+                    me había derribado, convertida en instrumento de salud pasar suave y caritativa
+                    sobre mis miembros magullados, restañando la sangre que brotaba de mi herida con
+                    la destreza de un facultativo y la solicitud de un hermano.</p>
+                <p>Pero luego hízose mi letargo tan profundo que ya nada sentí, sino un movimiento
+                    brusco y continuo que sacudía mi cuerpo, y el dolor que este movimiento causaba
+                    en mi herida.</p>
+                <p>Cuando volví en mi estaba acostado sobre una cama en un cuarto débilmente
+                    alumbrado por una lámpara, a cuya luz un hombre leía con la frente apoyada en su
+                    mano. Dábame la espalda; sin embargo lo reconocí: era él.</p>
+                <p>A un suspiro que se escapó de mi pecho, aquel hombre se volvió, y viéndome
+                    despierto, se levantó, cogió una taza que tenía a su lado, y acercándose a mí
+                    hízome beber una poción refrigerante. Consultó en seguida mi pulso, y arreglando
+                    las almohadas y ¡a posición de mi cabeza, volvió a continuar su vela y su
+                    lectura.</p>
+                <p>¿Qué diré a usted? Asi continuó cuidando de mi durante los siete días que tardó
+                    en cerrar mi herida. Al octavo, habiéndome ayudado a vestir hízome sentar en un
+                    sillón; sentóse él a mi lado, y fijando en mí una mirada grave y triste.</p>
+                <p>—¿Te sientes—me dijo—con fuerza bastante para escucharme y responderme? </p>
+                <p>No la tenía, porque aquel hombre ejercía sobre mí una extraña fascinación; y
+                    desde que caí en poder suyo estaba temiendo ese momento. Sin embargo, mi orgullo
+                    se revelaba contra esa misteriosa influencia: quise vencerla: y apartando mis
+                    ojos de la severa mirada que me contemplaba:</p>
+                <p>—Es inútil—respondí—gastar el tiempo en palabras: nada tienes que saber de mi:
+                    mis hechos están escritos por todas partes, y te los dirán las casas
+                    incendiadas, los talados campos y las numerosas cruces que se alzan al borde de
+                    los caminos. Mató, robé, destruí; me hallo a la merced de tu voluntad. ¿Y bien,
+                    qué te resta hacer? ¡Claro está! enviarme al patíbulo. </p>
+                <p>—Si—repuso él: — mataste, robaste, destruiste e hiciste del estrago la huella de
+                    tus pasos, cual un tigre carnicero; pero yo sé que hay en el fondo de tu alma
+                    una voz que en vano has querido ahogar, desdichado; una voz que habla más alto
+                    que tu sed de sangre y tu ansia de oro. Atrévete a negar que la oyes a todas
+                    horas: en el silencio de la noche, entre el tumulto del pillaje y en los gemidos
+                    de tus víctimas. </p>
+                <p>—Si—interrumpí yo con vehemencia:—hay una Voz que clama sin cesar en mi alma; que
+                    se mezcla al silbido del viento nocturno, y al tumulto del pillaje y a los
+                    gemidos de mis víctimas; voz de una herida profunda y sangrienta, abierta por la
+                    mano humana. ¿Sabes lo que me dice? </p>
+                <p>—¡Venganza! ¡venganza! </p>
+                <p>—¡Ah! ¿te has constituido mi juez y quieres interrogarme? ¡Pues escucha, y a tu
+                    vez osa decir que no habrías hecho otro tanto en lugar mío! </p>
+                <p>Y yo, que un momento antes rehusaba responderle, arrastrado por el irresistible
+                    ascendiente de aquel hombre, le reveló el drama entero de mi vida.</p>
+                <p>Escuchóme grave y silencioso; y en seguida me habló así:</p>
+                <p>—Casi al mismo tiempo que tú comencé yo a abrir mis ojos a la vida y el corazón a
+                    la esperanza. Tú soñabas la dicha en el amor, yo en la ciencia. Amábala con
+                    pasión, y niño aún, consagróle todos los momentos de mi existencia. Hijo de un
+                    rico negociante, la fortuna de mi padre me franqueó las puertas de las
+                    universidades, donde bebí a plena copa las delicias del saber humano; el cielo y
+                    la tierra me abrieron el tesoro de sus misterios, y yo comenzaba a saborear esa
+                    existencia de fruición infinita que hace de la vida del sabio un éxtasis eterno.
+                    ¡Quién sabe hasta dónde me hubiera elevado en la luminosa región donde mi alma
+                    se cernía entre los astros!... </p>
+                <p>Un día, sin embargo, fue necesario arrancar la mente a esa beatífica visión para
+                    volver al fango de la vida vulgar.</p>
+                <p>Mi padre, envuelto en la fraudulenta quiebra de un socio, vio desaparecer en un
+                    día su inmensa fortuna y murió de pesar. Su numerosa familia, víctima de los
+                    acreedores, fue arrojada a la calle y sus bienes puestos en pública subasta.</p>
+                <p>A esta fatal nueva, desvaneciéronse mis dorados ensueños: la voz severa del deber
+                    me ordenó renunciar a ellos para correr al socorro de los míos.</p>
+                <p>Pedí, y obtuve un plazo para redimir el honor de mi padre y bienestar de mi
+                    familia, abandonó las investigaciones del geólogo y el telescopio del astrónomo
+                    para empuñar la azada del agricultor; confinóme en un desierto, labró la tierra,
+                    fertilicé los campos, recibí inmensas invernadas, crió numerosos ganados, y en
+                    dos años pagué todas las deudas que grababan la memoria de mi padre, y
+                    restablecí el esplendor de mi familia.</p>
+                <p>La revolución americana vino a ofrecerme un nuevo campo en la carrera del bien.
+                    Unido a la falange de los libres salvé mil veces de su venganza a nuestros
+                    antiguos opresores; y otras tantas después de haberles servido de escudo, hube
+                    de perecer víctima de su perfidia...</p>
+                <p>Un día, fue esto en los tiempos de la revolución, cuando Liniers, con un cuerpo
+                    de tropas marchaba sobre las provincias del Sur, un hombre cubierto de polvo y
+                    pálido de fatiga y de terror entró de repente en mi casa y vino a caer a mis
+                    pies.</p>
+                <p>—¡Salvadme!—exclamó.—El virrey con todos los suyos ha sido hecho prisionero en su
+                    marcha, y se baila en poder de los insurgentes que no lo perdonarán. Yo soy el
+                    tesorero de la expedición: logré fugar a favor de las tinieblas, pero me siguen
+                    de cerca, y muy luego llegarán aquí para reclamarme. Poseo una inmensa fortuna
+                    que tengo depositada en Potosí. Este documento lo acredita, tomadlo, haceos
+                    dueño de ella, y libradme del patíbulo que me espera. </p>
+                <p>Apenas tuve tiempo de rechazar el papel en que aquel hombre me ofrecía su
+                    fortuna, cuando la casa fue cercada por un destacamento, cuyo jefe me pidió la
+                    entrega del prisionero. Di en lugar suyo una carta, en la que ofrecía por él mi
+                    garantía a la Junta Gubernativa de Buenos Aires.</p>
+                <p>Aquella misma noche, dándole un pasaporte y un guía seguro lo hice huir al
+                    Perú.</p>
+                <p>—Ve en paz con tu fortuna usurpada—le dije al despedirle—y acuérdate que quien te
+                    ha dado hoy la vida es el hijo de aquél a quien tú se la quitaste con tu infame
+                    banca-rota. </p>
+                <p>Aquel hombre era el asesino de mi padre: la fortuna que me ofrecía por precio de
+                    su vil existencia era la fortuna que le había robado.</p>
+                <p>He aquí una ante otra, tu vida y la mía: caminos antípodas, sembrados, el uno de
+                    monumentos, el otro de ruinas. ¡Mira cuanto has destruido tú y cuanto yo he
+                    reedificado! La honra de mi padre, la opulencia y la dicha de los míos, y hasta
+                    la felicidad y el bienestar de la familia de ese hombre que había hundido a mi
+                    padre en el sepulcro.</p>
+                <p>Dios ha premiado mis obras y me ha dado una esposa digna de mí. Daráme hijos y
+                    seré completamente feliz.</p>
+                <p>En cuanto a ti, conjuróte en nombre de lo único bueno que ha quedado en tu alma:
+                    la lealtad, que me digas, si es posible, que el arrepentimiento entre en tu
+                    alma. Sino, hoy te daré la libertad porque eres mi huésped; pero mañana iré a
+                    buscarte hasta las entrañas de la tierra para entregarte al brazo de la
+                    justicia.</p>
+                <p>Dios es testigo de que no fue el temor, sino el arrepentimiento, que las palabras
+                    de aquel hombre hicieron nacer en mi corazón, lo que me hizo caer a sus pies y
+                    exclamar golpeando mi pecho:</p>
+                <p>— ¡Pequé! ¡perdón! ¡misericordia! </p>
+                <p>Imposible seria pintar la expresión de santa alegría con que brilló en ese
+                    momento el noble semblante de ese hombre. Alzóme con bondad, me abrazó
+                    llamándome su hermano y me ofreció su amistad.</p>
+                <p>—¡Ah!—dije yo entonces como Cain—tú me has perdonado en nombre de Dios; ¿pero los
+                    otros?... ¡Me mirarán con horror! </p>
+                <p>—Nadie sabrá quien eres—respondió él;—tu secreto quedará entre Dios y yo. Gubi
+                    Amaya ha muerto, y tú eres Miguel. Todo lo he previsto; o si no, mira... </p>
+                <p>Abrió la puerta y me hizo ver el lugar en que nos hallábamos.</p>
+                <p>Era Gualiama, <q>«puesto»</q> desierto donde estábamos solos él y yo.</p>
+                <p>A estas palabras recordó con espanto que aquella terrible historia referida a un
+                    extranjero era para mi un secreto que sorprendía traidoramente a favor de un
+                    disfraz, secreto que mi padre había guardado y llevado consigo a la tumba.</p>
+                <p>Parecióme que iba a oír su voz alzarse de entre las ruinas para acusarme de
+                    impiedad.</p>
+                <p>Tuve miedo, y abrazando las rodillas de Miguel, exclamé:</p>
+                <p>—¡Perdón! </p>
+                <p>—¿Quién eres?—dijo. </p>
+                <p>—¿No me conoces ya, Miguel? </p>
+                <p>—¡No! — respondió él extrañamente conmovido con el eco de mi voz, y fijando en mi
+                    una ansiosa mirada. </p>
+                <p>—¿Has olvidado al más rubio de los niños que tanto amabas? </p>
+                <p>—¡Mi niña Emma!—exclamó con un gemido profundo. Y arrojándose a mi, alzóme en sus
+                    robustos brazos a la altura de su rostro para contemplar el mío. </p>
+                <p>—¡Mi niña Emma!—repitió dejándome en tierra. </p>
+                <p>Y reclinando el rostro sobre mi cabeza, lloró amargamente.</p>
+                <p>Después, tomándome por los hombros me alejó para mirarme.</p>
+                <p>—¡Sí—dijo,—eres mi niña! Mas ¿por qué se han tornado negros tus rubios cabellos?
+                    ¿por qué se ha vuelto triste tu risueño semblante? </p>
+                <p>Hablando así se sobresaltó de repente, y mirando en torno:</p>
+                <p>—¿Y los otros?—dijo más que con la voz, con la expresión de su mirada.—¿Dónde
+                    están tus hermanos? </p>
+                <p>Yo inclinó la cabeza y guardé silencio.</p>
+                <p>Debió comprenderme; porque, alejándose de mi fue a apoyarse en una columna
+                    desmoronada cubriéndose la cabeza con los largos pliegues de su poncho.</p>
+                <p>¡Lloraba!</p>
+                <p>En el silencio de la noche llegaban a mi oido de vez en cuando murmullos
+                    lúgubres: eran sus sollozos. ¡Ah! ¡él no sabía que de esos niños a quienes amó
+                    tanto, los más felices eran los que <q>«yacían en paz!...»</q></p>
+                <p>El caballo de Miguel pareció inquietarse por la prolongada ausencia de su dueño y
+                    lo llamó con fuertes relinchos.</p>
+                <p>A la voz de este amigo, Miguel alzó lentamente la cabeza; y viniendo hacia
+                    mi:</p>
+                <p>—Mi compañero se impacienta—me dijo—y quiere volver a la <q>«Banda»</q>. </p>
+                <p>—Este no es el <q>«Lobuno»</q>—añadió suspirando,— pero es bueno, fuerte y
+                    corredor cual ninguno. ¡Mira esa estampa, si no!... </p>
+                <p>Y me mostraba a lo lejos su magnifico y bien enjaezado corcel de color cebruno
+                    obscuro, larga crin y finísimo jarrete. La luna hacía brillar anchas medallas de
+                    plata en su freno y su petral.</p>
+                <p>—¡Sin embargo, yo echo de menos al otro, a mi Lobuno! El pobre tuvo menos
+                    resistencia que yo. Cuando vio que por la noche en vez de vadear el río para
+                    venir a <q>«Sala»</q> lo llevaba a batir a los federales, y que a las alegres
+                    voces de los niños sucedieron los disparos de fusil y los roncos gritos de
+                    aquellos diablos, no pudo ir más lejos; murió de pena. </p>
+                <p>Este viene también todas las noches; pero no hay quien lo acaricie; y sólo oye el
+                    grito del buho que llora en lo alto de la torre.</p>
+                <p>Y mirando al cielo</p>
+                <p>—Ya es tarde—dijo, cual solía decir en otro tiempo.—Las <q>«tres Marías»</q> y el
+                        <q>«Crucero»</q> se van a ocultar, y no habrás olvidado que es hora de
+                    retirarse. </p>
+                <p>Vámonos a nuestra casa.</p>
+                <p>¡Qué dulces fueron a mi corazón esas dos últimas palabras! ¡Hacia tanto tiempo
+                    que no las había oído decir! ¡hacía tanto tiempo que yo no tenía casa, y que el
+                    hogar paterno se había convertido en un montón de cenizas!</p>
+                <p>De súbito, en lo alto de un montón de escombros, las fantásticas siluetas de dos
+                    jinetes se dibujaron negras sobre el azul profundo del cielo.</p>
+                <p>Aquellos aéreos paseantes dirigieron en derredor una mirada inquieta, y
+                    creyéndose solos echáronse a tierra y se arrojaron sobre el caballo de Miguel
+                    que relinchó con angustia agitándose entre las trabas de su <q>«manea»</q>.</p>
+                <p>Verlos, enroscar su poncho en torno a la mano derecha, blandir el puñal con la
+                    izquierda y cargar sobre ellos, fue la acción de un momento para Miguel, que se
+                    eclipsó completamente, apareciendo en lugar suyo el terrible Gubi Amaya en toda
+                    su sombría grandeza.</p>
+                <p>Los ladrones, que se habían preparado a sostener su encuentro, cuando vieron
+                    enderezarse aquella hercúlea figura, y sus airados ojos brillar en la sombra
+                    como carbunclos, retrocedieron aterrorizados; y saltando en sus caballos con
+                    pasmosa agilidad, huyeron gritando:</p>
+                <p>—¡El brujo! ¡el brujo! </p>
+                <p>Miguel, arrancándole la manea, saltó a su vez sobre su veloz Cebruno y se arrojó
+                    tras ellos con la rapidez del pensamiento; y los tres jinetes desaparecieron en
+                    las sombras como un misterioso torbellino, dejándome inmóvil de sorpresa y
+                    terror.</p>
+                <p>Cuando volví de mi estupor, la luna comenzaba a palidecer a los primeros rayos
+                    del alba. Hallábame sola, sentada en el trozo de columna donde Miguel me había
+                    referido su tenebrosa historia; el rocío de la noche mojaba mis cabellos, y en
+                    torno mío no había ni la más ligera huella de las extrañas escenas que pasaron a
+                    mis ojos. Habría creído un desvario de la mente si la imponente figura de
+                    Miguel, destacándose en poderoso relieve, no viniese a imprimir en ellas el
+                    sello de la realidad.</p>
+            </div>
+            <div type="chapter">
+                <head>VII</head>
+                <p>Hallábame de nuevo sola entre las ruinas; mi fantástico protagonista había
+                    desaparecido con la noche; pero sus palabras sonaban en mi oído, y me aparecían
+                    como una honda estela remontando el sombrío torrente del pasado. Sentía en el
+                    alma y en el cuerpo un extraño quebranto, cual si hubiese vivido dos existencias
+                    en aquella noche; y estiraba los rizos de mi cabellera para ver si habían
+                    encanecido.</p>
+                <p>Pero al dejar el recinto de los escombros donde había pasado la noche, al
+                    descender de su elevada planicie, el risueño espectáculo que se ofreció a mis
+                    ojos, sin borrar el recuerdo de Miguel y de su terrible historia, llevó mi alma
+                    hacia un nuevo linaje de impresiones.</p>
+                <p>El sol comenzaba a dorar con alegres rayos los floridos <seg rend="italic"
+                        >turcales</seg> y la hilera de elevados árboles que señala el curso del
+                    arroyo. Los acres perfumes de la primavera embalsamaban el aire derramando en
+                    los sentidos una muelle embriaguez. Bandadas de <q>«charatas»</q> cantaban
+                    respondiéndose bajo la espesa fronda; y en torno de los inmensos corrales que se
+                    extendían a espaldas de la casa mugían centenares de vacas en busca de sus crias
+                    encerradas en los <q>«chiqueros»</q> de la quesería. A lo lejos los camperos
+                    corriendo entre los bosques en pos del ganado, entonaban con su magnifica voz
+                    las endechas que ellos improvisan con ardiente inspiración. El ligero temblor
+                    con que hacen vibrar la nota es uno de los encantos de aquellas patéticas
+                    melodías.</p>
+                <p>De vuelta a la casa encontré en ella nuevos huéspedes. Un viejo militar
+                    acompañado de su hija y a quien esperaban desde la víspera, había llegado en la
+                    noche. Era un coronel antiguo compañero de San Martín, uno de los pocos
+                    valientes que volvieron de esa inmortal cruzada que hizo libres a Chile y al
+                    Perú.</p>
+                <p>Su hija era un ángel de belleza. Llamábase Azucena. Blanca, blonda y
+                        <q>«cenceña»</q> tenía en sus celestes ojos, así como en toda su persona,
+                    algo aéreo, sobrenatural, que oprimió mi corazón al contemplarla, cual un triste
+                    presentimiento. ¡Ah! no me engañaba. Azucena se encontraba atacada de esa
+                    enfermedad inexorable que se ceba con preferencia en la juventud y la belleza;
+                    que camina lenta como la lava de los volcanes, pero que alcanza y devora con
+                    inflexible seguridad.</p>
+                <p>Nacida en las orillas del Plata, Azucena pidió en vano a sus perfumadas brisas
+                    alivio a su dolencia. Los médicos la habían ordenado respirar las aires del
+                    Norte; y su padre que oyó hablar del magnífico clima de M... la trajo allí
+                    alentado por la esperanza a que se aferraba su alma. ¡Cuánto habría dado el
+                    pobre padre por transmitir al pecho de su hija los torrentes de vida que
+                    respiraba el suyo ancho y fuerte!</p>
+                <p>En cuanto a ella, risueña y contenta sólo pensaba en divertirse. Desde que me vio
+                    se vino a mí sonriendo con malicia; y cuando mis huéspedes me presentaron con mi
+                    nombre masculino, echó sus brazos en torno de mi cuello y me besó
+                    diciéndome:</p>
+                <p>—Dios te guarde, Emma... nuel. </p>
+                <p>Desde ese momento fuimos inseparables. La llevaba sobre mis hombros a pasear bajo
+                    los <q>«mistolares»</q>; mi mano ordeñaba el vaso de leche que le llevaba a la
+                    cama, y en la mesa no comía sino aquello que yo le cortaba. Pero ¡ay! mis
+                    cuidados y los de su padre iban a estrellarse impotentes a los pies de ese
+                    terrible ángel de alas negras que se llama tisis.</p>
+                <p>Durante el día Rosalba se encontraba bien: el cálido viento Sur que reina en
+                    nuestros llanos mientras el sol está sobre el horizonte, vigorizaba su pecho.
+                    Pero desde que llegaba la noche, desde que los vapores de la montaña descendían
+                    a las praderas y que el rocío comenzaba a liquidarse entre los gramadales, la
+                    pobre niña sentía venir el fatal ahogo que la atormentaba, y corría de un lado a
+                    otro, angustiado el semblante y las sienes latentes, en busca del aire que
+                    faltaba a sus pulmones aniquilados por la inexorable enfermedad.</p>
+                <p>El coronel pasaba las noches paseándola en sus brazos a lo largo de la galería y
+                    sólo así podía ella respirar con libertad. Reclinada la cabeza en el seno de su
+                    padre Rosalba dormía largas horas, abandonándole el peso de su cuerpo con ese
+                    confiado egoísmo que tanto amarnos en nuestros hijos.</p>
+                <p>Yo acompañaba siempre al coronel en aquellas veladas. Sentada en un taburete al
+                    extremo de la galería, escuchábalo referir las aventuras de su larga vida,
+                    épicas leyendas que en el prestigioso lenguaje del veterano parecían pinceladas
+                    de fuego en el fondo tenebroso de la noche. Aquel anciano alto, seco, imponente,
+                    llevando en sus brazos a una niña blanca, vaporosa, frágil, cuyos largos
+                    cabellos blondos se mezclaban con los suyos canos y lo enlazaban como la yedra
+                    al añoso tronco, aquella voz que yéndose hablaba a lo lejos de hombres y de
+                    sucesos ya olvidados, sumergían mi mente en un extraño desvario: parecíame ver
+                    el fantasma del pasado elevando en sus brazos la sombra del porvenir.</p>
+                <p>Un día que Rosalba sufría más que nunca, vínome al pensamiento aconsejar al
+                    coronel que la llevara a las aguas termales del Rosario.</p>
+                <p>Mi idea habría parecido absurda a quien ignorase las propiedades maravillosas de
+                    esas aguas célebres en nuestro país. Son una panacea universal que cura todo,
+                    desde la lepra hasta la fiebre, la apoplegia, la hidropesía, la gota y las
+                    enfermedades pulmonares.</p>
+                <p>Sólo el atraso que una larga guerra civil mantiene entre nosotros, puede explicar
+                    la poca atención que se da a la necesidad de caminos y posadas en ese importante
+                    lugar, verdadero santuario de la salud.</p>
+                <p>Numerosas caravanas van allí de todos los puntos de la república a probar la
+                    eficacia de las aguas. Allí el lazarino, el cataléptico, el paralitico, ven
+                    desvanecerse su horrible mal; y enfermos desahuciados por la ciencia y traídos
+                    moribundos en camillas desde largas distancias recobran la vida y la salud en
+                    aquella agua milagrosa.</p>
+                <p>Brota en raudal hirviente entre las sinuosidades de un peñasco al pie del cerro
+                    de <q>«Fuente de Plata»</q>; derrámase en un cauce rápido cortado por anchos
+                    pozos destinados al baño, y corre entre las selvas ennegreciendo las piedras y
+                    los árboles, y señalando su paso con una larga cinta de vapores que disminuyen
+                    en densidad a medida que las aguas se enfrian bajo la húmeda sombra de los
+                    bosques, hasta perderse en el río de Orcones.</p>
+                <p>El coronel acogió mi receta con una exclamación de gozo, y Rosalba se arrojó en
+                    mis brazos, sin que la arredrara mi blusa de garzón.</p>
+                <p>—¡Quizá!—exclamó; y la mirada radiante que acompañó esta palabra encerraba fe y
+                    esperanza. </p>
+                <p>Hicimos de prisa nuestros preparativos.</p>
+                <p>El coronel ensilló los caballos; yo y la criada de Rosalba cargamos en un carro
+                    todo lo que ésta llamaba su regalo; alfombras, cojines, perfumeros; en fin, un
+                    equipaje de princesa oriental; y aquel mismo día a la caída de la tarde nos
+                    despedimos de nuestros buenos huéspedes y partimos llevándonos a las dos niñas
+                    de la casa, frescas y turbulentas muchachas que corrían siempre a vanguardia
+                    haciendo resonar los bosques con alegres risas, y arrastrando en su trisca
+                    infantil a la pálida enferma, que parecía una romántica ilusión entre aquellas
+                    dos robustas realidades.</p>
+                <p>Eran las seis. El sol se había puesto y la luna comenzaba a blanquear sobre la
+                    florida grama de los campos. Habíamos vadeado el río y marchábamos costeando la
+                    playa por un sendero pedregoso que mataba de impaciencia a las niñas precisadas
+                    a sujetar sus cabalgaduras al insoportable vaivén del paso llano.</p>
+                <p>Nuestro guía, viejo redomado, verdadero hijo del polear, de piel bronceada y ojo
+                    de buitre, marchaba delante en su potro gateado, provisto de enormes espuelas y
+                    sonoros guardamontes, cuyo ruido espantaba al ganado que pacía en torno. Antiguo
+                    habitante del <q>«pago»</q> sabía de memoria la historia de aquellos sitios, que
+                    refería en su pintoresco lenguaje mejor que el más aventajado cronista, poniendo
+                    muchas veces por testigo a su caballo de la exactitud de su aserto.</p>
+                <p>—«Jeñor», pasemos pronto este tuscal; es un paraje <q>«pesado»</q>: deslinda las
+                    tierras de dos hermanos ya finados; hermanos que se querían mucho pero que eran
+                    caudillos de partidos enemigos: el uno unitario, el otro federal. ¡Vaya
+                        <q>«ujté»</q> a ver eso, jeñor! Así cuando se <q>«juntaban»</q> a solas se
+                    abrazaban y lloraban... digo, lloraba el uno; que el otro era muy hombre y se
+                    tragaba las lágrimas. Pero si se encontraban a la cabeza de sus partidas, ¡Dios
+                    nos guarde! se <q>«trenzaban»</q> hasta dejar la tierra <q>«coloreando»</q>.
+                        <q>«Allicito»</q> hay todavía montón de huesos donde penan. La otra noche no
+                    más <q>«jeñor»</q>, se enderezó de ahí un <q>«pantasma»</q> que me dejó
+                    tiritando. Mi <q>«gateao»</q> puede decir si no dio una <q>«tendida»</q> de
+                    media legua que me hizo perder la <q>«manea»</q> y tres chapas del petral. </p>
+                <p>—Cuidado, amigo Contreras—le dijo Rosalba riendo,—que si no derribó a usted
+                    aquella tendida lo derribe esa <q>«bola»</q>. </p>
+                <p>—¡Naá! ¡La niña no cree en pantasmas! Como la pusiera en Esteco por una noche de
+                    cuarto menguante para que viera salir de esos escombros tan horribles
+                        <q>«aparencias»</q> que se le cuajara el alma. </p>
+                <p>—¡Esteco! ¿y dónde es eso?—preguntó Rosalba haciéndome una seña. </p>
+                <p>—Allicito, niña, en la cabecera de aquel cerro al otro lado del río. ¿No ha oído
+                    usted hablar de esa ciudad de gentes tan soberbias que sólo querían vistir de
+                    oro y plata y tan crueles que asaban a sus esclavos? Pues allí estaba; y de aquí
+                    habríamos oído el ruido de sus jaranas que diz que duraban meses; porque esa
+                    gente no tenia necesidad de trabajar; en lo alto del cerro tenían minas de oro
+                    en barra que cortaban a cincel. Pero, jeñor, <q>«si Dios consiente no es para
+                        siempre»</q>; y una noche <q>«como quien no hace la cosa»</q>, la tierra se
+                    los tragó. </p>
+                <p>Ni uno solo volvió a aparecer jamás; pero si sus vajillas de oro y collares de
+                    diamantes, que las <q>«avenidas»</q> arrastraban al fondo de los barrancos. Yo
+                    he hallado muchas veces anillos de piedras verdes y platos que brillan como el
+                    sol; pero nunca quise recogerlos, y los arrojó a lo lejos para que no tentasen a
+                    un cristiano esas prendas malditas de Dios. ¡Cierto jeñor! Ah está mi gateao que
+                    estuvo presente y no me dejará mentir.</p>
+                <p>Y Contreras acentuaba gravemente su apelación, seguro de que el pobre gateao no
+                    había de decir esta boca es mía.</p>
+                <p>Entretanto la noche adelantaba. El viento había caído y sólo de vez en cuando una
+                    brisa tibia y cargada del aroma embriagante del heliotropo venía a morir en los
+                    jarales de la playa.</p>
+                <p>Yo iba al lado de Rosalba que hacía rato guardaba profundo silencio. Oíla
+                    suspirar muchas veces y aspirar con ansia el aire cálido de la noche. Parecía
+                    oprimida, inquieta, y se volvía con frecuencia para mirar a su padre que se
+                    había detenido a encender su mechero para nuestras compañeras que fumaban. De
+                    súbito, apartando bruscamente mi mano que se apoyaba en el cuello de su caballo,
+                    Rosalba alzó la brida, y haciéndolo saltar sobre las altas hierbas lo echó
+                    adelante y se alejó en una carrera desesperada.</p>
+                <p>Seguila de cerca, a pesar de la gran desventaja que me daba la velocidad
+                    prodigiosa de su cabalgadura.</p>
+                <p>Después de haber corrido una hora por los obscuros senderos de un
+                        <q>«sevilar»</q>, Rosalba se detuvo al fin en el fondo de una cañada
+                    cubierta de sombra y de salvajes perfumes. Estaba en extremo pálida, y sin
+                    embargo sonreía.</p>
+                <p>—Confiesa al menos, Emmanuel—me dijo, dando una carcajada que vibró como el canto
+                    de una ave en la atmósfera sonora de la noche,—confiesa que por esta vez te
+                    asustaste. ¡Perdón! Tú no sabes que cuando el ahogo viene, mi mejor remedio es
+                    la carrera. Si: huyo de mi feroz enemigo y lo dejo a larga distancia—dijo
+                    volviendo el rostro con una mueca burlona cual si desafiara en efecto la saña de
+                    un adversario. </p>
+                <p>—¡Qué bello paraje!—continuó ella paseando una mirada en torno,—¡qué soledad! qué
+                    frescura! ¿Sientes esta suave corriente de aire que ensancha el pulmón? ¡Qué
+                    bien se respira aquí! Mira las ruinas de ese rancho. ¡Cuán felices serian los
+                    que vivieron bajo su techo de cañas, a la sombra de esos algarrobos que en la
+                    primavera derramarían sobre ellos sus nevadas flores!... </p>
+                <p>Pero, ¿qué tienes, Emmanuel? pareces preocupado, sueñas... ¡qué se yo!... pero de
+                    seguro tu alma está lejos.</p>
+                <p>—Sí, lejos estaba mi alma, lejos. Vagaba en los espacios del pasado; reconocía
+                    esa cañada, esos árboles, ese rancho. Allí había estado yo otra vez, en una
+                    noche de luna como aquella. </p>
+                <p>Un día, mi hermano y yo, contrariados en casa, resolvimos solemnemente retirarnos
+                    del mundo e ir en romería a Jerusalem para de allí pasar al desierto, y a
+                    semejanza de San Jerónimo y Santa Paula, hacernos ermitaños. Aunque Santa Paula
+                    sólo tenía ocho años y San Jerónimo seis, no tardaron una hora en ejecutar su
+                    proyecto. Unas buenas mujeres habían venido trayendo miel y patay para nuestra
+                    madre. Nosotros nos apoderamos de sus caballos, y cabalgando con devoto
+                    recogimiento, partimos a trote largo y nos internamos en la selva.</p>
+                <p>Todo fue a maravilla mientras el sol hilaba sus alegres rayos entre la fronda.
+                    Pero el día comenzó a declinar y nosotros a conocer que Jerusalem estaba más
+                    lejos que lo que habíamos imaginado, y nuestros piadosos designios se
+                    convirtieron en miedo, y nuestra ascética sobriedad en una hambre que habría
+                    sido inmensa si no la embotara una sed devoradora. Llorábamos; y nos
+                    espantábamos uno a otro con gritos de terror. Y la noche adelantaba y nosotros
+                    nos internábamos más y más en la profunda selva.</p>
+                <p>En uno de esos momentos en que el terror nos dejaba silenciosos, oímos a lo lejos
+                    los ladridos de un perro. Comenzamos a alegrarnos y dimos voces pidiendo
+                    socorro, cuando a poco un espantoso rugido hizo estremecer el bosque dejándonos
+                    mudos de terror. No podíamos equivocarnos; era el tigre: sólo de sus tremendas
+                    fauces podía salir ese bramido. Sin embargo, nuestros caballos marchaban
+                    tranquilos, cual si no lo hubieran oído.</p>
+                <p>Nuestros lamentos comenzaron de nuevo, y el rugido se repitió más terrible; pero
+                    entonces percibimos una voz que gritaba a distancia.</p>
+                <p>—¡Antolin! ¡Antolin! ¡muchacho! ¡válgame Dios! ¡Te envío a llamar a esas
+                    criaturas y te diviertes asustándolas! Por aquí, niños, por aquí. </p>
+                <p>Y los árboles clarearon, y divisamos en el fondo de la cañada el techo pajizo de
+                    un rancho; y al lado del fuego que ardía en el guarda-patio, una mujer vestida
+                    de blanco que nos hacia señas con el extremo de su rebozo azul.</p>
+                <p>Vimos entonces venir a nuestro encuentro un rapazuelo de catorce a dieciséis
+                    años, verdadera estampa de bandido, ojo avizor, mirada impudente y sonrisa
+                    desvergonzada.</p>
+                <p>Saltó con la agilidad de un gato a la grupa del caballo de mi hermano, cogió la
+                    brida, y guió hacia la casa, donde abrumados de cansancio caímos en los brazos
+                    de la mujer, que se acercó a desmontarnos.</p>
+                <p>Nuestra huéspeda, viéndome con los labios secos y la lengua pegada al paladar,
+                    entró un momento a la casa volviendo luego con dos anchas copas formadas con las
+                    cáscaras del huevo de avestruz y llenas de <q>«aloja»</q> de algarroba. Hízonos
+                    acostar al lado del fuego en dos bancos de madera, y en seguida, ensillando un
+                    caballo que pacía maneado allí cerca, echó a la grupa a su hijo por miedo de que
+                    nos hiciera alguna mala pasada, y tomó el camino que nosotros habíamos traído.
+                    Iba a delatar en casa nuestra edificante cruzada y a hacer que vinieran en busca
+                    de los asendereados peregrinos.</p>
+                <p>Mi madre la despidió cargada de regalos, y siempre que hablaba de aquella mujer
+                    era con profundo reconocimiento.</p>
+                <p>Cuatro años después, en 1831, cuando la frontera del Sur se levantó en masa
+                    contra el gobierno constitucional, cuando los sublevados entregándose al más
+                    feroz vandalaje, paseaban por todas partes el robo, la muerte y el incendio, y
+                    que mi padre, armado de la ley marcial que había votado el poder legislativo,
+                    fue enviado con fuerzas contra ellos, presentáronle un día, después de una
+                    sangrienta refriega, a uno de los caudillos de la sublevación, que después de
+                    una resistencia desesperada habla sido hecho prisionero. Era éste un famoso
+                    asesino que se había señalado en aquel motín por el refinamiento de sus
+                    crueldades. Llevaba por nombre de guerra el <q>«Carneador»</q>, nombre que
+                    añadía una sombra más a las que obscurecían su historia. Los crímenes de que era
+                    reo y la ley marcial, lo condenaban sin apelación; y mi padre, que a pesar de su
+                    severidad en el cumplimiento del deber, había encontrado efugios para salvar a
+                    muchos de aquellos ilusos, nada pudo en favor de aquel hombre, por más que le
+                    interesara su extrema juventud. Tuvo, pues, que abandonarlo a la suerte funesta
+                    que le aguardaba en algunos momentos, y se retiró deplorando el fatal error que
+                    nos induce a cimentar con sangre el edificio social.</p>
+                <p>De repente una mujer pálida y trémula se precipitó en la tienda gritando:</p>
+                <p>—¡Hijo mío! ¡Antolín! </p>
+                <p>Y divisando a mi padre iba a arrojarse en sus brazos, cuando la detonación de una
+                    descarga la hizo caer u sus pies.</p>
+                <p>Aquel trágico suceso conmovió profundamente a mi padre, y dejó para siempre un
+                    punto doloroso en su grande alma.</p>
+                <p>El recuerdo de esos acontecimientos absorbió mi mente, y durante algunos minutos
+                    olvidó a Azucena. Cuando me volví hacia ella, hallé fija en mí su mirada.</p>
+                <p>—Si no piensas en Lima—me dijo,—de seguro es en algo que te entristece. </p>
+                <p>Reunímonos a nuestros compañeros, y a las seis de la mañana llegamos a los baños
+                    de <q>«Agua-caliente»</q>.</p>
+                <p>Hallábanse allí algunas familias, que reunidas en un círculo de tiendas, pasaban
+                    el tiempo de una manera agradable, bañándose, cazando, haciendo largas
+                    incursiones en busca de colmenas, comiendo juntos deliciosas <q>«picanas»</q> en
+                    largos manteles tendidos bajo la olorosa fronda de los bosques, bailando,
+                    cantando, jugando prendas y contando cuentos de toda clase, desde el drama hasta
+                    el chascarrillo.</p>
+                <p>Hiciéronnos la más cordial acogida. Las señoras corrieron a <q>«cebar»</q> los
+                    mates en los chorros de agua hirviente que saltan de la peña, y nos los ofrecían
+                    excusándose de su poca destreza, y asegurándonos que los tomaríamos mejores
+                    cuando volviera la <q>«maestre do ceremonias»</q>, personaje investido también
+                    de aquel cargo, y a quien llamaban <q>«el Alma social»</q>, a causa decían, de
+                    su viveza y su inagotable alegría. Había ido al Rosario en busca de provisiones,
+                    y era esperada con suma impaciencia.</p>
+                <p>Vérnosla venir en fin. Montaba un potro bayo, y corría como una endiablada,
+                    apartando con la mano las ramas de los árboles, llevándolas en pos suyo largo
+                    trecho, y soltándolas con locas carcajadas. Traía a la grupa un costal repleto
+                    que dejó caer en tierra antes de llegar al campamento, y deslizándose ella misma
+                    de la silla, corrió al encuentro de la colonia que salió en masa a recibirla con
+                    gritos de alegría. Abrazó a todos, mujeres y hombres; dijo a cada uno aquello
+                    que le había encargado averiguar; dióles noticias de todo, del cura, de los
+                    vecinos del pueblo, de las fiestas, del paso de las diligencias por el camino
+                    real. Y volviéndose a las jóvenes, añadió, haciendo sigilosos ademanes:</p>
+                <p>—Ahí viene un italiano <q>«bello e mesto come un trovatore»</q>; pero mudo, hijas
+                    mías como un topo. Lo alcancé en la bajada del río; y aunque hice lo increíble
+                    porque hablara, sólo pude saber de él, que venía de Tucumán y viajaba por donde
+                    lo llevaba el paso de su caballo. </p>
+                <p>Yo miraba a aquella mujer y no podía creer a mis ojos. Era María Montenegro,
+                    amiga y contemporánea de mi madre, y sin embargo, bella y joven todavía como
+                    cuando tenía veinte años. Y no obstante, María no había sido feliz: grandes
+                    desgracias habían caldo sobre ella y el porvenir se le mostraba sañudo, pero era
+                    un alma valerosa que sabía sonreír al dolor, y éste se había deslizado por su
+                    frente sin dejar huella alguna en su tersa frescura.</p>
+                <p>—¡Cuánto deseaba yo abrazarla y decirla mi nombre! pero me era forzoso permanecer
+                    incógnita, y sólo Azucena y su padre debían conocer su secreto. </p>
+                <p>Otra sorpresa me esperaba todavía. Miguel estaba allí. Había alcanzado a los
+                    ladrones; se había apoderado de ellos y conducídolos al Rosario, donde los
+                    entregó al alcalde. Allí encontró algunas señoras de la colonia de los baños.
+                    Estas le rogaron que las acompañara, y se hallaba allí hacía días, muy a gusto
+                    de las jóvenes, a quienes custodiaba en sus correrías, y por la noche las servía
+                    de tenedor de las prendas en los juegos de la velada. Ese día había ido en busca
+                    de lechihuanas, y cuando regresó por la tarde, cargado como en otro tiempo, de
+                    miel y de flores, tuve el grandísimo contento de correr a él, y como de niña,
+                    saltarle al cuello y arrebatarle su dulce botín.</p>
+                <p>Poco después, el taciturno italiano se presentó en nuestro campo. Saludó con
+                    grave cortesía y nos pidió licencia para pasar con nosotros la noche. Los
+                    hombres se apresuraron a ofrecerle sus tiendas, y las señoras, enamoradas del
+                    aire de tristeza esparcido en su bello semblante, lo acogieron con extrema
+                    amabilidad.</p>
+                <p>Sin embargo, por más que hicieron, no pudieron conseguir que nos acompañara a la
+                    expedición que proyectamos para la mañana siguiente a Cerro-Colorado, y que
+                    emprendimos al amanecer, dejando a nuestro huésped solo en el campamento.</p>
+                <p>Aquel día fue verdaderamente delicioso. Yagamos durante todas sus horas por las
+                    estrechas gargantas de esa cordillera que el vulgo puebla de apariciones y
+                    encantamientos. Esos parajes tienen en efecto un aspecto salvaje, imponente y
+                    siniestro como las tribus nómadas que los habitan. Arboles de corpulencia y y
+                    elevación gigantescas, de ramaje extraño en colores y formas, alzan aquí y allí
+                    sus inmensas copas sacudidas eternamente por ardientes e impetuosos vientos, que
+                    agitando las añosas lianas que los entrelazan les dan en la noche la apariencia
+                    de fantasmas que danzan aullando entre las tinieblas. Altas hierbas, casi todas
+                    venenosas aun al tacto, crecen con un lujo prodigioso de vegetación sobre la
+                    arena roja y abrasada de aquel suelo que en las noches de estío presenta
+                    fenómenos increíbles de electricidad. Las tempestades jamás abandonan esas
+                    montañas. El rayo estalla sin cesar en sus cimas: y al estruendo del trueno
+                    responden en lo hondo de los valles los rugidos del tigre y el silbido de la
+                    serpiente. El águila y el gavilán tienen su nido entre esas rocas; y se les ve a
+                    cada momento elevarse lanzando chillidos y surcar el aire en mágicos círculos
+                    llevando entre sus garras un lagarto o una culebra de cascabel.</p>
+                <p>Sin embargo, nada hay tan risueño como el aspecto lejano de esos montes que
+                    vistos de cerca despiertan en el alma un invencible sentimiento de terror.
+                    Elévanse como una muralla azul de recta silueta que limita el horizonte. Adorna
+                    su base un verde cordón de bosques, y más abajo el caudaloso Pasaje extiende su
+                    plateada cinta añadiendo sus cambiantes reflejos a las ricas tintas con que el
+                    alba colora esta admirable Perspectiva.</p>
+                <p>Cuando llegamos a nuestro campo, después de la prolongada excursión al Colorado,
+                    hacía largo tiempo que había anochecido. La luna llena, alzándose detrás las
+                    montañas que habíamos recorrido durante el día, alumbraba las copas de los
+                    árboles; y sus rayos, deslizándose oblicuamente entre el ramaje, se cruzaban
+                    como hilos luminosos en la obscuridad que reinaba en lo bajo de la selva.
+                    Habríase creído que eran redes de plata tendidas por los genios para aprisionar
+                    a las auras.</p>
+                <p>Con la brida de mi caballo en la mano, de pie o inmóvil, contemplaba yo
+                    enteramente embebecido aquel mágico contraste, aquella escena compuesta de dos
+                    principios opuestos: la luz y las tinieblas. Poco a poco la fijeza de mi mirada
+                    comenzó a presentarme singulares fenómenos de óptica. Unas veces veía agitarse
+                    en la espesura las alas diáfanas y el ropaje ondulante de una silfide; otras
+                    brillar como ascuas los ojos ardientes y las aceradas escamas de un dragón. Ora
+                    veía surgir entre los sinuosos troncos la horrible cabeza de un demonio, ora
+                    sonreír a lo lejos el rostro luminoso de un ángel.</p>
+                <p>Con asombro mío, la última visión no se desvaneció. El ser celestial se acercaba,
+                    y a medida que sus aéreas formas se dibujaban más perceptibles, la melancólica
+                    sonrisa que entreabría su labio se volvía más dulce. Al llegar cerca de mi posó
+                    su mano en mi hombro, y mostrándome la selva, me dijo con voz suavísima:</p>
+                <p>—«Nel mezzo fiel cammino di nostra vita». </p>
+                <p>Era Azucena. Había dejado su amazona, y vestía una bata de muselina blanca, cuyos
+                    undosos pliegues agitados en torno suyo por la brisa de la noche, le daban un
+                    aire fantástico y sobrenatural que despertó en mi corazón ese lúgubre
+                    presentimiento producido ya a la primera vista de aquella hermosa niña.</p>
+                <p>Pero ella no se apercibió de mi tristeza, y continuó con gesto de dolor
+                    graciosamente cómico:</p>
+                <p>—¡Ay de nosotros, que vivimos en el siglo de loa nervios y de los vapores! tres
+                    veces ¡ay! Las señoras, medrosas como siempre, han mandado encender las
+                    hogueras, y... mira cómo nuestra <q>«selva selvaggia»</q> no está ya
+                        <q>«obscura»</q>. </p>
+                <p>En efecto, el bosque se iluminó de repente .con la luz de las grandes fogatas que
+                    los criados mantenían toda la noche para alejar a los tigres.</p>
+                <p>Azucena recordó nuestra <q>«soirée»</q> campestre, y ambas nos apresuramos a
+                    volver a las tiendas.</p>
+                <p>Era ya tiempo. Bajo el nogal consagrado hallábase ya reunida la pequeña sociedad
+                    de los baños. Nadie faltaba, ni aun el taciturno y misterioso italiano que había
+                    llegado la víspera. Sentado en una raíz saliente del árbol y con la cabeza
+                    apoyada en su tronco, miraba las estrellas con aire meditabundo, y parecía
+                    enteramente ajeno a todo lo que pasaba en torno suyo.</p>
+                <p>Después que se hubo cantado, bailado y hablado de política, llegó finalmente la
+                    hora de los cuentos.</p>
+                <p>Miguel, según la costumbre establecida, dio su sombrero a la criada de Azucena
+                    para recoger las Prendas.</p>
+                <p>El incógnito, instruido de lo que se exigía de él dio un anillo que llevaba al
+                    dedo.</p>
+                <p>La Montenegro, al pasar cerca de mí, me dijo rápidamente al oído:</p>
+                <p>—El italiano se marcha mañana. Es necesario que Pague su contingente de cuentos. </p>
+                <p>Y yendo a Miguel que se había vuelto de espaldas para extraer la prenda con
+                    imparcialidad, le dijo en voz baja dándole el sombrero:</p>
+                <p>—Por Dios, mi viejo Miguel, encuentre usted un grueso anillo que anda por ahí. </p>
+                <p>Miguel guiñó sus ojos negros como sólo saben hacerlo sus compatriotas, y
+                    revolviendo bulliciosamente las prendas que contenía el sombrero, alzó la mano,
+                    en cuyo índice brillaba el anillo del italiano.</p>
+                <p>Todas las miradas se volvieron entonces hacia éste; las señoras acercaron sus
+                    asientos para escuchar mejor; y Azucena, dejando los almohadones que había
+                    traído para ella su criada, vino a sentarse a mi lado sobre el poncho de
+                    Miguel.</p>
+                <p>El extranjero conoció que toda excusa seria inoportuna; y sonriendo
+                    melancólicamente, saludó a la compañía con esa cortesía galante y exquisita que
+                    distingue a los italianos nobles.</p>
+                <p>Después pareció reconcentrarse en sí mismo; dirigió una mirada al cielo moviendo
+                    tristemente la cabeza; y como si hubiese olvidado que tenía un círculo de
+                    oyentes, cual un sonámbulo que bajo el poder magnético evoca algún recuerdo de
+                    su pasado, con una voz, ora triste como el gemido del viento, ora ronca y
+                    amenazante como el fragor del trueno, comenzó a hablar.</p>
+            </div>
+        </body>
+    </text>
+</TEI>

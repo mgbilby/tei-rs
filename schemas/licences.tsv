@@ -1,0 +1,35 @@
+# Licence and public-release class of every schema file in this store (path
+# relative to schemas/). Same classes as tests/tei/licences.tsv: fetch-only
+# files are left out of the public repository, and `tei-rs schemas sync`
+# downloads them from the URLs in manifest.json.
+# file	spdx	publish	basis
+epidoc.stoa.org/schema/8.13/tei-epidoc.rng	CC-BY-3.0	public	mirror in github.com/papyri/idp.data, which is CC BY 3.0
+epidoc.stoa.org/schema/8.16/tei-epidoc.rng	CC-BY-3.0	public	mirror in github.com/papyri/idp.data, which is CC BY 3.0
+oeuvres.github.io/Teinte/teinte.rng	BSD-3-Clause	public	github.com/oeuvres/Teinte LICENSE
+oeuvres.github.io/Teinte/teinteHeader.rng	BSD-3-Clause	public	github.com/oeuvres/Teinte LICENSE
+openarabicpe.github.io/OpenArabicPE_ODD/schema/tei_periodical.rng	CC-BY-SA-4.0	public	stated in the file
+papyri.info/schemas/papyri.info.rng	GPL-3.0-or-later	public	github.com/papyri/navigator is GPL v3
+raw.githubusercontent.com/84000/data-tei/master/schema/current/knowledgebase.rng	CC-BY-NC-ND-3.0	fetch-only	NC/ND: github.com/84000/data-tei README
+raw.githubusercontent.com/84000/data-tei/master/schema/current/translation.rng	CC-BY-NC-ND-3.0	fetch-only	NC/ND: github.com/84000/data-tei README
+raw.githubusercontent.com/BetaMasaheft/Schema/master/tei-betamesaheft.rng	CC-BY-SA-4.0	public	stated in the file
+raw.githubusercontent.com/COST-ELTeC/Schemas/master/eltec-1.rng	NONE	fetch-only	no licence stated
+raw.githubusercontent.com/COST-ELTeC/Schemas/master/eltec-x.rng	NONE	fetch-only	no licence stated
+raw.githubusercontent.com/DARIAH-ERIC/lexicalresources/master/Events/LexMC2017/Data/Etymology/basisformat.rng	CC-BY-SA-3.0-DE	public	stated in the file
+raw.githubusercontent.com/FrankensteinVariorum/fv-data/master/FV_ODD/out/FV_ODD.rng	CC-BY-SA-3.0 OR BSD-2-Clause	public	stated in the file (TEI's dual licence)
+raw.githubusercontent.com/HistoryAtState/frus/master/schema/frus.rnc	LicenseRef-Public-Domain	public	U.S. government work; github.com/HistoryAtState/frus README
+raw.githubusercontent.com/Jean-Baptiste-Camps/Geste/master/odd/out/Modele.rng	CC-BY-SA-4.0	public	github.com/Jean-Baptiste-Camps/Geste README
+raw.githubusercontent.com/MiMoText/roman18/master/Schemas/eltec-x.rng	MIT	public	github.com/MiMoText/roman18 LICENSE
+raw.githubusercontent.com/TEI-Correspondence-SIG/CMIF/master/schema/cmi-customization.rng	BSD-2-Clause OR CC-BY-4.0	public	repository README
+raw.githubusercontent.com/bodleian/consolidated-tei-schema/master/msdesc.rng	CC-BY-4.0	public	stated in the file
+raw.githubusercontent.com/cbeta-org/xml-p5/master/schema/cbeta-p5.rnc	NONE	fetch-only	no licence stated
+raw.githubusercontent.com/chartes/encpos/master/data/encpos.rng	NONE	fetch-only	no licence stated
+raw.githubusercontent.com/clarin-eric/ParlaMint/main/Schema/ParlaMint-TEI.ana.rng	NONE	fetch-only	no licence stated
+raw.githubusercontent.com/clarin-eric/ParlaMint/main/Schema/ParlaMint-TEI.rng	NONE	fetch-only	no licence stated
+raw.githubusercontent.com/clarin-eric/ParlaMint/main/Schema/ParlaMint.rng	NONE	fetch-only	no licence stated
+raw.githubusercontent.com/cligs/reference/master/tei/cligs.rng	CC-BY-SA-3.0 OR BSD-2-Clause	public	stated in the file (TEI's dual licence)
+raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_CritEdSchema.rng	CC-BY-SA-3.0 OR BSD-2-Clause	public	stated in the file (TEI's dual licence)
+raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng	CC-BY-4.0	public	github.com/erc-dharma/project-documentation LICENCE.txt
+raw.githubusercontent.com/freedict/fd-dictionaries/master/shared/freedict-P5.rng	GPL-2.0-or-later	public	stated in the file
+raw.githubusercontent.com/pruizf/disco/master/schema/tei_all_DISCO.rnc	BSD-2-Clause OR CC-BY-3.0	public	stated in the file (TEI's dual licence)
+raw.githubusercontent.com/srophe/Gaddel/refs/heads/main/documentation/schemas/out/syriacaPersons.compiled.rng	CC-BY-3.0	public	stated in the file
+raw.githubusercontent.com/srophe/Gaddel/refs/heads/main/documentation/schemas/out/syriacaPlaces.compiled.rng	CC-BY-3.0	public	stated in the file

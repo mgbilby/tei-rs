@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-model href="../meta/schnitzler-briefe-schematron.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?><TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.tei-c.org/ns/1.0 ../meta/schnitzler-briefe-schema.xsd" xml:id="L01903" xml:base="https://id.acdh.oeaw.ac.at/schnitzler/schnitzler-briefe/editions">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title level="s">Arthur Schnitzler: Briefwechsel mit Autorinnen und Autoren</title>
+            <title type="iso-date" when-iso="1909-12-16" n="01">1909-12-16</title>
+            <title level="a">Arthur Schnitzler an Richard Beer-Hofmann, 16. 12. 1909</title>
+            <author ref="#pmb2121">Schnitzler, Arthur</author>
+            <editor>
+               <name>Müller, Martin Anton</name>
+               <name>Susen, Gerd-Hermann</name>
+            </editor>
+            <funder>
+               <name>Österreichischer Wissenschaftsfonds FWF</name>
+               <address>
+                  <street>Georg-Coch-Platz 2</street>
+                  <postCode>1010 Wien</postCode>
+                  <placeName>
+                     <country>A</country>
+                     <settlement>Wien</settlement>
+                  </placeName>
+               </address>
+            </funder>
+         </titleStmt>
+         <editionStmt>
+            <edition>schnitzler-briefe</edition>
+            <respStmt>
+               <resp>Transkription und Kommentierung</resp>
+               <persName>Müller, Martin Anton</persName>
+               <persName>Susen, Gerd-Hermann</persName>
+            </respStmt>
+         </editionStmt>
+         <publicationStmt>
+            <publisher>Austrian Centre for Digital Humanities </publisher>
+            <pubPlace>Vienna</pubPlace>
+            <date when="2023">2023</date>
+            <availability>
+               <licence target="https://creativecommons.org/licenses/by/4.0/deed.de">
+                  <p>Sie dürfen: Teilen – das Material in jedwedem Format oder Medium
+                     vervielfältigen und weiterverbreiten Bearbeiten – das Material remixen,
+                     verändern und darauf aufbauen und zwar für beliebige Zwecke, sogar
+                     kommerziell.</p>
+                  <p>Der Lizenzgeber kann diese Freiheiten nicht widerrufen solange Sie sich an die
+                     Lizenzbedingungen halten. Unter folgenden Bedingungen:</p>
+                  <p>Namensnennung – Sie müssen angemessene Urheber- und Rechteangaben machen, einen
+                     Link zur Lizenz beifügen und angeben, ob Änderungen vorgenommen wurden. Diese
+                     Angaben dürfen in jeder angemessenen Art und Weise gemacht werden, allerdings
+                     nicht so, dass der Eindruck entsteht, der Lizenzgeber unterstütze gerade Sie
+                     oder Ihre Nutzung besonders. Keine weiteren Einschränkungen – Sie dürfen keine
+                     zusätzlichen Klauseln oder technische Verfahren einsetzen, die anderen
+                     rechtlich irgendetwas untersagen, was die Lizenz erlaubt.</p>
+                  <p>Hinweise:</p>
+                  <p>Sie müssen sich nicht an diese Lizenz halten hinsichtlich solcher Teile des
+                     Materials, die gemeinfrei sind, oder soweit Ihre Nutzungshandlungen durch
+                     Ausnahmen und Schranken des Urheberrechts gedeckt sind. Es werden keine
+                     Garantien gegeben und auch keine Gewähr geleistet. Die Lizenz verschafft Ihnen
+                     möglicherweise nicht alle Erlaubnisse, die Sie für die jeweilige Nutzung
+                     brauchen. Es können beispielsweise andere Rechte wie Persönlichkeits- und
+                     Datenschutzrechte zu beachten sein, die Ihre Nutzung des Materials entsprechend
+                     beschränken.</p>
+               </licence>
+            </availability>
+            <idno type="handle">https://hdl.handle.net/21.11115/0000-000E-728F-1</idno>
+         </publicationStmt>
+         <seriesStmt>
+            <p>Machine-Readable Transcriptions of the Correspondences of Arthur Schnitzler</p>
+         </seriesStmt>
+         <sourceDesc>
+            <listWit>
+               <witness n="1">
+                  <objectType corresp="karte" ana="briefkarte"/>
+                  <msDesc>
+                     <msIdentifier>
+                        <country>U.S.A.</country>
+                        <settlement>Yale</settlement>
+                        <repository>Beinecke Rare Book and Manuscript Library</repository>
+                        <idno>Yale Collection of German Literature, MSS 31</idno>
+                     </msIdentifier>
+                     <physDesc>
+                        <objectDesc>
+                           <supportDesc>
+                              <extent>
+                                 <measure unit="karte" quantity="1"/>
+                                 <measure unit="kuvert" quantity="1"/>
+                                 <measure unit="zeichenanzahl" quantity="463"/>
+                              </extent>
+                           </supportDesc>
+                        </objectDesc>
+                        <handDesc hands="1">
+                           <handNote medium="bleistift" style="deutsche-kurrent"/>
+                        </handDesc>
+                        <additions>
+                           <incident type="postal">
+                              <desc>ohne postalischen Übermittlungsvermerk</desc>
+                           </incident>
+                        </additions>
+                     </physDesc>
+                  </msDesc>
+               </witness>
+            </listWit>
+            <listBibl>
+               <biblStruct corresp="ASBH">
+                  <monogr>
+                     <author ref="#pmb2121">Schnitzler, Arthur</author>
+                     <author ref="#pmb10863">Beer-Hofmann, Richard</author>
+                     <title level="m">Briefwechsel 1891–1931</title>
+                     <editor>Fliedl, Konstanze</editor>
+                     <imprint>
+                        <pubPlace>Wien, Zürich</pubPlace>
+                        <publisher>Europaverlag</publisher>
+                        <date when="1992">1992</date>
+                     </imprint>
+                     <biblScope unit="pp">206</biblScope>
+                  </monogr>
+               </biblStruct>
+            </listBibl>
+         </sourceDesc>
+      </fileDesc>
+      <profileDesc>
+         <langUsage>
+            <language ident="de-AT">German</language>
+         </langUsage>
+         <correspDesc>
+            <correspAction type="sent">
+               <persName ref="#pmb2121">Schnitzler, Arthur</persName>
+               <date when="1909-12-16" n="01">16. 12. 1909</date>
+               <placeName ref="#pmb168940">Edmund-Weiß-Gasse 7</placeName>
+            </correspAction>
+            <correspAction type="received">
+               <persName ref="#pmb10863">Beer-Hofmann, Richard</persName>
+               <date when="1909-12-16">16. 12. 1909</date>
+               <placeName ref="#pmb235251">Hasenauerstraße 59</placeName>
+            </correspAction>
+            <correspContext>
+               <ref type="belongsToCorrespondence" target="correspondence_10863">Beer-Hofmann, Richard</ref>
+               <ref subtype="previous_letter" type="withinCollection" target="L02560">Schnitzler an Beer-Hofmann, Beer-Hofmann, [15. 12. 1909]?</ref>
+               <ref subtype="next_letter" type="withinCollection" target="L01904">Schnitzler an Beer-Hofmann, [16. 12. 1909?]</ref>
+               <ref subtype="previous_letter" type="withinCorrespondence" source="correspondence_10863" target="L02560">Schnitzler an Beer-Hofmann, Beer-Hofmann, [15. 12. 1909]?</ref>
+               <ref subtype="next_letter" type="withinCorrespondence" source="correspondence_10863" target="L01904">Schnitzler an Beer-Hofmann, [16. 12. 1909?]</ref>
+            </correspContext>
+         </correspDesc>
+      </profileDesc>
+      <revisionDesc status="approved">
+         <change who="MAM" when="2019-06-12">Automatisch angelegt aus Buchausgabe</change>
+         <change who="MAM" when="2020-08-06">Index check</change>
+         <change who="MAM" when="2021-01-25">Durchsicht</change>
+         <change who="MAM" when="2021-04-19">Durchsicht</change>
+         <change who="GHS" when="2021-07-08">Durchsicht</change>
+      </revisionDesc>
+   </teiHeader>
+   <facsimile>
+      <graphic url="1909_AS_RBH_2_00014"/>
+      <graphic url="1909_AS_RBH_2_00015"/>
+      <graphic url="1909_AS_RBH_2_00016"/>
+      <graphic url="1909_AS_RBH_2_00017"/>
+   </facsimile>
+   <text>
+      <body>
+         <div type="address"><address><addrLine><pb facs="1909_AS_RBH_2_00015"/><hi rend="pre-print">Dr. Arthur Schnitzler</hi></addrLine><addrLine><hi rend="pre-print"><rs type="place" ref="#pmb168940">Wien XVIII. Spoettelgasse 7</rs>.</hi></addrLine></address><address><addrLine><pb facs="1909_AS_RBH_2_00014"/>Hrn <hi rend="latintype">Dr. Rich.
+                     Beer-Hofmann</hi></addrLine><addrLine><rs type="place" ref="#pmb50">Wien</rs></addrLine></address></div>
+         <div type="writingSession" n="1"><opener><seg type="letterhead"><seg rend="left"><pb facs="1909_AS_RBH_2_00016"/><hi rend="pre-print">Dr. Arthur Schnitzler</hi></seg><seg rend="right"><date when="1909-12-16">16. 12. 09</date></seg></seg><seg type="letterhead"><hi rend="pre-print"><rs type="place" ref="#pmb168940">Wien XVIII. Spoettelgasse 7</rs>.</hi></seg></opener><p><salute>lieber Richard,</salute> heute Abend ka<c rendition="#gemination-n">nn</c> ich <rs ref="#pmb10765" type="person"><hi rend="latintype">Poldi</hi></rs> nicht erwarten, gehe eben, läng<c rendition="#langesS">s</c>t geladen, mit <rs ref="#pmb2173" type="person">Olga</rs> zu <rs ref="#pmb2642 #pmb2646" type="person"><hi rend="latintype">Speidels</hi></rs>; <date>morgen</date> früh<c rendition="#dots" n="2"/> doch eben<space unit="chars" quantity="1"/><c rendition="#langesS">s</c>eh ich, da<c rendition="#langesS">s</c>s
+               er<space unit="chars" quantity="1"/><c rendition="#langesS">s</c>chon morgen früh abrei<c rendition="#langesS">s</c>t. <pb facs="1909_AS_RBH_2_00017"/>Nun, für alle Fälle,
+               von <time>½ 10</time>–<time>10</time> bin ich zu Hau<c rendition="#langesS">s</c>e.</p><closer>Herzlich<c rendition="#langesS">s</c>t<lb/>Ihr<lb/><signed>A.</signed></closer><postscript><p>(Aber, we<c rendition="#gemination-n">nn</c> nicht dringend gewün<c rendition="#langesS">s</c>cht,<space unit="chars" quantity="1"/><c rendition="#langesS">s</c>agen Sie’s
+                  nicht.</p><p>Gratulire herzlich zu Ihrem Telephon</p><p>Der Einfachheit wegen könnten Sie eigentlich <pb facs="1909_AS_RBH_2_00016"/><anchor type="textConst" xml:id="T_L01903-1"/>telephoniren, Ihre Karte habe uns
+                  nicht mehr zu Haus getroffen<supplied>)</supplied><note type="textConst" corresp="T_L01903-1">auf der ersten Seite am oberen Rand,
+                     verkehrt zum Text</note></p></postscript></div>
+      </body>
+      <back>
+         <listPerson>
+            <person xml:id="pmb10765">
+               <persName>
+                  <forename>Leopold von</forename>
+                  <surname>Andrian-Werburg</surname>
+               </persName>
+               <birth>
+                  <date when="1875-05-09">1875-05-09</date>
+                  <settlement ref="pmb168">
+                     <placeName type="pref">Berlin</placeName>
+                     <location>
+                        <geo>52,52437 13,41053</geo>
+                     </location>
+                  </settlement>
+               </birth>
+               <death>
+                  <date when="1951-11-19">1951-11-19</date>
+                  <settlement ref="pmb60994">
+                     <placeName type="pref">Fribourg</placeName>
+                     <location>
+                        <geo>46,80237 7,15128</geo>
+                     </location>
+                  </settlement>
+               </death>
+            </person>
+            <person xml:id="pmb10863">
+               <persName>
+                  <forename>Richard</forename>
+                  <surname>Beer-Hofmann</surname>
+               </persName>
+               <birth>
+                  <date when="1866-07-11">1866-07-11</date>
+                  <settlement ref="pmb50">
+                     <placeName type="pref">Wien</placeName>
+                     <location>
+                        <geo>48,208333 16,373056</geo>
+                     </location>
+                  </settlement>
+               </birth>
+               <death>
+                  <date when="1945-09-26">1945-09-26</date>
+                  <settlement ref="pmb44053">
+                     <placeName type="pref">New York City</placeName>
+                     <location>
+                        <geo>40,71427 -74,00597</geo>
+                     </location>
+                  </settlement>
+               </death>
+            </person>
+            <person xml:id="pmb2121">
+               <persName>
+                  <surname>Schnitzler</surname>
+                  <forename>Arthur</forename>
+               </persName>
+               <birth>
+                  <date when="1862-05-15">15. 5. 1862</date>
+                  <settlement ref="pmb50">
+                     <placeName type="pref">Wien</placeName>
+                     <location>
+                        <geo>48,208333 16,373056</geo>
+                     </location>
+                  </settlement>
+               </birth>
+               <death>
+                  <date when="1931-10-21">21. 10. 1931</date>
+                  <settlement ref="pmb50">
+                     <placeName type="pref">Wien</placeName>
+                     <location>
+                        <geo>48,208333 16,373056</geo>
+                     </location>
+                  </settlement>
+               </death>
+               <sex value="male"/>
+               <occupation ref="pmb90">Schriftsteller/Schriftstellerin</occupation>
+               <occupation ref="pmb97">Mediziner/Medizinerin</occupation>
+               <idno type="gnd">https://d-nb.info/gnd/118609807/</idno>
+            </person>
+            <person xml:id="pmb2173">
+               <persName>
+                  <forename>Olga</forename>
+                  <surname>Schnitzler</surname>
+               </persName>
+               <birth>
+                  <date when="1882-01-17">1882-01-17</date>
+                  <settlement ref="pmb50">
+                     <placeName type="pref">Wien</placeName>
+                     <location>
+                        <geo>48,208333 16,373056</geo>
+                     </location>
+                  </settlement>
+               </birth>
+               <death>
+                  <date when="1970-01-13">1970-01-13</date>
+                  <settlement ref="pmb885">
+                     <placeName type="pref">Lugano</placeName>
+                     <location>
+                        <geo>46,01008 8,96004</geo>
+                     </location>
+                  </settlement>
+               </death>
+            </person>
+            <person xml:id="pmb2642">
+               <persName>
+                  <forename>Else</forename>
+                  <surname>Speidel-Haeberle</surname>
+               </persName>
+               <birth>
+                  <date when="1877-07-11">1877-07-11</date>
+                  <settlement ref="pmb872">
+                     <placeName type="pref">Stuttgart</placeName>
+                     <location>
+                        <geo>48,78232 9,17702</geo>
+                     </location>
+                  </settlement>
+               </birth>
+               <death>
+                  <date when="1937-07-21">1937-07-21</date>
+                  <settlement ref="pmb46544">
+                     <placeName type="pref">Augustenfeld</placeName>
+                     <location>
+                        <geo>52,7529 7,70918</geo>
+                     </location>
+                  </settlement>
+               </death>
+            </person>
+            <person xml:id="pmb2646">
+               <persName>
+                  <forename>Felix</forename>
+                  <surname>Speidel</surname>
+               </persName>
+               <birth>
+                  <date when="1875-07-02">1875-07-02</date>
+                  <settlement ref="pmb872">
+                     <placeName type="pref">Stuttgart</placeName>
+                     <location>
+                        <geo>48,78232 9,17702</geo>
+                     </location>
+                  </settlement>
+               </birth>
+               <death>
+                  <date when="1952-10-03">1952-10-03</date>
+                  <settlement ref="pmb877">
+                     <placeName type="pref">Unterach am Attersee</placeName>
+                     <location>
+                        <geo>47,80494 13,48728</geo>
+                     </location>
+                  </settlement>
+               </death>
+            </person>
+         </listPerson>
+         <listPlace>
+            <place xml:id="pmb168940">
+               <placeName>Edmund-Weiß-Gasse 7</placeName>
+               <placeName type="ort_fruherer-name">Spöttelgasse 7</placeName>
+               <location type="coords">
+                  <geo>48,2304 16,33472</geo>
+               </location>
+               <location type="located_in_place">
+                  <placeName ref="pmb68">XVIII., Währing</placeName>
+                  <geo>48,23333 16,31667</geo>
+               </location>
+               <location type="located_in_place">
+                  <placeName ref="pmb533">Währinger Cottage</placeName>
+                  <geo>48,233056 16,341944</geo>
+               </location>
+               <location type="located_in_place">
+                  <placeName ref="pmb133">Edmund-Weiß-Gasse</placeName>
+                  <geo>48,23056 16,3348</geo>
+               </location>
+            </place>
+            <place xml:id="pmb235251">
+               <placeName>Hasenauerstraße 59</placeName>
+               <location type="coords">
+                  <geo>48,23365 16,33494</geo>
+               </location>
+               <location type="located_in_place">
+                  <placeName ref="pmb68">XVIII., Währing</placeName>
+                  <geo>48,23333 16,31667</geo>
+               </location>
+               <location type="located_in_place">
+                  <placeName ref="pmb533">Währinger Cottage</placeName>
+                  <geo>48,233056 16,341944</geo>
+               </location>
+               <location type="located_in_place">
+                  <placeName ref="pmb383">Hasenauerstraße</placeName>
+                  <geo>48,233816866614 16,337927920952</geo>
+               </location>
+            </place>
+            <place xml:id="pmb50">
+               <placeName>Wien</placeName>
+               <placeName type="ort_fruherer-name">K.K. Reichshaupt- und Residenzstadt Wien</placeName>
+               <placeName type="legacy-name-merge">Wien</placeName>
+               <placeName type="alternative-name">Bécs</placeName>
+               <placeName type="alternative-name">Land Wien</placeName>
+               <placeName type="alternative-name">Vídeň</placeName>
+               <placeName type="alternative-name">Wenia</placeName>
+               <placeName type="alternative-name">Beč</placeName>
+               <placeName type="ort_fruherer-name">Vindobona</placeName>
+               <placeName type="legacy-name-merge">Vindobona</placeName>
+               <placeName type="alternative-name">Vienna</placeName>
+               <placeName type="legacy-name-merge">Vienna</placeName>
+               <placeName type="alternative-name">Vienna</placeName>
+               <location type="coords">
+                  <geo>48,208333 16,373056</geo>
+               </location>
+               <location type="located_in_place">
+                  <placeName ref="pmb41240">Österreich</placeName>
+                  <geo>47,33333 13,33333</geo>
+               </location>
+            </place>
+         </listPlace>
+      </back>
+   </text>
+</TEI>

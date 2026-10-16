@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A made-up document that breaks as many of the Schematron rules in the
+     bundled schemas as possible (it is not meant to be valid RELAX NG), so the
+     reference comparison in tests/schematron_agreement.rs exercises them. -->
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:teix="http://www.tei-c.org/ns/Examples" xml:lang="en">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title/>
+        <title type="main">A <hi>title</hi></title>
+      </titleStmt>
+      <extent><measure unit="pages">3</measure></extent>
+      <publicationStmt>
+        <idno type="filename">12345a</idno>
+        <idno type="filename">bad name!</idno>
+        <idno type="ddb-hybrid">p.oxy;1;23</idno>
+        <idno type="ddb-hybrid">not hybrid</idno>
+        <idno type="dclp-hybrid">p.bad;;x</idno>
+        <idno type="HGV">12a</idno>
+        <idno type="TM">0123</idno>
+        <idno type="LDAB">456</idno>
+      </publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><idno>1</idno></msIdentifier>
+          <msContents/>
+          <physDesc>
+            <objectDesc>
+              <supportDesc>
+                <extent>
+                  <dimensions><height>1</height><height>2</height><width>1</width><width>2</width><depth>1</depth><depth>2</depth></dimensions>
+                </extent>
+              </supportDesc>
+            </objectDesc>
+          </physDesc>
+          <msContents/>
+          <msPart><msIdentifier/><altIdentifier><idno>2</idno></altIdentifier></msPart>
+          <history/>
+          <additional/>
+          <additional/>
+        </msDesc>
+        <relatedItem target="#a"><bibl/></relatedItem>
+        <relatedItem/>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <styleDefDecl schemeVersion="1"/>
+      <styleDefDecl scheme="free" schemeVersion="2"/>
+      <variantEncoding location="external" method="parallel-segmentation"/>
+      <editorialDecl><quotation/><quotation marks="all"/></editorialDecl>
+      <citeStructure match="div"><citeStructure match="/p"/></citeStructure>
+    </encodingDesc>
+    <profileDesc>
+      <textDesc><canonicity/></textDesc>
+    </profileDesc>
+  </teiHeader>
+  <facsimile>
+    <surface>
+      <zone>zone text</zone>
+      <line> </line>
+      <path points="1,1 2,2 1,1"/>
+      <path points="1,1 2,2 3,3"/>
+    </surface>
+  </facsimile>
+  <standOff><standOff/></standOff>
+  <text>
+    <front><div type="other"/></front>
+    <body>
+      <head><ref target="https://papyri.info/dclp/1//x/">link</ref><ref target="bad target"/></head>
+      <p xml:id="a">
+        <date calendar="#julian"/>
+        <date calendar="#julian">1700</date>
+        <date when="1700" notBefore="1699" from="1700"/>
+        <date from="1700" notBefore="1699" to="1701" notAfter="1702"/>
+        <measure unitRef="#u" unit="m">1</measure>
+        <abbr subtype="x">abbr</abbr>
+        <gloss targetLang="la">x</gloss>
+        <anchor xml:id="before"/>
+        <addSpan spanTo="#before"/>
+        <addSpan/>
+        <delSpan spanTo="#nowhere"/>
+        <damageSpan/>
+        <ptr target="#a" cRef="x"/>
+        <ref target="#a" cRef="x">r</ref>
+        <s><s>nested</s></s>
+        <span from="#a" target="#a"/>
+        <span to="#a" target="#a"/>
+        <span from="#a #b"/>
+        <link target="#a"/>
+        <link target="#a #b" targets="#a"/>
+        <link/>
+        <join target="#a"/>
+        <join/>
+        <subst><add>a</add></subst>
+        <subst><add>a</add><del>b</del></subst>
+        <gap quantity="2" extent="some"/>
+        <gap quantity="2"/>
+        <supplied reason="lost"><gap reason="lost"/></supplied>
+        <expan>expansion</expan>
+        <expan>ex<ex>p</ex></expan>
+        <abbr>a<ex>b</ex></abbr>
+        <ex>c</ex>
+        <space quantity="1" extent="x"/>
+        <relation active="#a" mutual="#b"/>
+        <relation passive="#a" name="x"/>
+        <shift/>
+        <app><lem>a</lem><lem>b</lem></app>
+        <app><rdg>a</rdg></app>
+        <rdgGrp><lem>a</lem><lem>b</lem></rdgGrp>
+        <fVal><f/>text</fVal>
+        <fVal><f/><f/></fVal>
+        <catchwords>c</catchwords>
+        <secFol>s</secFol>
+        <signatures>s</signatures>
+        <term> </term>
+        <term>t</term>
+        <rt target="#a" from="#a"/>
+        <rt from="#a"/>
+        <rt to="#a"/>
+        <desc type="deprecationInfo">d</desc>
+        <note>a note</note>
+        <list type="gloss"><item>i</item></list>
+        <elementSpec ident="x" module="nomodule"/>
+        <moduleRef key="core" prefix="a"><content/></moduleRef>
+        <moduleRef key="tei" prefix="a"/>
+        <schemaSpec ident="s" source="a b"/>
+        <constraintSpec scheme="schematron"><constraint><teix:egXML/></constraint></constraintSpec>
+        <attDef ident="a"/>
+        <p>nested p</p>
+        <ab><p>p in ab</p></ab>
+        <div type="chapter"/>
+        <seg generatedBy="x">s</seg>
+      </p>
+      <div type="chapter"><div type="section"/></div>
+      <div type="textpart"><div type="textpart"/><div type="other"/></div>
+      <lg/>
+      <lg><l>one <lg><l>two</l></lg></l><l>three <note><l>three</l></note></l></lg>
+      <l><p>p in l</p><ab>ab in l</ab><div/></l>
+      <msIdentifier/>
+    </body>
+    <back><div/></back>
+  </text>
+</TEI>

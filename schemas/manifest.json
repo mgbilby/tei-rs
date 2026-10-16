@@ -1,0 +1,282 @@
+{
+  "schemas": [
+    {
+      "url": "https://epidoc.stoa.org/schema/8.13/tei-epidoc.rng",
+      "mirrors": [
+        "https://raw.githubusercontent.com/papyri/idp.data/master/Validation/EpiDoc/8.13/tei-epidoc.rng"
+      ],
+      "file": "epidoc.stoa.org/schema/8.13/tei-epidoc.rng",
+      "sha256": "fb18bad56d4402222050675eb4ba1ee1a3e0d6425e90c28605ed3387653755d7",
+      "fetched_from": "https://raw.githubusercontent.com/papyri/idp.data/master/Validation/EpiDoc/8.13/tei-epidoc.rng",
+      "checked": "2026-10-15"
+    },
+    {
+      "url": "https://epidoc.stoa.org/schema/8.16/tei-epidoc.rng",
+      "mirrors": [
+        "https://raw.githubusercontent.com/papyri/idp.data/master/Validation/EpiDoc/8.16/tei-epidoc.rng"
+      ],
+      "file": "epidoc.stoa.org/schema/8.16/tei-epidoc.rng",
+      "sha256": "8a9bd91a4a08037d79393c8e653f3b5a0b9c05d5235688637c0463c73b787229",
+      "fetched_from": "https://raw.githubusercontent.com/papyri/idp.data/master/Validation/EpiDoc/8.16/tei-epidoc.rng",
+      "checked": "2026-10-15"
+    },
+    {
+      "url": "https://papyri.info/schemas/papyri.info.rng",
+      "mirrors": [
+        "https://raw.githubusercontent.com/papyri/navigator/master/pn-site/schemas/papyri.info.rng"
+      ],
+      "file": "papyri.info/schemas/papyri.info.rng",
+      "sha256": "6664b3e77ac6b874711d612183f1f31391b8c09680d8971bbed7607923dd94ba",
+      "fetched_from": "https://raw.githubusercontent.com/papyri/navigator/master/pn-site/schemas/papyri.info.rng",
+      "checked": "2026-10-15"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/COST-ELTeC/Schemas/master/eltec-1.rng",
+      "aliases": [
+        "../../Schemas/eltec-1.rng"
+      ],
+      "file": "raw.githubusercontent.com/COST-ELTeC/Schemas/master/eltec-1.rng",
+      "sha256": "52c7e3943f6a686ab8acbefd0864f5cae0854377deeb97189a2aaea6b2d9d983",
+      "fetched_from": "https://raw.githubusercontent.com/COST-ELTeC/Schemas/master/eltec-1.rng",
+      "checked": "2026-10-15"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/clarin-eric/ParlaMint/main/Schema/ParlaMint-TEI.rng",
+      "file": "raw.githubusercontent.com/clarin-eric/ParlaMint/main/Schema/ParlaMint-TEI.rng",
+      "dependencies": [
+        "raw.githubusercontent.com/clarin-eric/ParlaMint/main/Schema/ParlaMint.rng"
+      ],
+      "sha256": "227cb1ca12810d302158f5c3f409374013902a9296b6b16055ecd03116591a9a",
+      "fetched_from": "https://raw.githubusercontent.com/clarin-eric/ParlaMint/main/Schema/ParlaMint-TEI.rng",
+      "checked": "2026-10-15"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/clarin-eric/ParlaMint/main/Schema/ParlaMint-TEI.ana.rng",
+      "file": "raw.githubusercontent.com/clarin-eric/ParlaMint/main/Schema/ParlaMint-TEI.ana.rng",
+      "dependencies": [
+        "raw.githubusercontent.com/clarin-eric/ParlaMint/main/Schema/ParlaMint-TEI.rng",
+        "raw.githubusercontent.com/clarin-eric/ParlaMint/main/Schema/ParlaMint.rng"
+      ],
+      "sha256": "b025b7669c10c61222443655260d7b2d9cb1ef1aff3e669042832fb011f51ac3",
+      "fetched_from": "https://raw.githubusercontent.com/clarin-eric/ParlaMint/main/Schema/ParlaMint-TEI.ana.rng",
+      "checked": "2026-10-15"
+    },
+    {
+      "url": "https://tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng",
+      "aliases": [
+        "http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng",
+        "https://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng",
+        "http://tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng"
+      ]
+    },
+    {
+      "url": "https://epidoc.stoa.org/schema/latest/tei-epidoc.rng",
+      "aliases": [
+        "http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng"
+      ]
+    },
+    {
+      "url": "https://epidoc.stoa.org/schema/9.7/tei-epidoc.rng"
+    },
+    {
+      "url": "https://dracor.org/schema.rng"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/cbeta-org/xml-p5/master/schema/cbeta-p5.rnc",
+      "file": "raw.githubusercontent.com/cbeta-org/xml-p5/master/schema/cbeta-p5.rnc",
+      "sha256": "5cd8e97d03d75a5b86cc5dde6784a9059c40c40fa8896b66f62eccf18b0cc4d7",
+      "fetched_from": "https://raw.githubusercontent.com/cbeta-org/xml-p5/master/schema/cbeta-p5.rnc",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/BetaMasaheft/Schema/master/tei-betamesaheft.rng",
+      "aliases": [
+        "https://raw.githubusercontent.com/BetaMasaheft/schema/master/tei-betamesaheft.rng"
+      ],
+      "file": "raw.githubusercontent.com/BetaMasaheft/Schema/master/tei-betamesaheft.rng",
+      "sha256": "07a305828d615179b96e4d7d534eb1ccb3e06011f5eaba848db12daa7d86978c",
+      "fetched_from": "https://raw.githubusercontent.com/BetaMasaheft/Schema/master/tei-betamesaheft.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/srophe/Gaddel/refs/heads/main/documentation/schemas/out/syriacaPersons.compiled.rng",
+      "file": "raw.githubusercontent.com/srophe/Gaddel/refs/heads/main/documentation/schemas/out/syriacaPersons.compiled.rng",
+      "sha256": "817b798fc41b38fb7a72280d6fddf130b9a8f0447c2c082e30a2f3bc8393b845",
+      "fetched_from": "https://raw.githubusercontent.com/srophe/Gaddel/refs/heads/main/documentation/schemas/out/syriacaPersons.compiled.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/srophe/Gaddel/refs/heads/main/documentation/schemas/out/syriacaPlaces.compiled.rng",
+      "file": "raw.githubusercontent.com/srophe/Gaddel/refs/heads/main/documentation/schemas/out/syriacaPlaces.compiled.rng",
+      "sha256": "3a0ca552c87a89bcab3a9c3f5b6eeaeee359056e28c539e483c5f5e0942a79cc",
+      "fetched_from": "https://raw.githubusercontent.com/srophe/Gaddel/refs/heads/main/documentation/schemas/out/syriacaPlaces.compiled.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/freedict/fd-dictionaries/master/shared/freedict-P5.rng",
+      "file": "raw.githubusercontent.com/freedict/fd-dictionaries/master/shared/freedict-P5.rng",
+      "sha256": "e120a1b695b45d1ff80c76426e16fa330f9fa3c33c5550912274fc586f795399",
+      "fetched_from": "https://raw.githubusercontent.com/freedict/fd-dictionaries/master/shared/freedict-P5.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/TEI-Correspondence-SIG/CMIF/master/schema/cmi-customization.rng",
+      "file": "raw.githubusercontent.com/TEI-Correspondence-SIG/CMIF/master/schema/cmi-customization.rng",
+      "sha256": "f2847266dcad9884c80b9f52fb430033566ea7306a0a453c246d6932094abf5f",
+      "fetched_from": "https://raw.githubusercontent.com/TEI-Correspondence-SIG/CMIF/master/schema/cmi-customization.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/84000/data-tei/master/schema/current/translation.rng",
+      "aliases": [
+        "../../../schema/current/translation.rng"
+      ],
+      "file": "raw.githubusercontent.com/84000/data-tei/master/schema/current/translation.rng",
+      "sha256": "28fad2bd087b1b4f758d5753cd11e023ffc7b659de45222334d4549c5fc8ec17",
+      "fetched_from": "https://raw.githubusercontent.com/84000/data-tei/master/schema/current/translation.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/84000/data-tei/master/schema/current/knowledgebase.rng",
+      "aliases": [
+        "../schema/current/knowledgebase.rng"
+      ],
+      "file": "raw.githubusercontent.com/84000/data-tei/master/schema/current/knowledgebase.rng",
+      "sha256": "e1279ad66c534a726ebea5fc22933b9d23c2f9a4f88c8e2481d3254a66868363",
+      "fetched_from": "https://raw.githubusercontent.com/84000/data-tei/master/schema/current/knowledgebase.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/bodleian/consolidated-tei-schema/master/msdesc.rng",
+      "aliases": [
+        "https://raw.githubusercontent.com/msdesc/consolidated-tei-schema/master/msdesc.rng",
+        "https://raw.githubusercontent.com/msDesc/consolidated-tei-schema/master/msdesc.rng"
+      ],
+      "file": "raw.githubusercontent.com/bodleian/consolidated-tei-schema/master/msdesc.rng",
+      "sha256": "440af5ddd845fa35f6a73b74900227bddaa647fd0a54e7b068694ce061a098a7",
+      "fetched_from": "https://raw.githubusercontent.com/bodleian/consolidated-tei-schema/master/msdesc.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/cligs/reference/master/tei/cligs.rng",
+      "file": "raw.githubusercontent.com/cligs/reference/master/tei/cligs.rng",
+      "sha256": "139ef51a21546c25388fb972e3ea22e242056359d3ce8b16748c0436cb1bccdf",
+      "fetched_from": "https://raw.githubusercontent.com/cligs/reference/master/tei/cligs.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/DARIAH-ERIC/lexicalresources/master/Events/LexMC2017/Data/Etymology/basisformat.rng",
+      "aliases": [
+        "basisformat.rng"
+      ],
+      "file": "raw.githubusercontent.com/DARIAH-ERIC/lexicalresources/master/Events/LexMC2017/Data/Etymology/basisformat.rng",
+      "sha256": "3cbf26247bab8b697898c603c629b1a6deee127b946714078a17891803425c64",
+      "fetched_from": "https://raw.githubusercontent.com/DARIAH-ERIC/lexicalresources/master/Events/LexMC2017/Data/Etymology/basisformat.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng",
+      "file": "raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng",
+      "sha256": "dc1cfc0c5ee77bd0f0376bede5629d9db1e4112e9a846c242b458071e6ccf446",
+      "fetched_from": "https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_CritEdSchema.rng",
+      "file": "raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_CritEdSchema.rng",
+      "sha256": "7461eebb355ae22626b53270574e49ae819d8e99d9dc53ccf2c087208e29eac9",
+      "fetched_from": "https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_CritEdSchema.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/pruizf/disco/master/schema/tei_all_DISCO.rnc",
+      "file": "raw.githubusercontent.com/pruizf/disco/master/schema/tei_all_DISCO.rnc",
+      "sha256": "a9ea7c20a76beb09ab9f6b839bd43bd6688e9031772b4e9756fcd033fa650b24",
+      "fetched_from": "https://raw.githubusercontent.com/pruizf/disco/master/schema/tei_all_DISCO.rnc",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/chartes/encpos/master/data/encpos.rng",
+      "aliases": [
+        "../encpos.rng"
+      ],
+      "file": "raw.githubusercontent.com/chartes/encpos/master/data/encpos.rng",
+      "sha256": "b3cc02ee15d4e492b2198733eee4a77f9c5d6a897326e0ba8afd7596db3d7dbb",
+      "fetched_from": "https://raw.githubusercontent.com/chartes/encpos/master/data/encpos.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/FrankensteinVariorum/fv-data/master/FV_ODD/out/FV_ODD.rng",
+      "aliases": [
+        "../FV_ODD/out/FV_ODD.rng"
+      ],
+      "file": "raw.githubusercontent.com/FrankensteinVariorum/fv-data/master/FV_ODD/out/FV_ODD.rng",
+      "sha256": "bfe27545f52cf9f6fe427c44305f248a000b9959d31d593a073a02895441bda1",
+      "fetched_from": "https://raw.githubusercontent.com/FrankensteinVariorum/fv-data/master/FV_ODD/out/FV_ODD.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Jean-Baptiste-Camps/Geste/master/odd/out/Modele.rng",
+      "aliases": [
+        "../odd/out/Modele.rng"
+      ],
+      "file": "raw.githubusercontent.com/Jean-Baptiste-Camps/Geste/master/odd/out/Modele.rng",
+      "sha256": "0514242fb8b9f400c39737a972b7ac00f2a4df7ca598070164f04b6ebaaf172a",
+      "fetched_from": "https://raw.githubusercontent.com/Jean-Baptiste-Camps/Geste/master/odd/out/Modele.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MiMoText/roman18/master/Schemas/eltec-x.rng",
+      "aliases": [
+        "../../Schemas/eltec-x.rng"
+      ],
+      "file": "raw.githubusercontent.com/MiMoText/roman18/master/Schemas/eltec-x.rng",
+      "sha256": "2c153df7da73d82ab759017ae42c5f4ae4a5e5b47f9fb80795bda059bc2432c7",
+      "fetched_from": "https://raw.githubusercontent.com/MiMoText/roman18/master/Schemas/eltec-x.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/COST-ELTeC/Schemas/master/eltec-x.rng",
+      "aliases": [
+        "https://github.com/COST-ELTEC/Schemas/raw/master/eltec-x.rng"
+      ],
+      "file": "raw.githubusercontent.com/COST-ELTeC/Schemas/master/eltec-x.rng",
+      "sha256": "3cacb58ae9244c7caa347872d659b4cb9afb0d118869e376a68f388f780bc0d0",
+      "fetched_from": "https://raw.githubusercontent.com/COST-ELTeC/Schemas/master/eltec-x.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "http://oeuvres.github.io/Teinte/teinte.rng",
+      "aliases": [
+        "http://oeuvres.github.io/teinte/teinte.rng"
+      ],
+      "mirrors": [
+        "https://raw.githubusercontent.com/oeuvres/Teinte/main/teinte.rng"
+      ],
+      "file": "oeuvres.github.io/Teinte/teinte.rng",
+      "dependencies": [
+        "oeuvres.github.io/Teinte/teinteHeader.rng"
+      ],
+      "sha256": "c7adfa25e7b04d24c373f5a4acbd1f7b9155df65d2459d2ca1a93c54d2477d37",
+      "fetched_from": "https://raw.githubusercontent.com/oeuvres/Teinte/main/teinte.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://openarabicpe.github.io/OpenArabicPE_ODD/schema/tei_periodical.rng",
+      "mirrors": [
+        "https://raw.githubusercontent.com/OpenArabicPE/OpenArabicPE_ODD/master/schema/tei_periodical.rng"
+      ],
+      "file": "openarabicpe.github.io/OpenArabicPE_ODD/schema/tei_periodical.rng",
+      "sha256": "feac17cdd00eb03a6a99eb94454828cdfccdee893630e1f427cffd7f9c11c1ea",
+      "fetched_from": "https://raw.githubusercontent.com/OpenArabicPE/OpenArabicPE_ODD/master/schema/tei_periodical.rng",
+      "checked": "2026-10-16"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/HistoryAtState/frus/master/schema/frus.rnc",
+      "file": "raw.githubusercontent.com/HistoryAtState/frus/master/schema/frus.rnc",
+      "sha256": "0da2ba078235049c28791d0156276af51cd6e1ee3b90e0701cc825c48515f1f0",
+      "fetched_from": "https://raw.githubusercontent.com/HistoryAtState/frus/master/schema/frus.rnc",
+      "checked": "2026-10-16"
+    }
+  ]
+}

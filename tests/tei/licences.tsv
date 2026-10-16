@@ -1,0 +1,58 @@
+# Licence and public-release class of every project in samples.tsv (column 2).
+# publish: public = the files may be in the public repository; fetch-only = only
+# their links are published, and scripts/fetch-samples.sh downloads them.
+# Open licences are public; NC/ND licences are fetch-only unless a fair-use
+# case is recorded in the note; no licence stated is always fetch-only.
+# project	spdx	publish	note
+84000	CC-BY-NC-ND-3.0	fetch-only	NC/ND
+Akademieprotokolle (ÖAW)	NONE	fetch-only	no licence stated
+Arthur Schnitzler	CC-BY-4.0	public	
+Auden Musulin Papers	CC-BY-4.0	public	
+Beta maṣāḥǝft	CC-BY-SA-4.0	public	
+Bodleian medieval manuscripts	NONE	fetch-only	no licence stated
+Bullinger Digital	LicenseRef-CC-BY-NC-ND-3.0-CH	fetch-only	NC/ND
+CBETA	LicenseRef-CBETA-NC	fetch-only	non-commercial use, with the TEI header intact
+CLiGS textbox	CC-BY-SA-4.0	public	
+conha19	LicenseRef-Public-Domain-Mark-1.0	public	public domain
+Coptic Scriptorium	CC-BY-4.0	public	
+correspSearch (CMIF)	CC0-1.0 OR CC-BY-4.0	public	licence per file, see samples.tsv
+CroALa	CC-BY-4.0 OR CC0-1.0	public	licence per file, see samples.tsv
+CSEL, Open Greek and Latin	CC-BY-SA-4.0	public	
+DARIAH-ERIC lexical resources	CC-BY-3.0 OR CC-BY-4.0	public	licence per file, see samples.tsv
+Deutsches Lyrik Korpus (DLK)	NONE	fetch-only	no licence stated
+Deutsches Textarchiv	CC-BY-SA-4.0	public	
+DHARMA	CC-BY-4.0 OR CC-BY-SA-4.0	public	licence per file, see samples.tsv
+Digital Mitford	CC-BY-SA-3.0	public	
+DISCO	CC-BY-4.0	public	
+DraCor (GerDraCor)	CC0-1.0	public	
+ELTeC	CC-BY-4.0	public	texts public domain, markup CC BY 4.0
+ENCPOS (École des chartes)	LicenseRef-CC-BY-NC-ND-3.0-FR	fetch-only	NC/ND
+Faust-Edition	CC-BY-NC-SA-4.0	fetch-only	NC
+Fihrist	NONE	fetch-only	no licence stated
+First1KGreek	CC-BY-SA-4.0	public	
+Frankenstein Variorum	CC-BY-SA-3.0	public	
+FreeDict	GPL-2.0-or-later OR GPL-3.0-or-later	public	licence per file, see samples.tsv; texts in LICENSES/
+FRUS (Office of the Historian)	LicenseRef-Public-Domain	public	public domain (U.S. government work)
+Genji monogatari (nakamura196)	CC-BY-4.0 OR CC0-1.0	public	licence per file, see samples.tsv
+Geste	CC-BY-SA-4.0	public	texts public domain, markup CC BY-SA 4.0
+Handrit.is	NONE	fetch-only	no licence stated
+I.Sicily	CC-BY-4.0	public	
+Inscriptions of Israel/Palestine	NONE	fetch-only	no licence stated
+IOSPE	MIT	public	repository LICENSE
+Legal Kraus	CC-BY-4.0	public	
+MiMoText roman18	CC0-1.0	public	
+OBVIL Critique	LicenseRef-CC-BY-NC-ND-3.0-FR	fetch-only	NC/ND
+OpenArabicPE: al-Manār	CC-BY-SA-4.0	public	
+papyri.info	CC-BY-3.0	public	
+ParlaMint	CC-BY-4.0	public	
+Patrologia Latina	CC-BY-SA-4.0	public	
+Perseus	CC-BY-SA-4.0	public	
+Persian Digital Library	CC-BY-SA-4.0	public	
+SARIT	CC-BY-SA-3.0	public	
+Syriaca.org	CC-BY-3.0 OR CC-BY-4.0	public	licence per file, see samples.tsv
+TEI Consortium test suite	BSD-2-Clause OR CC-BY-3.0	public	
+TEI P5 2.7.0 tei_all	BSD-2-Clause OR CC-BY-3.0	public	
+Text Creation Partnership	CC0-1.0	public	
+Tolstoy Digital	CC-BY-SA-4.0	public	stated in Russian in each TEI header
+U.S. Epigraphy	NONE	fetch-only	no licence stated
+VICAV	CC-BY-NC-SA-3.0	fetch-only	NC (per the TEI headers)

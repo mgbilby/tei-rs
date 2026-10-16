@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Tiruvaṇṇāmalai, Kiḷi Gopura, time of Kulottuṅga Cōḻa, year 18</title>
+                <respStmt>
+                    <resp key="creator">author of digital edition</resp>
+                    <persName ref="part:reda">
+                        <forename>Renato</forename>
+                        <surname>Dávalos</surname>
+                    </persName>
+                    <persName ref="part:emfr">
+                        <forename>Emmanuel</forename>
+                        <surname>Francis</surname>
+                    </persName>
+                </respStmt>
+            <funder>European Research Council (ERC), grant agreement no 809994</funder></titleStmt>
+            <publicationStmt>
+                <authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+                <pubPlace>Paris</pubPlace>
+                <idno type="filename">DHARMA_INStfaSIIv08p0i0127.xml</idno>
+                <availability><licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence></availability>
+                <date from="2019" to="2026">2019-2026</date>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier><repository>as per external metadata</repository></msIdentifier>
+                    <msContents>
+                        <summary>Donation of land (the village of Mērāṉ Paḷḷi) as <foreign>tiruppaḷḷi-y-eḻucci-p-puṟam</foreign>.</summary>
+                    </msContents>
+                    <physDesc>
+                        <handDesc>
+                            <p/>
+                        </handDesc>
+                    </physDesc>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+         <p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+      </encodingDesc>
+        <revisionDesc>
+            <change who="part:reda" when="2024-03-25" status="draft">Creation of the file</change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:space="preserve">
+        <body>
+            
+            <div type="edition" xml:lang="tam-Latn" rendition="class:tamil maturity:83215"><!--check @rendition-->
+                
+                <ab>
+                    <lb n="1"/><hi rend="grantha">svasti śrī</hi>
+                </ab>
+                
+                <p>
+                    tiri-puvaṉa-c-cakkara-va<reg>r</reg>ttikaḷ <hi rend="grantha">śrī</hi>-kulottuṅka-cōḻa-tēvaṟku yāṇṭu <num value="18"><g type="numeral">10</g> 8</num>-vatu			
+                </p>
+                
+                <p>
+                    <lb n="2"/>Uṭaiyār <unclear>tiru-v-aṇ</unclear>ṇāmalai Uṭaiya nāyaṉāṟku mā-tēvar makan<unclear>ār kali</unclear>-tēvaṉ-āṉa <unclear>Imma</unclear>
+                    <lb n="3" break="no"/>ṭi cerakka-p perumāḷ-āṉa murai<unclear>y</unclear>ātarāyan-ēṉ tiru-p-paḷḷi-Eḻucci-p-puṟam āka v-iṭṭa muraicūr-nāṭṭu
+                    <lb n="4"/>k<choice><orig>i</orig><reg>ī</reg></choice>ḻ-cūṟṟi<supplied reason="omitted">l</supplied> cāliyūr-p paṟṟil mē<unclear>r</unclear>āṉ paḷḷi nāṟ-pāl Ellaiyum tiru-c-<unclear>cū</unclear>la-k-kallukku Uḷḷu<supplied reason="omitted">m</supplied> cantirātitta-varai celvat’ āka kal veṭṭi-k kuṭuttēṉ muraiyā
+                    <lb n="5" break="no"/>tarāyan-ēṉ
+                </p>
+                <p>
+                    Itil Oru mā-c-ciṉ<choice><orig>n</orig><reg>ṉ</reg></choice>am koḷvāṉ keṅkai-k karaiyil kurāl pacu-k koṉṟāṉ pāvam koḷvāṉ
+                </p>
+                <p>
+                    Itu viṭuvittāṉ Aṇṭār Amara-puyaṅkara-p-perumā<unclear>ḷ</unclear>
+                </p>
+                <p>
+                    paṉ-mā<hi rend="grantha">heśvarar rakṣai</hi>
+                </p>
+                
+            </div>
+            
+            <!--<div type="apparatus">		
+                
+                <listApp>
+                
+                <app loc="0">
+                <lem>...</lem>
+                <note>...</note>
+                </app>
+                
+                </listApp>
+                
+                </div>-->
+            
+            <div type="translation" resp="part:emfr">
+                
+                <p n="1">Prosperity! Fortune</p>
+                <p n="1">18th year of the glorious king Kulottuṅga, the emperor of the three worlds.</p>
+                <p n="2-4">
+                    I, ...
+                    so that it proceeds as long as the moon and the sun endure
+                    ...
+                </p>
+                <p n="5">
+                    From  this he who seizes even anything very small obtains the sin of killing a tawny cow on the bank of the Gaṅgā.
+                </p>
+                <p n="5">
+                    He who had this released is Āṇṭār Amarapuyaṅkapperumāḷ.
+                </p>
+                <p n="5">
+                    The Paṉmāheśvaras are protection <supplied reason="subaudible">to this</supplied>.
+                </p>
+                
+            </div>	
+            <div type="translation" source="bib:Srinivasan+Reiniche1990_01">
+                
+                <p>Hail! Prosperity! <supplied reason="subaudible">It is</supplied> the year 18 <supplied reason="subaudible">of the reign</supplied> of <supplied reason="subaudible">the king</supplied> Tiripuvaṉaccakkaravattikaḷ <supplied reason="explanation">emperor over the three worlds</supplied> śrī-Kulōttuṅkacōḻatēvar. I, Kalitēvaṉ, <hi rend="italic">alias</hi> Cokkapperumāḷ<hi rend="italic">alias</hi>Muraiyātarāyaṉ, the son of Mātēvar, gave as <foreign>tiruppaḷḷi eḻuccipuṟam</foreign><note>i.e., provision for the service of waking up.</note> for the god Tiruvaṇṇāmalai uṭaiya nāyaṉār, Mērāṉpaḷḷi, situated in Cāliyūr-paṟṟu on the eastern side of the Muraicūr-nāṭu with all the lands within its four boundaries where stones marked with trident symbol were put, to last as long as the moon and the sun endure, by engraving <supplied reason="subaudible">the document</supplied> on the stone. If any one took away <foreign>oru mācciṉam</foreign> <supplied reason="explanation">an iota</supplied> of this gift, he would be considered to have committed the sin of one who had killed a tawny cow on the bank of the Gaṅgā. This was released by Āṇṭār Amarapuyaṅkapperumāḷ. <supplied reason="subaudible">This is</supplied> protected by the <foreign>Paṉ-Māheśvaras</foreign>.</p>
+                
+            </div>	
+            
+            <!-- <div type="commentary">
+                
+                </div>-->
+            
+            <div type="bibliography">
+                
+                <p>Reported in <bibl><ptr target="bib:ARIE1902-1903"/></bibl> (ARIE/1902-1903/A/1902/537).</p>	
+                <p>First edited in <bibl><ptr target="bib:SubrahmanyaAiyer1937_01"/></bibl> (SII 8.127). Edited and translated in <bibl><ptr target="bib:Srinivasan+Reiniche1990_01"/></bibl> (TVM 102)</p>
+                <p>This digital edition by Renato Dávalos and Emmanuel Francis (2024), based on previous editions.</p>
+                
+                <listBibl type="primary">
+                    
+                    <bibl>
+                        <ptr target="bib:SubrahmanyaAiyer1937_01"/>
+                        <citedRange unit="page">61</citedRange>
+                        <citedRange unit="item">127</citedRange>
+                    </bibl>  
+                    
+                    <bibl n="S">
+                        <ptr target="bib:Srinivasan+Reiniche1990_01"/>
+                        <citedRange unit="page">247</citedRange>
+                        <citedRange unit="item">102</citedRange>
+                    </bibl>
+                    
+                </listBibl>           
+                
+                <listBibl type="secondary">
+                    
+                    <bibl>
+                        <ptr target="bib:ARIE1902-1903"/>
+                        <citedRange unit="page">12</citedRange>
+                        <citedRange unit="appendix">A</citedRange>
+                        <citedRange unit="item">537</citedRange>
+                    </bibl>
+                    
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

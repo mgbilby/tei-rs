@@ -1,0 +1,43 @@
+[package]
+name = "teixml"
+version = "0.1.0"
+description = "Validate TEI XML documents against RELAX NG schemas, in pure Rust"
+license = "MIT"
+edition = "2024"
+rust-version = "1.88"
+repository = "https://github.com/mgbilby/tei-rs"
+keywords = ["tei", "xml", "relaxng", "validation", "digital-humanities"]
+categories = ["command-line-utilities", "parser-implementations", "text-processing"]
+# Only the code and its licences are packaged. Tests, benchmarks, sample
+# documents and schemas stay in the repository.
+include = ["/src/", "/LICENSE", "/README.md"]
+
+[[bin]]
+name = "tei-rs"
+path = "src/main.rs"
+
+[dependencies]
+regex = "1"
+roxmltree = "0.21.1"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+sha2 = "0.11.1"
+unicode-ident = "1"
+ureq = { version = "3.4.2", optional = true, features = ["platform-verifier"] }
+
+[features]
+default = ["schematron"]
+# Checking the ISO Schematron rules embedded in schemas (on by default; adds
+# no dependencies). Without it, validation is RELAX NG only.
+schematron = []
+# Optional: downloading and updating schemas in a SchemaStore
+# (`tei-rs schemas add/check/sync`). Validation never needs it.
+sync = ["dep:ureq"]
+
+[[bench]]
+name = "validate"
+harness = false
+
+[package.metadata.docs.rs]
+# Document the optional `sync` module too.
+all-features = true
