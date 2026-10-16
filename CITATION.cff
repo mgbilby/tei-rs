@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use teixml, please cite it as below."
+title: "teixml: TEI XML validation against RELAX NG schemas, in pure Rust"
+type: software
+authors:
+  - family-names: Bilby
+    given-names: Mark G.
+    orcid: "https://orcid.org/0000-0003-0100-6634"
+license: MIT
+repository-code: "https://github.com/mgbilby/tei-rs"
+url: "https://crates.io/crates/teixml"
+version: 0.1.2
